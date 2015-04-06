@@ -32,7 +32,7 @@ import com.microsoft.office365.snippetapp.helpers.DiscoveryController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.outlookservices.odata.OutlookClient;
 import com.microsoft.services.odata.impl.ADALDependencyResolver;
-import com.microsoft.sharepointservices.odata.SharePointClient;
+import com.microsoft.fileservices.odata.SharePointClient;
 
 import java.net.URI;
 import java.util.UUID;

@@ -7,7 +7,7 @@ package com.microsoft.office365.snippetapp.Interfaces;
 import android.view.View;
 
 import com.microsoft.outlookservices.odata.OutlookClient;
-import com.microsoft.sharepointservices.odata.SharePointClient;
+import com.microsoft.fileservices.odata.SharePointClient;
 
 /**
  * Created by Microsoft on 4/1/15.
