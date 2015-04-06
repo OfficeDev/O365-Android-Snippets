@@ -7,7 +7,7 @@ import com.google.common.base.Charsets;
 import com.microsoft.fileservices.File;
 import com.microsoft.fileservices.Item;
 import com.microsoft.services.odata.Constants;
-import com.microsoft.sharepointservices.odata.SharePointClient;
+import com.microsoft.fileservices.odata.SharePointClient;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
