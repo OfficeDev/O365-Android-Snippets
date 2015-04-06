@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+    defaultConfig {
+        applicationId "com.microsoft.office365.snippetapp"
+        minSdkVersion 15
+        targetSdkVersion 18
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    // base OData library:
+    // choose the outlook, discovery, and file services
+    // Azure Active Directory Library
+    compile 'com.microsoft.services:odata-engine-core:0.11.1'
+    compile 'com.microsoft.services:odata-engine-android-impl:0.11.1@aar'
+    compile 'com.microsoft.services:outlook-services:0.11.1'
+    compile 'com.microsoft.services:discovery-services:0.11.1'
+    compile 'com.microsoft.services:file-services:0.11.1'
+    compile 'com.microsoft.aad:adal:1.0.6'
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.google.guava:guava:16.0.1'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+}

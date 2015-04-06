@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_runall"
+        android:showAsAction="ifRoom"
+        android:title="@string/run_all"
+        tools:ignore="AppCompatResource" />
+    <item
+        android:id="@+id/menu_signin"
+        android:icon="@drawable/user_signedout"
+        android:orderInCategory="1"
+        android:showAsAction="never"
+        android:title="@string/MainActivity_SignInButtonText"
+        tools:ignore="AppCompatResource" />
+    <item
+        android:id="@+id/menu_signout"
+        android:icon="@drawable/user_signedout"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="@string/MainActivity_SignOutButtonText"
+        tools:ignore="AppCompatResource"
+        android:enabled="false"/>
+    <item
+        android:id="@+id/menu_clearTokens"
+        android:icon="@drawable/user_signedout"
+        android:orderInCategory="3"
+        android:showAsAction="never"
+        android:title="@string/MainActivity_ClearTokensText"
+        tools:ignore="AppCompatResource"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/menu_clearResults"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
+        android:title="Clear results"
+        tools:ignore="AppCompatResource" />
+</menu>
