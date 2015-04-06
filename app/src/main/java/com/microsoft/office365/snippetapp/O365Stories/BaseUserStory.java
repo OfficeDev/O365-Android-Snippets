@@ -9,7 +9,7 @@ import android.view.View;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
-import com.microsoft.sharepointservices.odata.SharePointClient;
+import com.microsoft.fileservices.odata.SharePointClient;
 
 public abstract class BaseUserStory {
 
