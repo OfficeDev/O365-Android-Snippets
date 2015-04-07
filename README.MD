@@ -101,6 +101,7 @@ Open the project by importing the settings.gradle file.
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
 > * The [Azure Active Directory Authentication Library for Android](https://github.com/AzureAD/azure-activedirectory-library-for-android).
 > * The [Office 365 SDK for Android](https://github.com/OfficeDev/Office-365-SDK-for-Android).
+> * The [Google Core Libraries for Java 18.0 API](https://code.google.com/p/guava-libraries/).
 
 
 
