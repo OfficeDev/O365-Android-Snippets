@@ -4,7 +4,7 @@
 package com.microsoft.office365.snippetapp.Interfaces;
 
 /**
- * Created by brianmel on 3/20/2015.
+ * Created by Microsoft on 3/20/2015.
  */
 public interface OnUseCaseStatusChangedListener {
 

@@ -22,9 +22,9 @@ public interface IOperationCompleteListener {
             return mid;
         }
 
-        // operation: the CRUD operation attempted
-        // operationResult: The result of the CRUD operation
-        // id: The id of the entity that was operated on
+        // operation: the CRUD operation attempted.
+        // operationResult: The result of the CRUD operation.
+        // id: The id of the entity that was operated on.
         public OperationResult(String operation, String operationResult) {
             mOperation = operation;
             mOperationResult = operationResult;

@@ -15,9 +15,6 @@ public class AsyncUseCaseWrapper extends AsyncTask<BaseUserStory, IOperationComp
 
     private final IOperationCompleteListener mOperationCompletedListener;
 
-    public AsyncUseCaseWrapper() {
-        mOperationCompletedListener = null;
-    }
 
     public AsyncUseCaseWrapper(IOperationCompleteListener operationCompleteListener) {
         mOperationCompletedListener = operationCompleteListener;
@@ -34,11 +31,6 @@ public class AsyncUseCaseWrapper extends AsyncTask<BaseUserStory, IOperationComp
                     result));
         }
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void _null) {
-        // Tell the invoker we're all done?
     }
 
     @Override

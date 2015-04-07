@@ -34,17 +34,17 @@ import java.util.Map;
 
 public class CommandList {
     /**
-     * An array of test scenarios.
+     * An array of story scenarios.
      */
     public List<BaseUserStory> ITEMS = new ArrayList<>();
 
     /**
-     * A map of test scenarios, by ID.
+     * A map of story scenarios, by ID.
      */
     static final Map<String, BaseUserStory> ITEM_MAP = new HashMap<>();
 
     /*
-    * Add tests to the public test list and test map
+    * Add stories to the public story list and story map.
      */
     public CommandList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(

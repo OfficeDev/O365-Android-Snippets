@@ -10,12 +10,12 @@ import org.json.JSONObject;
 public class APIErrorMessageHelper {
     // Takes the string returned from Outlook service in the
     // onFailure event, parses for the JSON object, and gets
-    // the actual error message
+    // the actual error message.
     public static String getErrorMessage(String result) {
         String errorMessage = "";
         try {
 
-            // Gets the JSON object out of the result string
+            // Gets the JSON object out of the result string.
             String responseJSON = result
                     .substring(result.indexOf("{"), result.length());
 

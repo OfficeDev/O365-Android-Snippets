@@ -143,7 +143,7 @@ public class AuthenticationController {
     /**
      * Gets AuthenticationContext for AAD.
      *
-     * @return authenticationContext, if successful
+     * @return authenticationContext, if successful.
      */
     public AuthenticationContext getAuthenticationContext() {
         if (authContext == null) {
