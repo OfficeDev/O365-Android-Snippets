@@ -1,7 +1,5 @@
 /*
- * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
- * Portions of this class are adapted from the LoginFragment.java file from Microsoft Open Technologies, Inc.
- * located at https://github.com/AzureAD/azure-activedirectory-library-for-android/blob/2f6e922199a42b477cc77e52c4621641d41ae8ed/samples/hello/src/com/microsoft/aad/adal/hello/LoginFragment.java
+ *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
 
 package com.microsoft.office365.snippetapp.helpers;
@@ -23,8 +21,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AuthUtil {
 
-    private static final String TAG = "AuthUtil";
     public static final int MIN_SDK_VERSION_FOR_ENCRYPT = 18;
+    private static final String TAG = "AuthUtil";
 
     public static void setupEncryptionKey(OperationListActivity activity) {
         // Devices with API level lower than 18 must setSecretKey an encryption key.

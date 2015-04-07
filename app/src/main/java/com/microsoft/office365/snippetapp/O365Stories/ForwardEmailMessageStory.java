@@ -14,9 +14,6 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.List;
 
-/**
- * Created by Microsoft on 3/24/2015.
- */
 public class ForwardEmailMessageStory extends BaseUserStory {
     private static final int MAX_POLL_REQUESTS = 50;
 

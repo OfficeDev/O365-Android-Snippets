@@ -1,7 +1,5 @@
 /*
  * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
- * Portions of this class are adapted from the LoginFragment.java file from Microsoft Open Technologies, Inc.
- * located at https://github.com/AzureAD/azure-activedirectory-library-for-android/blob/2f6e922199a42b477cc77e52c4621641d41ae8ed/samples/hello/src/com/microsoft/aad/adal/hello/LoginFragment.java
  */
 package com.microsoft.office365.snippetapp;
 
@@ -24,6 +22,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.microsoft.aad.adal.AuthenticationResult;
 import com.microsoft.discoveryservices.ServiceInfo;
+import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.Interfaces.O365Operations;
 import com.microsoft.office365.snippetapp.helpers.AuthUtil;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
@@ -32,7 +31,6 @@ import com.microsoft.office365.snippetapp.helpers.DiscoveryController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.outlookservices.odata.OutlookClient;
 import com.microsoft.services.odata.impl.ADALDependencyResolver;
-import com.microsoft.fileservices.odata.SharePointClient;
 
 import java.net.URI;
 import java.util.UUID;
@@ -43,12 +41,13 @@ import static com.microsoft.office365.snippetapp.R.id.operation_detail_container
 public class OperationListActivity extends FragmentActivity
         implements O365Operations {
 
-    private static final String TAG = "OperationListActivity";
-    public static final String DISCONNECTD_FROM_OFFICE = "You are disconnected from Office 365";
+    public static final String DISCONNECTED_FROM_OFFICE = "You are disconnected from Office 365";
     public static final int SDK_BUILD_VERSION = 18;
     public static final int SIGNIN_MENU_ITEM = 1;
     public static final int SIGNOUT_MENU_ITEM = 2;
-
+    private static final String TAG = "OperationListActivity";
+    public OutlookClient mOutlookClient;
+    public SharePointClient mMyFilesClient;
     private String mMailServiceResourceId;
     private String mMailServiceEndpointUri;
     private String mMyFilesServiceEndpointUri;
@@ -56,8 +55,6 @@ public class OperationListActivity extends FragmentActivity
     private MenuItem mSignIn;
     private MenuItem mSignOut;
     private OperationDetailFragment mOperationDetailFragment;
-    public OutlookClient mOutlookClient;
-    public SharePointClient mMyFilesClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +192,7 @@ public class OperationListActivity extends FragmentActivity
             mOutlookClient = null;
             Toast.makeText(
                     OperationListActivity.this,
-                    DISCONNECTD_FROM_OFFICE,
+                    DISCONNECTED_FROM_OFFICE,
                     Toast.LENGTH_LONG).show();
         }
 

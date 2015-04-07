@@ -1,8 +1,10 @@
+/*
+ *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+ */
 package com.microsoft.office365.snippetapp.O365Stories;
 
 import android.util.Log;
 
-import com.microsoft.fileservices.Item;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
@@ -10,9 +12,39 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
-public class CreateOneDriveFolderStory extends BaseUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create a OneDrive Folder (which is then deleted for cleanup)
+//- Delete a OneDrive Folder (which is created first and then deleted)
+public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
     //Unique names used for tracking and cleanup of items created by running snippets
-    private static final String FOLDER_NAME = "O365SnippetFolder_create_";
+    private static final String FOLDER_NAME = "O365SnippetFolder_";
+    private final String CREATE_DESCRIPTION = "Create new folder on OneDrive";
+    private final String CREATE_TAG = "CreateOneDriveFolder";
+    private final String CREATE_SUCCESS = "OneDrive create folder story: Folder created.";
+    private final String CREATE_ERROR = "Create OneDrive folder exception: ";
+    private final String DELETE_DESCRIPTION = "Delete folder from OneDrive";
+    private final String DELETE_TAG = "DeleteOneDriveFolder";
+    private final String DELETE_SUCCESS = "OneDrive delete folder story: Folder deleted.";
+    private final String DELETE_ERROR = "Decline OneDrive folder exception: ";
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
+
+    public CreateOrDeleteOneDriveFolder(String action) {
+        if (action.equals("CREATE")) {
+            mDescription = CREATE_DESCRIPTION;
+            mLogTag = CREATE_TAG;
+            mSuccessDescription = CREATE_SUCCESS;
+            mErrorDescription = CREATE_ERROR;
+        } else { //DELETE
+            mDescription = DELETE_DESCRIPTION;
+            mLogTag = DELETE_TAG;
+            mSuccessDescription = DELETE_SUCCESS;
+            mErrorDescription = DELETE_ERROR;
+        }
+    }
 
     @Override
     public String execute() {
@@ -28,31 +60,21 @@ public class CreateOneDriveFolderStory extends BaseUserStory {
                     .UUID
                     .randomUUID()
                     .toString();
-            Item createdFolder = fileFolderSnippets.createO365Folder(folderName);
 
-            //CLEANUP
+            //Create folder
+            fileFolderSnippets.createO365Folder(folderName);
+
+            //Delete folder
             fileFolderSnippets.deleteO365Folder(folderName);
 
             return StoryResultFormatter.wrapResult(
-                    "OneDrive create folder story: Folder created.", true);
+                    mSuccessDescription, true);
 
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("CreateOneDriveFolder", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Create OneDrive folder exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("CreateOneDriveFolder", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Create OneDrive folder exception: "
-                            + formattedException
+            Log.e(mLogTag, formattedException);
+            return StoryResultFormatter.wrapResult(mErrorDescription + formattedException
                     , false
             );
         }
@@ -60,7 +82,7 @@ public class CreateOneDriveFolderStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Create new folder on OneDrive";
+        return mDescription;
     }
 
 }

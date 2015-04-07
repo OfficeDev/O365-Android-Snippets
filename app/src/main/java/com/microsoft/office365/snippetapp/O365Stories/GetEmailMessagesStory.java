@@ -14,10 +14,6 @@ import com.microsoft.outlookservices.Message;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 2/26/15.
- * String param, Integer progress type, String result
- */
 public class GetEmailMessagesStory extends BaseUserStory {
     @Override
     public String execute() {

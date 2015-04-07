@@ -14,9 +14,6 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.List;
 
-/**
- * Created by Microsoft on 3/12/15.
- */
 public class ReplyToEmailMessageStory extends BaseUserStory {
     private Context mContext;
 
@@ -26,8 +23,6 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
 
     @Override
     public String execute() {
-
-        String returnResult = "";
 
         AuthenticationController
                 .getInstance()

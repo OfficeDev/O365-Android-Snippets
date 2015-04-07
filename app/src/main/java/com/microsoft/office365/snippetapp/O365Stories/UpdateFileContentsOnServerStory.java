@@ -13,9 +13,6 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/19/15.
- */
 public class UpdateFileContentsOnServerStory extends BaseUserStory {
     @Override
     public String execute() {

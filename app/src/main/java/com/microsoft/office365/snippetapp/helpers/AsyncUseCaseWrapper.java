@@ -8,9 +8,6 @@ import android.os.AsyncTask;
 import com.microsoft.office365.snippetapp.Interfaces.IOperationCompleteListener;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 
-/**
- * Created by Microsoft on 3/10/15.
- */
 public class AsyncUseCaseWrapper extends AsyncTask<BaseUserStory, IOperationCompleteListener.OperationResult, Void> {
 
     private final IOperationCompleteListener mOperationCompletedListener;

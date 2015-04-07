@@ -14,22 +14,44 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/12/15.
- */
-public class CreateContactStory extends BaseUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create a contact (which is then deleted for cleanup)
+//- Delete a contact (which is created first and then deleted)
+public class CreateOrDeleteContactStory extends BaseUserStory {
+    private final String CREATE_DESCRIPTION = "Creates a new contact";
+    private final String CREATE_TAG = "Create contact story";
+    private final String CREATE_SUCCESS = "CreateContactStory: Contact created.";
+    private final String CREATE_ERROR = "Create contact exception: ";
+    private final String DELETE_DESCRIPTION = "Deletes a contact";
+    private final String DELETE_TAG = "Delete contact story";
+    private final String DELETE_SUCCESS = "DeleteContactStory: Contact deleted.";
+    private final String DELETE_ERROR = "Delete contact exception: ";
     private Context mContext;
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
 
-    public CreateContactStory(Context context) {
+    public CreateOrDeleteContactStory(Context context, String action) {
         mContext = context;
+        if (action.equals("CREATE")) {
+            mDescription = CREATE_DESCRIPTION;
+            mLogTag = CREATE_TAG;
+            mSuccessDescription = CREATE_SUCCESS;
+            mErrorDescription = CREATE_ERROR;
+        } else { //DELETE
+            mDescription = DELETE_DESCRIPTION;
+            mLogTag = DELETE_TAG;
+            mSuccessDescription = DELETE_SUCCESS;
+            mErrorDescription = DELETE_ERROR;
+        }
     }
-
 
     @Override
     public String execute() {
         String returnValue = StoryResultFormatter.wrapResult(
-                "CreateContactStory: Contact "
-                        + " created.", false
+                mLogTag, false
         );
         AuthenticationController
                 .getInstance()
@@ -47,38 +69,26 @@ public class CreateContactStory extends BaseUserStory {
             if (contactId.length() > 0) {
                 contactsSnippets.deleteContact(contactId);
                 return StoryResultFormatter.wrapResult(
-                        "CreateContactStory: Contact "
-                                + " created.", true
+                        mSuccessDescription, true
                 );
             }
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Create contact story", formattedException);
+            Log.e(mLogTag, formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Create contact exception: "
-                            + formattedException
+                    mErrorDescription + formattedException
                     , false
             );
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Create contact story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Create contact exception: "
-                            + formattedException
-                    , false
-            );
         }
         return returnValue;
     }
 
     @Override
     public String getDescription() {
-        return "Creates a contact";
+        return mDescription;
     }
-
 
 }
 // *********************************************************

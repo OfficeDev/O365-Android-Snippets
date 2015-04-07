@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/17/15.
- */
 public class UpdateEventStory extends BaseUserStory {
     private Context mContext;
 

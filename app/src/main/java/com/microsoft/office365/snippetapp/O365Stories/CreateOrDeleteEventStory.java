@@ -17,26 +17,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/12/15.
- */
-public class CreateEventStory extends BaseUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create an event (which is then deleted for cleanup)
+//- Delete an event (which is created first and then deleted)
+public class CreateOrDeleteEventStory extends BaseUserStory {
+    private final String CREATE_DESCRIPTION = "Adds a new calendar event";
+    private final String CREATE_TAG = "Create event story";
+    private final String CREATE_SUCCESS = "CreateEventStory: Event created.";
+    private final String CREATE_ERROR = "Create event exception: ";
+    private final String DELETE_DESCRIPTION = "Deletes a calendar event";
+    private final String DELETE_TAG = "Delete event story";
+    private final String DELETE_SUCCESS = "DeleteEventStory: Event deleted.";
+    private final String DELETE_ERROR = "Delete event exception: ";
     private Context mContext;
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
 
-    public CreateEventStory(Context context) {
+    public CreateOrDeleteEventStory(Context context, String action) {
         mContext = context;
+        if (action.equals("CREATE")) {
+            mDescription = CREATE_DESCRIPTION;
+            mLogTag = CREATE_TAG;
+            mSuccessDescription = CREATE_SUCCESS;
+            mErrorDescription = CREATE_ERROR;
+        } else { //DELETE
+            mDescription = DELETE_DESCRIPTION;
+            mLogTag = DELETE_TAG;
+            mSuccessDescription = DELETE_SUCCESS;
+            mErrorDescription = DELETE_ERROR;
+        }
     }
-
 
     @Override
     public String execute() {
         //PREPARE
-        String returnValue = StoryResultFormatter.wrapResult("Create Event story", false);
-
         AuthenticationController
                 .getInstance()
                 .setResourceId(
-                        getO365MailResourceId());
+                        super.getO365MailResourceId());
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
                 getO365MailClient());
@@ -53,49 +74,23 @@ public class CreateEventStory extends BaseUserStory {
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAdresses);
 
-            String addedEventId = calendarSnippets.getCalendarEventId(newEventId);
-
-            //CLEAN UP
+            //Delete event
             calendarSnippets.deleteCalendarEvent(newEventId);
-
-            //ASSERT
-            if (addedEventId.length() > 0 && addedEventId.equals(newEventId)) {
-                return StoryResultFormatter.wrapResult(
-                        "CreateEventStory: Event "
-                                + " created.", true
-                );
-
-            } else {
-                return StoryResultFormatter.wrapResult(
-                        "CreateEventStory: Create "
-                                + " event.", false
-                );
-            }
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Events story", formattedException);
+            Log.e(mLogTag, formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get events exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Events story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get events exception: "
-                            + formattedException
+                    mErrorDescription + formattedException
                     , false
             );
         }
+        return StoryResultFormatter.wrapResult(mSuccessDescription, true);
     }
 
     @Override
     public String getDescription() {
-        return "Adds a new calendar event";
+        return mDescription;
     }
 }
 // *********************************************************

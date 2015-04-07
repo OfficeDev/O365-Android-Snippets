@@ -24,11 +24,20 @@ import com.microsoft.services.odata.interfaces.LogLevel;
 
 public class AuthenticationController {
     private static String TAG = "AuthenticationController";
-
+    private static AuthenticationController INSTANCE;
     private AuthenticationContext authContext;
     private ADALDependencyResolver dependencyResolver;
     private Activity contextActivity;
     private String resourceId;
+
+    private AuthenticationController() {
+        resourceId = com.microsoft.office365.snippetapp.helpers.Constants.DISCOVERY_RESOURCE_ID;
+    }
+
+    private AuthenticationController(final Activity contextActivity) {
+        this();
+        this.contextActivity = contextActivity;
+    }
 
     public static synchronized AuthenticationController getInstance() {
         if (INSTANCE == null) {
@@ -39,17 +48,6 @@ public class AuthenticationController {
 
     public static synchronized void resetInstance() {
         INSTANCE = null;
-    }
-
-    private static AuthenticationController INSTANCE;
-
-    private AuthenticationController() {
-        resourceId = com.microsoft.office365.snippetapp.helpers.Constants.DISCOVERY_RESOURCE_ID;
-    }
-
-    private AuthenticationController(final Activity contextActivity) {
-        this();
-        this.contextActivity = contextActivity;
     }
 
     /**

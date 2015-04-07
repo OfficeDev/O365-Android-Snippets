@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/18/15.
- */
 public class DeclineEventInviteStory extends BaseUserStory {
     public static final String DECLINE_AN_EVENT_INVITE = "Decline an event invite";
     private Context mContext;

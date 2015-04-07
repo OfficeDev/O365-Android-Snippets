@@ -7,13 +7,11 @@ import android.content.Context;
 
 import com.microsoft.office365.snippetapp.O365Stories.AcceptEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
-import com.microsoft.office365.snippetapp.O365Stories.CreateContactStory;
-import com.microsoft.office365.snippetapp.O365Stories.CreateEventStory;
-import com.microsoft.office365.snippetapp.O365Stories.CreateNewFileStory;
-import com.microsoft.office365.snippetapp.O365Stories.CreateOneDriveFolderStory;
+import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory;
+import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
+import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
+import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
 import com.microsoft.office365.snippetapp.O365Stories.DeclineEventInviteStory;
-import com.microsoft.office365.snippetapp.O365Stories.DeleteFileFromServerStory;
-import com.microsoft.office365.snippetapp.O365Stories.DeleteOneDriveFolderStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
@@ -32,41 +30,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommandList {
+public class StoryList {
     /**
-     * An array of test scenarios.
+     * A map of stories, by ID.
+     */
+    static final Map<String, BaseUserStory> ITEM_MAP = new HashMap<>();
+    /**
+     * An array of stories.
      */
     public List<BaseUserStory> ITEMS = new ArrayList<>();
 
-    /**
-     * A map of test scenarios, by ID.
-     */
-    static final Map<String, BaseUserStory> ITEM_MAP = new HashMap<>();
-
     /*
-    * Add tests to the public test list and test map
+    * Add stories to the public story list and story map
      */
-    public CommandList(Context context) {
+    public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
                 new SendEmailMessageStory(context),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(context),
                 new ForwardEmailMessageStory(context),
                 new GetContactsStory(),
-                new CreateContactStory(context),
+                new CreateOrDeleteContactStory(context, "CREATE"),
+                new CreateOrDeleteContactStory(context, "DELETE"),
                 new UpdateContactStory(context),
-                new CreateEventStory(context),
+                new CreateOrDeleteEventStory(context, "CREATE"),
+                new CreateOrDeleteEventStory(context, "DELETE"),
                 new EventsFetcherStory(),
                 new UpdateEventStory(context),
                 new AcceptEventInviteStory(),
                 new DeclineEventInviteStory(context),
                 new GetFilesAndFoldersStory(),
-                new CreateNewFileStory(),
+                new CreateOrDeleteFileStory("CREATE"),
                 new UpdateFileContentsOnServerStory(),
-                new DeleteFileFromServerStory(),
+                new CreateOrDeleteFileStory("DELETE"),
                 new DownloadFileStory(),
-                new CreateOneDriveFolderStory(),
-                new DeleteOneDriveFolderStory()
+                new CreateOrDeleteOneDriveFolder("CREATE"),
+                new CreateOrDeleteOneDriveFolder("DELETE")
         );
         for (BaseUserStory object : baseUserStories) {
             ITEM_MAP.put(object.getId(), object);

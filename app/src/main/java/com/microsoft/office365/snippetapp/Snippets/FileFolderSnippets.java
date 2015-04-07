@@ -6,15 +6,12 @@ package com.microsoft.office365.snippetapp.Snippets;
 import com.google.common.base.Charsets;
 import com.microsoft.fileservices.File;
 import com.microsoft.fileservices.Item;
-import com.microsoft.services.odata.Constants;
 import com.microsoft.fileservices.odata.SharePointClient;
+import com.microsoft.services.odata.Constants;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/19/15.
- */
 public class FileFolderSnippets {
     SharePointClient mSharePointClient;
 

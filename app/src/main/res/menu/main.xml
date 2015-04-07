@@ -33,6 +33,6 @@
         android:id="@+id/menu_clearResults"
         android:orderInCategory="2"
         android:showAsAction="ifRoom"
-        android:title="Clear results"
+        android:title="@string/MainActivity_ClearResults"
         tools:ignore="AppCompatResource" />
 </menu>

@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/12/15.
- */
 public class ContactsSnippets {
 
     private final OutlookClient mCalendarClient;

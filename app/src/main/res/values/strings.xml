@@ -65,4 +65,5 @@
         &lt;/body&gt;
         &lt;/html&gt;
     </string>
+    <string name="MainActivity_ClearResults">Clear results</string>
 </resources>

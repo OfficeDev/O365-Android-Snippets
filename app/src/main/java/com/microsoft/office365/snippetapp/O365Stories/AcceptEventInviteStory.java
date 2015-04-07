@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/18/15.
- */
 public class AcceptEventInviteStory extends BaseUserStory {
     @Override
     public String execute() {

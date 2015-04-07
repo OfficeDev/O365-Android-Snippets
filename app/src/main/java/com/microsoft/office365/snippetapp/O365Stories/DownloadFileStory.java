@@ -16,9 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by microsoft on 3/20/15.
- */
 public class DownloadFileStory extends BaseUserStory {
     private static final String DOWNLOAD_DOC_PATH = "O365Snippets";
     private static final String DOWNLOAD_DOC_FILENAME = "testdownload.txt";

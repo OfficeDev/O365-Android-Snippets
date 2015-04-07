@@ -6,10 +6,10 @@ package com.microsoft.office365.snippetapp.O365Stories;
 
 import android.view.View;
 
+import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
-import com.microsoft.fileservices.odata.SharePointClient;
 
 public abstract class BaseUserStory {
 
@@ -19,6 +19,7 @@ public abstract class BaseUserStory {
     private SharePointClient mO365MyFilesClient;
     private String mMailResourceId;
     private OnUseCaseStatusChangedListener mUseCaseStatusChangedListener;
+    private String mFilesFoldersResourceId;
 
     public String getFilesFoldersResourceId() {
         return mFilesFoldersResourceId;
@@ -32,8 +33,6 @@ public abstract class BaseUserStory {
         mUseCaseStatusChangedListener = listener;
     }
 
-    private String mFilesFoldersResourceId;
-
     public abstract String execute();
 
     public abstract String getDescription();
@@ -42,30 +41,20 @@ public abstract class BaseUserStory {
         return java.util.UUID.randomUUID().toString();
     }
 
+    public View getUIResultView() {
+        return mUpdateView;
+    }
 
     public void setUIResultView(View view) {
         mUpdateView = view;
     }
 
-    public View getUIResultView() {
-        return mUpdateView;
-    }
-
-    public void setO365MailClient(OutlookClient client) {
-
-        mO365MailClient = client;
-    }
-
-    public void setO365MyFilesClient(SharePointClient client) {
-        mO365MyFilesClient = client;
+    public String getO365MailResourceId() {
+        return mMailResourceId;
     }
 
     public void setO365MailResourceId(String resourceId) {
         mMailResourceId = resourceId;
-    }
-
-    public String getO365MailResourceId() {
-        return mMailResourceId;
     }
 
     public OutlookClient getO365MailClient() {
@@ -76,8 +65,17 @@ public abstract class BaseUserStory {
         return mO365MailClient;
     }
 
+    public void setO365MailClient(OutlookClient client) {
+
+        mO365MailClient = client;
+    }
+
     public SharePointClient getO365MyFilesClient() {
         return mO365MyFilesClient;
+    }
+
+    public void setO365MyFilesClient(SharePointClient client) {
+        mO365MyFilesClient = client;
     }
 
     private void notifyStatusChange() {

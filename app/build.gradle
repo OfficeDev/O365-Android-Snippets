@@ -5,11 +5,17 @@ android {
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "com.microsoft.office365.snippetapp"
-        minSdkVersion 15
-        targetSdkVersion 18
+        minSdkVersion 16
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,6 +37,6 @@ dependencies {
     compile 'com.microsoft.services:file-services:0.12.1'
     compile 'com.microsoft.aad:adal:1.0.5'
     compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.google.guava:guava:16.0.1'
+    compile 'com.google.guava:guava:18.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
 }

@@ -15,9 +15,6 @@ import com.microsoft.outlookservices.Contact;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/16/15.
- */
 public class UpdateContactStory extends BaseUserStory {
     private Context mContext;
 

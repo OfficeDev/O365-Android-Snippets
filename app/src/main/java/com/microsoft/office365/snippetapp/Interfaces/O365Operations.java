@@ -6,12 +6,9 @@ package com.microsoft.office365.snippetapp.Interfaces;
 
 import android.view.View;
 
-import com.microsoft.outlookservices.odata.OutlookClient;
 import com.microsoft.fileservices.odata.SharePointClient;
+import com.microsoft.outlookservices.odata.OutlookClient;
 
-/**
- * Created by Microsoft on 4/1/15.
- */
 public interface O365Operations {
     public void connectToO365();
 

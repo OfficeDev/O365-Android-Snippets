@@ -3,9 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.helpers;
 
-/**
- * Created by Microsoft on 2/25/15.
- */
 public class StoryResultFormatter {
     public static String wrapResult(String result, boolean passed) {
         String passfail = "FAILED: ";

@@ -13,10 +13,41 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Microsoft on 3/19/15.
- */
-public class CreateNewFileStory extends BaseUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create a file (which is then deleted for cleanup)
+//- Delete a file (which is created first and then deleted)
+public class CreateOrDeleteFileStory extends BaseUserStory {
+    private final String CREATE_DESCRIPTION = "Create a file on server";
+    private final String CREATE_TAG = "CreateFile";
+    private final String CREATE_SUCCESS = "Create a file on server";
+    private final String CREATE_ERROR = "Create a file on server exception: ";
+
+    private final String DELETE_DESCRIPTION = "Delete a file on server";
+    private final String DELETE_TAG = "DeleteFile";
+    private final String DELETE_SUCCESS = "Delete a file on server";
+    private final String DELETE_ERROR = "Delete a file on server exception: ";
+
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
+
+    public CreateOrDeleteFileStory(String action) {
+
+        if (action.equals("CREATE")) {
+            mDescription = CREATE_DESCRIPTION;
+            mLogTag = CREATE_TAG;
+            mSuccessDescription = CREATE_SUCCESS;
+            mErrorDescription = CREATE_ERROR;
+        } else { //DELETE
+            mDescription = DELETE_DESCRIPTION;
+            mLogTag = DELETE_TAG;
+            mSuccessDescription = DELETE_SUCCESS;
+            mErrorDescription = DELETE_ERROR;
+        }
+    }
+
     @Override
     public String execute() {
         AuthenticationController
@@ -28,10 +59,11 @@ public class CreateNewFileStory extends BaseUserStory {
 
         try {
 
-            String fileContents = "Test create file";
+            String fileContents = "Test create and delete file";
+            //Create file
             String newFileId = fileFolderSnippets
                     .postNewFileToServer(
-                            "test_Create_"
+                            "test_Create_Delete_"
                                     + java
                                     .util
                                     .UUID
@@ -40,38 +72,22 @@ public class CreateNewFileStory extends BaseUserStory {
                                     + ".txt"
                             , fileContents.getBytes(Charsets.UTF_8));
 
-            String confirmFileId = fileFolderSnippets.getFileFromServerById(newFileId);
+            //Delete file
             fileFolderSnippets.deleteFileFromServer(newFileId);
-
-            if (confirmFileId.equals(newFileId)) {
-                return StoryResultFormatter.wrapResult("Create a file on server", true);
-            } else {
-                return StoryResultFormatter.wrapResult("Create a file on server", false);
-            }
-
-        } catch (ExecutionException e) {
+            return StoryResultFormatter.wrapResult(mSuccessDescription, true);
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Create a file on server", formattedException);
+            Log.e(mLogTag, formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Create a file on server exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Create a file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Create a file on server exception: "
-                            + formattedException, false
+                    mErrorDescription + formattedException, false
             );
         }
-
     }
 
     @Override
     public String getDescription() {
-        return "Create a file on server";
+        return mDescription;
     }
 }
 // *********************************************************

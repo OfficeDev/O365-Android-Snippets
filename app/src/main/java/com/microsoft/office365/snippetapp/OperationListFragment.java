@@ -20,13 +20,13 @@ import com.microsoft.office365.snippetapp.Interfaces.O365Operations;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.AsyncUseCaseWrapper;
-import com.microsoft.office365.snippetapp.helpers.CommandList;
+import com.microsoft.office365.snippetapp.helpers.StoryList;
 
 public class OperationListFragment extends ListFragment implements IOperationCompleteListener, OnUseCaseStatusChangedListener {
 
     public static final String DISCONNECTED_FROM_OFFICE_365 = "You are disconnected from Office 365";
     public static final String ON_ATTACH_EXCEPTION_MSG = "Activity must implement fragment's callbacks.";
-    private CommandList mCommands;
+    private StoryList mCommands;
     private O365Operations mO365Operations;
     private BaseAdapter mOperationAdapter;
 
@@ -93,7 +93,7 @@ public class OperationListFragment extends ListFragment implements IOperationCom
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mCommands = new CommandList(getActivity().getApplicationContext());
+        mCommands = new StoryList(getActivity().getApplicationContext());
     }
 
     @Override

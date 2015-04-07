@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 public class DiscoveryController {
 
     private static final String TAG = "DiscoveryController";
-
+    private static DiscoveryController INSTANCE;
     private List<ServiceInfo> mServices;
 
     public static synchronized DiscoveryController getInstance() {
@@ -37,8 +37,6 @@ public class DiscoveryController {
     public static synchronized void resetInstance() {
         INSTANCE = null;
     }
-
-    private static DiscoveryController INSTANCE;
 
     /**
      * Provides information about the service that corresponds to the provided

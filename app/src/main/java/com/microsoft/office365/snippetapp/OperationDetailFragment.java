@@ -12,23 +12,9 @@ import android.widget.TextView;
 
 public class OperationDetailFragment extends Fragment {
 
-    //todo: learn more about why this is here?
     public static final String ARG_ITEM_ID = "item_id";
 
     private TextView mOperationDetailTextView;
-
-//    public static OperationDetailFragment getInstance();
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_operation_detail, container, false);
-        mOperationDetailTextView = ((TextView) view.findViewById(R.id.operation_detail));
-        return view;
-    }
-
-    public void clearResults() {
-        mOperationDetailTextView.setText("");
-    }
 
     public static OperationDetailFragment getInstance(String itemId) {
         OperationDetailFragment fragment = new OperationDetailFragment();
@@ -39,6 +25,17 @@ public class OperationDetailFragment extends Fragment {
         );
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_operation_detail, container, false);
+        mOperationDetailTextView = ((TextView) view.findViewById(R.id.operation_detail));
+        return view;
+    }
+
+    public void clearResults() {
+        mOperationDetailTextView.setText("");
     }
 }
 // *********************************************************
