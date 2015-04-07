@@ -2,7 +2,6 @@
 *.ap_
 *.class
 *.dex
-*.iml
 *.ipr
 *.iws
 .classpath
