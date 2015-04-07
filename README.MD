@@ -2,7 +2,7 @@
 
 **Table of contents**
 
-* [Changee History](#change-history)
+* [Change History](#change-history)
 * [Device requirements](#device-requirements)
 * [Prerequisites](#prerequisites)
 * [Open the project using Android Studio](#open-the-project-using-android-studio) 
@@ -94,14 +94,13 @@ To use the Office 365 Code Snippets for Android you need the following:
 Open the project by importing the settings.gradle file.
 
 1. Install [Android Studio](http://developer.android.com/tools/studio/index.html#install-updates) and add the Android SDK packages according to the [instructions](http://developer.android.com/sdk/installing/adding-packages.html) on developer.android.com.
-1. Download or clone the
-   [Office 365 Code Snippets for Android](https://github.com/OfficeDev/O365-Android-Snippets).
-1. Start Android Studio.
-	1. From the **Welcome to Android Studio** dialog, choose **Import project (Eclipse ADT, Gradle, etc.)**. 
-	2. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
-1. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
-	1. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
-	2. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in Azure Active Directory.
+2. Download or clone the [Office 365 Code Snippets for Android](https://github.com/OfficeDev/O365-Android-Snippets).
+3. Start Android Studio.
+4. From the **Welcome to Android Studio** dialog, choose **Import project (Eclipse ADT, Gradle, etc.)**. 
+5. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
+6. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
+7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
+8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in Azure Active Directory.
 
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
 > 
@@ -181,4 +180,5 @@ We'd love to get your feedback on this Android starter kit. You can send your qu
 ## Copyright
 Copyright (c) 2015 Microsoft. All rights reserved.
 Microsoft and OneDrive are either registered trademarks or trademarks of Microsoft Corporation.
+
 
