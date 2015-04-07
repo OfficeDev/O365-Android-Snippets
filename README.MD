@@ -2,7 +2,7 @@
 
 **Table of contents**
 
-* [Changee History](#change-history)
+* [Change History](#change-history)
 * [Device requirements](#device-requirements)
 * [Prerequisites](#prerequisites)
 * [Open the project using Android Studio](#open-the-project-using-android-studio) 
