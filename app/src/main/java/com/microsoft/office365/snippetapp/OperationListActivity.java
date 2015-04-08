@@ -106,7 +106,7 @@ public class OperationListActivity extends FragmentActivity
                 new Runnable() {
                     @Override
                     public void run() {
-                        OperationListFragment operationListFragment = (OperationListFragment) getSupportFragmentManager()
+                        OperationListFragment operationListFragment = (OperationListFragment) getFragmentManager()
                                 .findFragmentById(R.id.operation_list);
                         operationListFragment.onServicesReady();
                     }
