@@ -12,7 +12,7 @@
 * [Questions and comments](#questions-and-comments)
 * [Additional resources](#additional-resources)
 
-This sample for Android gives you the common code routines that you write for access to email, calendar events, contacts, and files in Office 365. These code routines known as "snippets" are simple and self contained methods that you can copy and paste into your own code or use as reference for learning. This sample has snippets for the most common create, read, update, and delete operations on Office 365 content.  
+This sample for Android is a repository of simple method examples that access email, calendar events, contacts, and files in Office 365. These "snippet" methods self contained so you can paste them into your own code or use as reference for learning. This sample has snippets for the most common create, read, update, and delete operations on Office 365 content.
 
 This sample includes:
 
@@ -26,7 +26,7 @@ This sample includes:
 * Decline an event invitation.
 * Get the status of an event attendee.
 
-**OneDrive for Business Files**
+**OneDrive for Business**
  
 * Get existing files and folders.
 * Create text files.
@@ -62,7 +62,6 @@ April 6, 2015:
 ## Device requirements
 To run the snippets project your device needs to meet the following requirements:
 
-* A tablet with a screen size of 7 inches or larger.
 * Android API level 16 or newer.
 
 ### Prerequisites
@@ -71,7 +70,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 
 * The latest version of [Android Studio](http://developer.android.com/sdk/index.html).
 * The [Gradle](http://www.gradle.org) build automation system version 2.2.1 or later.
-* An Office 365 account. You can sign up for [an Office 365 Developer subscription](https://portal.microsoftonline.com/Signup/MainSignUp.aspx?OfferId=6881A1CB-F4EB-4db3-9F18-388898DAF510&DL=DEVELOPERPACK) that includes the resources that you need to start building Office 365 apps.
+* An Office 365 account. You can sign up for [an Office 365 Developer subscription](https://portal.office.com/Signup/Signup.aspx?OfferId=C69E7747-2566-4897-8CBA-B998ED3BAB88&DL=DEVELOPERPACK&ali=1#0) that includes the resources that you need to start building Office 365 apps.
 * Java Development Kit (JDK) 7.
 * A registered Azure application with a client id and redirect uri value. The application must have the following permissions:
 	* Windows Azure Active Directory
