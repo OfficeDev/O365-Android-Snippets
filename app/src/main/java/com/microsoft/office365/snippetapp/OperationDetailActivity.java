@@ -3,10 +3,7 @@
  */
 package com.microsoft.office365.snippetapp;
 
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
@@ -18,13 +15,10 @@ public class OperationDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operation_detail);
 
-        // Show the Up button in the action bar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         if (savedInstanceState == null) {
             String itemId = getIntent().getStringExtra(OperationDetailFragment.ARG_ITEM_ID);
             OperationDetailFragment fragment = OperationDetailFragment.getInstance(itemId);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.operation_detail_container, fragment)
                     .commit();
         }
@@ -33,10 +27,6 @@ public class OperationDetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, OperationListActivity.class));
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }
