@@ -57,7 +57,11 @@ public class DiscoveryController {
             for (ServiceInfo service : mServices) {
                 if (service.getcapability().equals(capability)) {
                     Log.i(TAG,
-                            "getServiceInfo - " + service.getserviceName() + " service for " + capability + " was found in local cached services");
+                            "getServiceInfo - "
+                                    + service.getserviceName()
+                                    + " service for "
+                                    + capability
+                                    + " was found in local cached services");
                     result.set(service);
                     serviceFound = true;
                     break;
@@ -65,7 +69,10 @@ public class DiscoveryController {
             }
 
             if (!serviceFound) {
-                NoSuchElementException noSuchElementException = new NoSuchElementException("The " + capability + " capability was not found in the local cached services.");
+                NoSuchElementException noSuchElementException = new NoSuchElementException(
+                        "The "
+                                + capability
+                                + " capability was not found in the local cached services.");
                 Log.e(TAG, "getServiceInfo - " + noSuchElementException.getMessage());
                 result.setException(noSuchElementException);
             }
@@ -92,7 +99,11 @@ public class DiscoveryController {
                                 for (ServiceInfo service : services) {
                                     if (service.getcapability().equals(capability)) {
                                         Log.i(TAG,
-                                                "getServiceInfo - " + service.getserviceName() + " service for " + capability + " was found in services retrieved from discovery");
+                                                "getServiceInfo - "
+                                                        + service.getserviceName()
+                                                        + " service for "
+                                                        + capability
+                                                        + " was found in services retrieved from discovery");
                                         result.set(service);
                                         serviceFound = true;
                                         break;
@@ -101,7 +112,9 @@ public class DiscoveryController {
 
                                 if (!serviceFound) {
                                     NoSuchElementException noSuchElementException = new NoSuchElementException(
-                                            "The " + capability + " capability was not found in the user services.");
+                                            "The "
+                                                    + capability
+                                                    + " capability was not found in the user services.");
                                     Log.e(TAG,
                                             "getServiceInfo - " + noSuchElementException.getMessage());
                                     result.setException(noSuchElementException);

@@ -5,21 +5,10 @@
 package com.microsoft.office365.snippetapp.Interfaces;
 
 public interface IOperationCompleteListener {
-    void onOperationComplete(OperationResult opResult);
-
     class OperationResult {
         String mOperationResult;
         String mOperation;
         String mid;
-
-        // operation: the CRUD operation attempted
-        // operationResult: The result of the CRUD operation
-        // id: The id of the entity that was operated on
-        public OperationResult(String operation, String operationResult) {
-            mOperation = operation;
-            mOperationResult = operationResult;
-
-        }
 
         public String getOperationResult() {
             return mOperationResult;
@@ -33,7 +22,18 @@ public interface IOperationCompleteListener {
             return mid;
         }
 
+        // operation: the CRUD operation attempted.
+        // operationResult: The result of the CRUD operation.
+        // id: The id of the entity that was operated on.
+        public OperationResult(String operation, String operationResult) {
+            mOperation = operation;
+            mOperationResult = operationResult;
+
+        }
+
     }
+
+    void onOperationComplete(OperationResult opResult);
 }
 // *********************************************************
 //

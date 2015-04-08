@@ -23,6 +23,12 @@ public class AuthUtil {
 
     public static final int MIN_SDK_VERSION_FOR_ENCRYPT = 18;
     private static final String TAG = "AuthUtil";
+    public static final String ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
+    public static final String O365_PASSWORD = "O365_password";
+    public static final String O365_SALT = "O365_salt";
+    public static final int ITERATION_COUNT = 100;
+    public static final int KEY_LENGTH = 256;
+    public static final String AES = "AES";
 
     public static void setupEncryptionKey(OperationListActivity activity) {
         // Devices with API level lower than 18 must setSecretKey an encryption key.
@@ -42,13 +48,13 @@ public class AuthUtil {
             InvalidKeySpecException, UnsupportedEncodingException {
         if (AuthenticationSettings.INSTANCE.getSecretKeyData() == null) {
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(
-                    "PBEWithSHA256And256BitAES-CBC-BC");
-            PBEKeySpec keySpec = new PBEKeySpec("O365_password".toCharArray(),
-                    "O365_salt".getBytes("UTF-8"),
-                    100,
-                    256);
+                    ALGORITHM);
+            PBEKeySpec keySpec = new PBEKeySpec(O365_PASSWORD.toCharArray(),
+                    O365_SALT.getBytes("UTF-8"),
+                    ITERATION_COUNT,
+                    KEY_LENGTH);
             SecretKey tempKey = keyFactory.generateSecret(keySpec);
-            SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), "AES");
+            SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), AES);
             AuthenticationSettings.INSTANCE.setSecretKey(secretKey.getEncoded());
         }
     }

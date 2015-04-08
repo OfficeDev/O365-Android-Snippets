@@ -63,7 +63,7 @@ April 6, 2015:
 To run the snippets project your device needs to meet the following requirements:
 
 * A tablet with a screen size of 7 inches or larger.
-* Android API level 16 or later.
+* Android API level 16 or newer.
 
 ### Prerequisites
 

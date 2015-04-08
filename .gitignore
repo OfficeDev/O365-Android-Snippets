@@ -12,6 +12,7 @@
 /.idea/libraries
 /.idea/workspace.xml
 /build
+/gradle
 /local.properties
 bin/
 build/

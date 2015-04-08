@@ -32,16 +32,16 @@ import java.util.Map;
 
 public class StoryList {
     /**
-     * A map of stories, by ID.
+     * An array of story scenarios.
      */
     static final Map<String, BaseUserStory> ITEM_MAP = new HashMap<>();
     /**
-     * An array of stories.
+     * A map of story scenarios, by ID.
      */
     public List<BaseUserStory> ITEMS = new ArrayList<>();
 
     /*
-    * Add stories to the public story list and story map
+    * Add stories to the public story list and story map.
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(

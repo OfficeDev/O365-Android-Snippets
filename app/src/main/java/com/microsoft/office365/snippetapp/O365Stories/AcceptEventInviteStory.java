@@ -32,8 +32,8 @@ public class AcceptEventInviteStory extends BaseUserStory {
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
-        //ACT
-        try {
+
+         try {
             newEventId = calendarSnippets.createCalendarEvent(
                     "Subject"
                     , "<p class=MsoNormal>Hello world!</p>"
@@ -50,9 +50,9 @@ public class AcceptEventInviteStory extends BaseUserStory {
             String attendeeStatus = calendarSnippets.getEventAttendeeStatus(
                     newEventId
                     , GlobalValues.USER_EMAIL);
-            //CLEAN UP
+
             calendarSnippets.deleteCalendarEvent(newEventId);
-            //ASSERT
+
             if (attendeeStatus.toLowerCase().contains("accept")) {
                 return StoryResultFormatter.wrapResult(
                         "Accept event invite story: Event "
