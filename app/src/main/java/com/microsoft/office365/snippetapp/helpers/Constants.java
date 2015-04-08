@@ -13,8 +13,8 @@ public interface Constants {
     public static final String CONTACTS_CAPABILITY = "Contacts";
 
     // Update these two constants with the values for your application:
-    public static final String CLIENT_ID = "<Your client ID HERE>";
-    public static final String REDIRECT_URI = "<Your redirect URI HERE>";
+    public static final String CLIENT_ID = "7c6bb398-09fc-4a68-bac5-2d0d7bfe65e8";
+    public static final String REDIRECT_URI = "https://www.patsoltest.com";
 
 }
 
