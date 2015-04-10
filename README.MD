@@ -1,4 +1,4 @@
-﻿﻿# Office 365 Code Snippets for Android
+# Office 365 Code Snippets for Android
 
 **Table of contents**
 
