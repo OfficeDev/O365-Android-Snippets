@@ -12,6 +12,7 @@ import com.microsoft.office365.snippetapp.OperationListActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.SecretKey;
@@ -22,43 +23,32 @@ import javax.crypto.spec.SecretKeySpec;
 public class AuthUtil {
 
     public static final int MIN_SDK_VERSION_FOR_ENCRYPT = 18;
-    private static final String TAG = "AuthUtil";
-    public static final String ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
-    public static final String O365_PASSWORD = "O365_password";
-    public static final String O365_SALT = "O365_salt";
-    public static final int ITERATION_COUNT = 100;
-    public static final int KEY_LENGTH = 256;
-    public static final String AES = "AES";
 
-    public static void setupEncryptionKey(OperationListActivity activity) {
-        // Devices with API level lower than 18 must setSecretKey an encryption key.
-        if (Build.VERSION.SDK_INT >= MIN_SDK_VERSION_FOR_ENCRYPT) {
-            return;
+    public static void configureAuthSettings(OperationListActivity activity) {
+        // Devices with API level lower than 18 must setup an encryption key.
+        if (Build.VERSION.SDK_INT < MIN_SDK_VERSION_FOR_ENCRYPT && AuthenticationSettings.INSTANCE.getSecretKeyData() == null) {
+            AuthenticationSettings.INSTANCE.setSecretKey(generateSecretKey());
         }
-        try {
-            setSecretKey();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | UnsupportedEncodingException ex) {
-            Log.e(TAG, "setup encryption key failed!");
-            activity.showEncryptionKeyErrorUI();
-        }
+
+        // We're not using Microsoft Intune's Company portal app,
+        // skip the broker check so we don't get warnings about the following permissions
+        // in manifest:
+        // GET_ACCOUNTS
+        // USE_CREDENTIALS
+        // MANAGE_ACCOUNTS
         AuthenticationSettings.INSTANCE.setSkipBroker(true);
     }
 
-    private static void setSecretKey() throws NoSuchAlgorithmException,
-            InvalidKeySpecException, UnsupportedEncodingException {
-        if (AuthenticationSettings.INSTANCE.getSecretKeyData() == null) {
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(
-                    ALGORITHM);
-            PBEKeySpec keySpec = new PBEKeySpec(O365_PASSWORD.toCharArray(),
-                    O365_SALT.getBytes("UTF-8"),
-                    ITERATION_COUNT,
-                    KEY_LENGTH);
-            SecretKey tempKey = keyFactory.generateSecret(keySpec);
-            SecretKey secretKey = new SecretKeySpec(tempKey.getEncoded(), AES);
-            AuthenticationSettings.INSTANCE.setSecretKey(secretKey.getEncoded());
-        }
+    /**
+     * Randomly generates an encryption key for devices with API level lower than 18.
+     *
+     * @return The encryption key in a 32 byte long array.
+     */
+    protected static byte[] generateSecretKey() {
+        byte[] key = new byte[32];
+        new SecureRandom().nextBytes(key);
+        return key;
     }
-
 }
 // *********************************************************
 //
