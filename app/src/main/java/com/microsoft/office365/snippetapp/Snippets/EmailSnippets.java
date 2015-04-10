@@ -37,7 +37,7 @@ public class EmailSnippets {
 
     }
 
-    public List<String> GetInboxMessageBySubject(String subjectLine) throws ExecutionException, InterruptedException {
+    public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mMailClient
                 .getMe()
                 .getFolders()

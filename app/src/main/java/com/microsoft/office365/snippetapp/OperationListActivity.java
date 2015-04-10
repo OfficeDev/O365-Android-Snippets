@@ -3,12 +3,12 @@
  */
 package com.microsoft.office365.snippetapp;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +38,7 @@ import java.util.UUID;
 import static com.microsoft.office365.snippetapp.R.id.operation_detail_container;
 
 
-public class OperationListActivity extends FragmentActivity
+public class OperationListActivity extends Activity
         implements O365Operations {
 
     public static final String DISCONNECTED_FROM_OFFICE = "You are disconnected from Office 365";
@@ -63,8 +63,10 @@ public class OperationListActivity extends FragmentActivity
         if (findViewById(operation_detail_container) != null) {
 
             mOperationDetailFragment = new OperationDetailFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
+            FragmentTransaction fragmentTransaction = getFragmentManager()
+                    .beginTransaction()
                     .add(R.id.operation_detail_container, mOperationDetailFragment);
+
             fragmentTransaction.commit();
         }
         if (Build.VERSION.SDK_INT < SDK_BUILD_VERSION) {
