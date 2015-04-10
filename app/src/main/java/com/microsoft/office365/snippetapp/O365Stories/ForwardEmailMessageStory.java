@@ -46,15 +46,21 @@ public class ForwardEmailMessageStory extends BaseUserStory {
             //Get the new message
             String emailId = "";
             int tryCount = 0;
+
+            //Try to get the newly sent email from user's inbox at least once.
+            //continue trying to get the email while the email is not found
+            //and the loop has tried less than 50 times.
             do {
                 List<String> mailIds = emailSnippets
-                        .GetInboxMessageBySubject(
+                        .GetInboxMessagesBySubject(
                                 mContext.getString(R.string.mail_subject_text)
                                         + uniqueGUID);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }
                 tryCount++;
+                //Stay in loop while these conditions are true.
+                //If either condition becomes false, break
             } while (emailId.length() == 0 && tryCount < MAX_POLL_REQUESTS);
 
             String forwardEmailId = emailSnippets.forwardMail(emailId);
