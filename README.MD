@@ -95,8 +95,9 @@ Open the project by importing the settings.gradle file.
 5. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
 6. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
 7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
-8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you [registered in Azure Active Directory.](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding)
+8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you [register in Azure Active Directory.](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding)
     ![Office 365 Snippet sample](/readme-images/constants_Modify.png "Client ID and Redirect URI values in Constants file")
+> Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 9. [Grant proper permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
 
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
