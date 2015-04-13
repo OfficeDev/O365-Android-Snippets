@@ -12,7 +12,8 @@
         android:orderInCategory="1"
         android:showAsAction="never"
         android:title="@string/MainActivity_SignInButtonText"
-        tools:ignore="AppCompatResource" />
+        tools:ignore="AppCompatResource"
+        android:textColor="@color/text_color"/>
     <item
         android:id="@+id/menu_signout"
         android:icon="@drawable/user_signedout"
@@ -20,7 +21,8 @@
         android:showAsAction="never"
         android:title="@string/MainActivity_SignOutButtonText"
         tools:ignore="AppCompatResource"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:textColor="@color/text_color"/>
     <item
         android:id="@+id/menu_clearTokens"
         android:icon="@drawable/user_signedout"
@@ -29,10 +31,5 @@
         android:title="@string/MainActivity_ClearTokensText"
         tools:ignore="AppCompatResource"
         android:enabled="true"/>
-    <item
-        android:id="@+id/menu_clearResults"
-        android:orderInCategory="2"
-        android:showAsAction="ifRoom"
-        android:title="@string/MainActivity_ClearResults"
-        tools:ignore="AppCompatResource" />
+
 </menu>
