@@ -26,7 +26,6 @@ public interface O365Operations {
 
     public View getResultView();
 
-    public void clearTokens();
 }
 
 // *********************************************************

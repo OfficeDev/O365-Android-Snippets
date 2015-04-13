@@ -7,5 +7,4 @@
           android:padding="16dp"
           android:textIsSelectable="true"
           tools:context=".OperationDetailFragment"
-          android:textSize="14sp"
-          />
+          android:textSize="14sp"/>

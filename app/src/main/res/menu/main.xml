@@ -23,13 +23,11 @@
         tools:ignore="AppCompatResource"
         android:enabled="false"
         android:textColor="@color/text_color"/>
-    <item
-        android:id="@+id/menu_clearTokens"
-        android:icon="@drawable/user_signedout"
-        android:orderInCategory="3"
-        android:showAsAction="never"
-        android:title="@string/MainActivity_ClearTokensText"
-        tools:ignore="AppCompatResource"
-        android:enabled="true"/>
 
+    <item
+        android:id="@+id/menu_clearResults"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
+        android:title="@string/MainActivity_ClearResults"
+        tools:ignore="AppCompatResource"/>
 </menu>

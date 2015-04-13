@@ -349,17 +349,6 @@ public class OperationListActivity extends Activity
         );
     }
 
-    @Override
-    public void clearTokens() {
-        if (AuthenticationController.getInstance().getAuthenticationContext() != null) {
-            AuthenticationController
-                    .getInstance()
-                    .getAuthenticationContext()
-                    .getCache()
-                    .removeAll();
-        }
-    }
-
     private void lazyMailClientGetter() {
         AuthenticationController.getInstance()
                 .setResourceId(mMailServiceResourceId);
