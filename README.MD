@@ -1,4 +1,4 @@
-﻿﻿# Office 365 Code Snippets for Android
+﻿﻿﻿# Office 365 Code Snippets for Android
 
 **Table of contents**
 
@@ -88,6 +88,9 @@ To use the Office 365 Code Snippets for Android you need the following:
 ## Open the project using Android Studio
 Open the project by importing the settings.gradle file.
 
+1. Register a new app in [Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding)
+ > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
+
 1. Install [Android Studio](http://developer.android.com/tools/studio/index.html#install-updates) and add the Android SDK packages according to the [instructions](http://developer.android.com/sdk/installing/adding-packages.html) on developer.android.com.
 2. Download or clone the [Office 365 Code Snippets for Android](https://github.com/OfficeDev/O365-Android-Snippets).
 3. Start Android Studio.
@@ -95,9 +98,9 @@ Open the project by importing the settings.gradle file.
 5. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
 6. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
 7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
-8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you [register in Azure Active Directory.](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding)
+8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in Azure Active Directory.
     ![Office 365 Snippet sample](/readme-images/constants_Modify.png "Client ID and Redirect URI values in Constants file")
-> Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
+
 9. [Grant proper permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
 
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
