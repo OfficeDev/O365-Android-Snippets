@@ -13,7 +13,7 @@
         android:showAsAction="never"
         android:title="@string/MainActivity_SignInButtonText"
         tools:ignore="AppCompatResource"
-        android:textColor="@color/text_color"/>
+        />
     <item
         android:id="@+id/menu_signout"
         android:icon="@drawable/user_signedout"
@@ -22,7 +22,7 @@
         android:title="@string/MainActivity_SignOutButtonText"
         tools:ignore="AppCompatResource"
         android:enabled="false"
-        android:textColor="@color/text_color"/>
+        />
 
     <item
         android:id="@+id/menu_clearResults"
