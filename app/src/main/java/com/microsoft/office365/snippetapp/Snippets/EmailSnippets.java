@@ -37,7 +37,7 @@ public class EmailSnippets {
 
     }
 
-    public List<String> GetInboxMessageBySubject(String subjectLine) throws ExecutionException, InterruptedException {
+    public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mMailClient
                 .getMe()
                 .getFolders()
@@ -78,7 +78,11 @@ public class EmailSnippets {
         messageToSend.setSubject(subject);
 
         // Contact the Office 365 service and try to deliver the message.
-        Message draft = mMailClient.getMe().getMessages().add(messageToSend).get();
+        Message draft = mMailClient
+                .getMe()
+                .getMessages()
+                .add(messageToSend)
+                .get();
         mMailClient.getMe()
                 .getOperations()
                 .sendMail(draft, false)

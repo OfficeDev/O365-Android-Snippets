@@ -51,8 +51,6 @@ public class OperationListFragment extends ListFragment implements IOperationCom
             case R.id.menu_clearResults:
                 mO365Operations.clearResults();
                 break;
-            case R.id.menu_clearTokens:
-                mO365Operations.clearTokens();
             default:
                 break;
 

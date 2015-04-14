@@ -6,7 +6,6 @@ package com.microsoft.office365.snippetapp;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -42,7 +41,6 @@ public class OperationListActivity extends Activity
         implements O365Operations {
 
     public static final String DISCONNECTED_FROM_OFFICE = "You are disconnected from Office 365";
-    public static final int SDK_BUILD_VERSION = 18;
     public static final int SIGNIN_MENU_ITEM = 1;
     public static final int SIGNOUT_MENU_ITEM = 2;
     private static final String TAG = "OperationListActivity";
@@ -69,9 +67,7 @@ public class OperationListActivity extends Activity
 
             fragmentTransaction.commit();
         }
-        if (Build.VERSION.SDK_INT < SDK_BUILD_VERSION) {
-            AuthUtil.setupEncryptionKey(this);
-        }
+        AuthUtil.configureAuthSettings(this);
     }
 
     @Override
@@ -351,17 +347,6 @@ public class OperationListActivity extends Activity
                     }
                 }
         );
-    }
-
-    @Override
-    public void clearTokens() {
-        if (AuthenticationController.getInstance().getAuthenticationContext() != null) {
-            AuthenticationController
-                    .getInstance()
-                    .getAuthenticationContext()
-                    .getCache()
-                    .removeAll();
-        }
     }
 
     private void lazyMailClientGetter() {
