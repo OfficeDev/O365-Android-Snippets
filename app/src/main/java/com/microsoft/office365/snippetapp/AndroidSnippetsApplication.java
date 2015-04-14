@@ -6,9 +6,17 @@ package com.microsoft.office365.snippetapp;
 import android.app.Application;
 
 public class AndroidSnippetsApplication extends Application {
+
+    private static AndroidSnippetsApplication mAndroidSnippetsApplication;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mAndroidSnippetsApplication = this;
+    }
+
+    public static AndroidSnippetsApplication getApplication() {
+        return mAndroidSnippetsApplication;
     }
 }
 // *********************************************************

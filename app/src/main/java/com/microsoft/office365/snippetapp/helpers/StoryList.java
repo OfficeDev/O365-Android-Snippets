@@ -45,7 +45,7 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
-                new SendEmailMessageStory(context),
+                new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(context),
                 new ForwardEmailMessageStory(context),
