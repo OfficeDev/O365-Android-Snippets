@@ -19,11 +19,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class UpdateEventStory extends BaseUserStory {
-    private Context mContext;
 
-    public UpdateEventStory(Context context) {
-        mContext = context;
-    }
 
     @Override
     public String execute() {
@@ -41,8 +37,8 @@ public class UpdateEventStory extends BaseUserStory {
         //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(
-                    mContext.getString(R.string.calendar_subject_text)
-                    , mContext.getString(R.string.calendar_body_text)
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAdresses
@@ -50,7 +46,8 @@ public class UpdateEventStory extends BaseUserStory {
 
             Event updatedEvent = calendarSnippets.updateCalendarEvent(
                     newEventId
-                    , mContext.getString(R.string.calendar_subject_text) + " Updated Subject"
+                    , getStringResource(R.string.calendar_subject_text)
+                            + " Updated Subject"
                     , false
                     , null
                     , null
@@ -62,7 +59,8 @@ public class UpdateEventStory extends BaseUserStory {
             //CLEAN UP
             calendarSnippets.deleteCalendarEvent(newEventId);
             //ASSERT
-            if (updatedSubject.equals(mContext.getString(R.string.calendar_subject_text) + " Updated Subject")) {
+            if (updatedSubject.equals(getStringResource(R.string.calendar_subject_text)
+                    + " Updated Subject")) {
                 return StoryResultFormatter.wrapResult(
                         "UpdateEventStory: Event "
                                 + " updated.", true

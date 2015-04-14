@@ -6,6 +6,7 @@ package com.microsoft.office365.snippetapp.Snippets;
 
 import com.microsoft.outlookservices.BodyType;
 import com.microsoft.outlookservices.EmailAddress;
+import com.microsoft.outlookservices.FileAttachment;
 import com.microsoft.outlookservices.ItemBody;
 import com.microsoft.outlookservices.Message;
 import com.microsoft.outlookservices.Recipient;
@@ -52,6 +53,84 @@ public class EmailSnippets {
             mailIds.add(message.getId());
         }
         return mailIds;
+    }
+
+    //Creates a FileAttachment object with given contents and file name
+    private FileAttachment getTextFileAttachment(String textContent, String fileName)
+    {
+        FileAttachment fileAttachment = new FileAttachment();
+        fileAttachment.setContentBytes(textContent.getBytes());
+        fileAttachment.setName(fileName);
+        fileAttachment.setContentType("Text");
+        fileAttachment.setSize(textContent.getBytes().length);
+        return fileAttachment;
+    }
+
+    //Gets a message out of the user's draft folder by id and adds a text file attachment
+    public Boolean addAttachmentToDraft(String mailId, String fileContents, String fileName) throws ExecutionException, InterruptedException {
+
+        mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailId)
+                .getAttachments()
+                .add(getTextFileAttachment(fileContents,fileName))
+                .get();
+        return true;
+    }
+
+    //Adds a new mail message to the user's draft folder and returns the id of
+    //the new message
+    public String addDraftMail (final String emailAddress
+            , final String subject
+            , final String body) throws ExecutionException, InterruptedException {
+        // Prepare the message.
+        List<Recipient> recipientList = new ArrayList<>();
+
+        Recipient recipient = new Recipient();
+        EmailAddress email = new EmailAddress();
+        email.setAddress(emailAddress);
+        recipient.setEmailAddress(email);
+        recipientList.add(recipient);
+
+        Message messageToSend = new Message();
+        messageToSend.setToRecipients(recipientList);
+
+        ItemBody bodyItem = new ItemBody();
+        bodyItem.setContentType(BodyType.HTML);
+        bodyItem.setContent(body);
+        messageToSend.setBody(bodyItem);
+        messageToSend.setSubject(subject);
+
+        // Contact the Office 365 service and try to add the message to
+        // the draft folder.
+        Message draft = mMailClient
+                .getMe()
+                .getFolders()
+                .getById("Drafts")
+                .getMessages()
+                .add(messageToSend)
+                .get();
+
+        return draft.getId();
+    }
+
+    public Boolean sendDraftMail(String mailID) throws ExecutionException, InterruptedException
+    {
+        //Get a message out of user's draft folder by mail Id
+        Message draft = mMailClient.getMe()
+                .getFolders()
+                .getById("Drafts")
+                .getMessages()
+                .getById(mailID)
+                .read().get();
+
+        //Send the draft message
+        mMailClient.getMe()
+                .getOperations()
+                .sendMail(draft, false)
+                .get();
+        return true;
     }
 
     public String sendMail(

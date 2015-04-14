@@ -3,10 +3,8 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
@@ -32,14 +30,8 @@ public class SendEmailMessageStory extends BaseUserStory {
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
             String emailID = emailSnippets.sendMail(GlobalValues.USER_EMAIL,
-                    AndroidSnippetsApplication
-                            .getApplication()
-                            .getApplicationContext()
-                            .getString(R.string.mail_subject_text) + uniqueGUID,
-                    AndroidSnippetsApplication
-                            .getApplication()
-                            .getApplicationContext()
-                            .getString(R.string.mail_body_text));
+                    getStringResource(R.string.mail_subject_text) + uniqueGUID,
+                    getStringResource(R.string.mail_body_text));
 
             //3. Delete the email using the ID
             Boolean result = emailSnippets.deleteMail(emailID);

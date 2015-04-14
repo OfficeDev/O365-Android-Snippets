@@ -3,8 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
@@ -16,11 +14,7 @@ import java.util.List;
 
 //Create a new email, send to yourself, reply to the email, and delete sent mail
 public class ReplyToEmailMessageStory extends BaseUserStory {
-    private Context mContext;
 
-    public ReplyToEmailMessageStory(Context context) {
-        mContext = context;
-    }
 
     @Override
     public String execute() {
@@ -38,9 +32,9 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
             String uniqueGUID = java.util.UUID.randomUUID().toString();
             String emailID = emailSnippets.sendMail(
                     GlobalValues.USER_EMAIL
-                    , mContext.getString(R.string.mail_subject_text)
+                    , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID
-                    , mContext.getString(R.string.mail_body_text));
+                    , getStringResource(R.string.mail_body_text));
 
             //Get the new message
             String emailId = "";
@@ -52,7 +46,7 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
             do {
                 List<String> mailIds = emailSnippets
                         .GetInboxMessagesBySubject(
-                                mContext.getString(R.string.mail_subject_text)
+                                getStringResource(R.string.mail_subject_text)
                                         + uniqueGUID);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
@@ -65,7 +59,7 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
 
             String replyEmailId = emailSnippets.replyToEmailMessage(
                     emailId
-                    , mContext.getString(R.string.mail_body_text));
+                    , getStringResource(R.string.mail_body_text));
 
             //3. Delete the email using the ID
             emailSnippets.deleteMail(emailId);
