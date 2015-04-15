@@ -26,6 +26,12 @@ public class EmailSnippets {
         mMailClient = mailClient;
     }
 
+    /**
+     * Gets a list of the 10 most recent email messages in the
+     * user Inbox, sorted by date and time received
+     * @return List of type com.microsoft.outlookservices.Message
+     * @version 1.0
+     */
     public List<Message> getMailMessages() throws ExecutionException, InterruptedException {
         List<Message> messages = mMailClient
                 .getMe()
@@ -38,6 +44,27 @@ public class EmailSnippets {
 
     }
 
+    /**
+     * Gets an email message by the id of the desired message
+     * @return com.microsoft.outlookservices.Message
+     * @version 1.0
+     */
+    public Message getMailMessageById(String mailId) throws ExecutionException, InterruptedException {
+        return mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailId)
+                .read().get();
+
+    }
+
+    /**
+     * Gets a list of all recent email messages in the
+     * user Inbox whose subject matches, sorted by date and time received
+     *  @param subjectLine The subject of the email to be matched
+     * @return List of String. The mail Ids of the matching messages
+     * @version 1.0
+     */
     public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mMailClient
                 .getMe()
@@ -55,7 +82,14 @@ public class EmailSnippets {
         return mailIds;
     }
 
-    //Creates a FileAttachment object with given contents and file name
+    /**
+     * Gets a list of all recent email messages in the
+     * user Inbox whose subject matches, sorted by date and time received
+     *  @param textContent The content of the file to be attached
+     *  @param fileName  The name of the file to be attached
+     * @return com.microsoft.outlookservices.FileAttachment. The Attachment object
+     * @version 1.0
+     */
     private FileAttachment getTextFileAttachment(String textContent, String fileName)
     {
         FileAttachment fileAttachment = new FileAttachment();
@@ -66,7 +100,15 @@ public class EmailSnippets {
         return fileAttachment;
     }
 
-    //Gets a message out of the user's draft folder by id and adds a text file attachment
+
+    /**
+     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     *  @param mailId The id of the draft email that will get the attachment
+     *  @param fileContents  The contents of the text file to be attached
+     *  @param fileName  The name of the file to be attached
+     * @return Boolean. The result of the operation. True if success
+     * @version 1.0
+     */
     public Boolean addAttachmentToDraft(String mailId, String fileContents, String fileName) throws ExecutionException, InterruptedException {
 
         mMailClient
@@ -79,8 +121,14 @@ public class EmailSnippets {
         return true;
     }
 
-    //Adds a new mail message to the user's draft folder and returns the id of
-    //the new message
+    /**
+     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     *  @param emailAddress The email address of the mail recipient
+     *  @param subject  The subject of the email
+     *  @param body The body of the email
+     * @return String. The id of the email added to the draft folder
+     * @version 1.0
+     */
     public String addDraftMail (final String emailAddress
             , final String subject
             , final String body) throws ExecutionException, InterruptedException {
@@ -115,6 +163,12 @@ public class EmailSnippets {
         return draft.getId();
     }
 
+    /**
+     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     *  @param mailID The email id of the mail to be sent from the draft folder
+     * @return Boolean. The result of the operation
+     * @version 1.0
+     */
     public Boolean sendDraftMail(String mailID) throws ExecutionException, InterruptedException
     {
         //Get a message out of user's draft folder by mail Id
@@ -133,6 +187,14 @@ public class EmailSnippets {
         return true;
     }
 
+    /**
+     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     *  @param emailAddress The email address of the mail recipient
+     *  @param  subject The subject of the email
+     *  @param body  The body of the email
+     * @return String. The id of the sent email
+     * @version 1.0
+     */
     public String sendMail(
             final String emailAddress
             , final String subject
@@ -169,6 +231,12 @@ public class EmailSnippets {
         return draft.getId();
     }
 
+    /**
+     * Forwards a message out of the user's Inbox folder by id
+     *  @param emailId The id of the mail to be forwarded
+     * @return String. The id of the sent email
+     * @version 1.0
+     */
     public String forwardMail(String emailId) throws ExecutionException, InterruptedException {
         Message forwardMessage = mMailClient
                 .getMe()
@@ -184,6 +252,12 @@ public class EmailSnippets {
         return message.getId();
     }
 
+    /**
+     * Deletes a message out of the user's Sent folder by id
+     *  @param emailID The id of the mail to be deleted
+     * @return Boolean. The result of the operation
+     * @version 1.0
+     */
     public Boolean deleteMail(String emailID) throws ExecutionException, InterruptedException {
         mMailClient
                 .getMe()
@@ -195,6 +269,12 @@ public class EmailSnippets {
         return true;
     }
 
+    /**
+     * Generates a hash table whose key is a mail Id and value is corresponding
+     * mail message
+     * @return Map of type String, Message. The result of the operation
+     * @version 1.0
+     */
     public Map<String, Message> getDraftMessageMap() throws ExecutionException, InterruptedException {
         Map<String, Message> draftMessageMap = new HashMap<>();
         for (Message draftMessage : getDraftMessages()) {
@@ -203,6 +283,12 @@ public class EmailSnippets {
         return draftMessageMap;
     }
 
+    /**
+     * Gets a List of type Message representing the contents of
+     * the user's email drafts folder
+     * @return List. The result of the operation
+     * @version 1.0
+     */
     public List<Message> getDraftMessages() throws ExecutionException, InterruptedException {
         return mMailClient
                 .getMe()
@@ -212,6 +298,13 @@ public class EmailSnippets {
                 .get();
     }
 
+    /**
+     * Forwards a message out of the user's Inbox folder by id
+     *  @param emailId The id of the mail to be forwarded
+     *  @param messageBody The body of the message as a string
+     * @return String. The id of the sent email
+     * @version 1.0
+     */
     public String replyToEmailMessage(String emailId, String messageBody)
             throws
             ExecutionException

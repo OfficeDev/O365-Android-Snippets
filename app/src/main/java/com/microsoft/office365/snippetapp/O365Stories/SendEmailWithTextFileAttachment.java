@@ -43,15 +43,19 @@ public class SendEmailWithTextFileAttachment extends  BaseUserStory {
                     , getStringResource(R.string.text_attachment_filename));
 
             //Send the draft email
-            emailSnippets.sendDraftMail(emailID);
+            if (emailSnippets.getMailMessageById(emailID).getHasAttachments()) {
+                //build string for test results on UI
+                StringBuilder sb = new StringBuilder();
+                sb.append(SENT_NOTICE);
+                returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+
+                //Send the draft email to the recipient
+                emailSnippets.sendDraftMail(emailID);
+            }
 
             //3. Delete the email using the ID
            // Boolean result = emailSnippets.deleteMail(emailID);
 
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append(SENT_NOTICE);
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
