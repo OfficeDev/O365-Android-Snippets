@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;

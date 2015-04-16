@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -34,7 +33,6 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
     private String mErrorDescription;
 
     public CreateOrDeleteContactStory(String action) {
-        ;
         if (action.equals("CREATE")) {
             mDescription = CREATE_DESCRIPTION;
             mLogTag = CREATE_TAG;

@@ -49,7 +49,7 @@ public class ForwardEmailMessageStory extends BaseUserStory {
                 List<String> mailIds = emailSnippets
                         .GetInboxMessagesBySubject_DateTimeReceived(
                                 getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID,sentDate);
+                                        + uniqueGUID, sentDate);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }

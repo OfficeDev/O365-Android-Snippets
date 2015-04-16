@@ -33,6 +33,7 @@ public class CalendarSnippets {
      * Start field. The range of events to be returned includes events from
      * 1 week prior to current date through 1 week into the future. 10 events
      * are returned per page
+     *
      * @return List. A list of the com.microsoft.outlookservices.Event objects
      * @version 1.0
      */
@@ -64,6 +65,7 @@ public class CalendarSnippets {
     /**
      * Removes an event specified by the id
      * are returned per page
+     *
      * @param eventId The id of the event to be removed
      * @version 1.0
      */
@@ -79,11 +81,12 @@ public class CalendarSnippets {
 
     /**
      * Creates an event
-     * @param subject The subject of the event
+     *
+     * @param subject      The subject of the event
      * @param itemBodyHtml The body of the event as HTML
-     * @param startDate The start date of the event
-     * @param endDate The end date of the event
-     * @param  attendees A list of attendee email addresses
+     * @param startDate    The start date of the event
+     * @param endDate      The end date of the event
+     * @param attendees    A list of attendee email addresses
      * @return String The id of the created event
      * @version 1.0
      */
@@ -128,12 +131,13 @@ public class CalendarSnippets {
 
     /**
      * Updates the subject, body, start date, end date, or attendees of an event
-     * @param subject The subject of the event
-     * @param allDay true if event spans a work day
+     *
+     * @param subject      The subject of the event
+     * @param allDay       true if event spans a work day
      * @param itemBodyHtml The body of the event as HTML
-     * @param startDate The start date of the event
-     * @param endDate The end date of the event
-     * @param  attendees A list of attendee email addresses
+     * @param startDate    The start date of the event
+     * @param endDate      The end date of the event
+     * @param attendees    A list of attendee email addresses
      * @return String The id of the created event
      * @version 1.0
      */
@@ -192,7 +196,8 @@ public class CalendarSnippets {
 
     /**
      * Gets the invitation status of a given attendee for a given event
-     * @param eventId The id of the event to be removed
+     *
+     * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @version 1.0
      */
@@ -208,7 +213,8 @@ public class CalendarSnippets {
 
     /**
      * Accepts an event invitation on behalf of the specified attendee
-     * @param eventId The id of the event to be removed
+     *
+     * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @version 1.0
      */
@@ -235,7 +241,8 @@ public class CalendarSnippets {
 
     /**
      * Declines an event invitation on behalf of the specified attendee
-     * @param eventId The id of the event to be responded to
+     *
+     * @param eventId        The id of the event to be responded to
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @version 1.0
      */
@@ -264,6 +271,7 @@ public class CalendarSnippets {
 
     /**
      * Gets the event id of the event specified by an event Id
+     *
      * @param eventId The id of the event to be responded to
      * @version 1.0
      */
@@ -279,6 +287,7 @@ public class CalendarSnippets {
 
     /**
      * Gets the event object of the event specified by an event Id
+     *
      * @param eventId The id of the event to be responded to
      * @return Event The event of interest
      * @version 1.0

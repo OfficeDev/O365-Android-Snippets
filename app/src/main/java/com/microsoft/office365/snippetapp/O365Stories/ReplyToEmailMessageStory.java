@@ -73,9 +73,7 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
                 }
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", true);
-            }
-            else
-            {
+            } else {
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", false);
             }

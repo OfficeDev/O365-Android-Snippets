@@ -4,7 +4,6 @@
 package com.microsoft.office365.snippetapp.Snippets;
 
 import com.google.common.base.Charsets;
-import com.microsoft.fileservices.File;
 import com.microsoft.fileservices.Item;
 import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.services.odata.Constants;
@@ -21,6 +20,7 @@ public class FileFolderSnippets {
 
     /**
      * Gets the folders and files at the user's OneDrive for business root
+     *
      * @return List. A list of the com.microsoft.fileservices.Item objects
      * @version 1.0
      */
@@ -33,6 +33,7 @@ public class FileFolderSnippets {
 
     /**
      * Gets the ID of a file on user's OnDrive for Business by file name
+     *
      * @param fileName The name of the file whose Id is to be returned
      * @return String. The Id of the retrieved file
      * @version 1.0
@@ -51,6 +52,7 @@ public class FileFolderSnippets {
 
     /**
      * Gets the contents of a file on user's OnDrive for Business by ID
+     *
      * @param fileId The Id of the file whose contents are to be returned
      * @return Byte[]. The contents of the file as a byte array
      * @version 1.0
@@ -67,6 +69,7 @@ public class FileFolderSnippets {
 
     /**
      * Deletes a file on user's OnDrive for Business by ID
+     *
      * @param fileId The Id of the file whose contents are to be returned
      * @version 1.0
      */
@@ -83,8 +86,9 @@ public class FileFolderSnippets {
 
     /**
      * Uploads a file to the root folder of a user's OneDrive for Business drive
-     * @param fileName The name of the file to be uploaded
-     * @param fileContents  Byte[]. The contents of the file as a byte array
+     *
+     * @param fileName     The name of the file to be uploaded
+     * @param fileContents Byte[]. The contents of the file as a byte array
      * @version 1.0
      */
     public String postNewFileToServer(
@@ -111,8 +115,9 @@ public class FileFolderSnippets {
 
     /**
      * Uploads a an update to a file to the root folder of a user's OneDrive for Business drive
-     * @param fileId The id of the file to be uploaded
-     * @param updatedContents  The contents of the file as a string
+     *
+     * @param fileId          The id of the file to be uploaded
+     * @param updatedContents The contents of the file as a string
      * @version 1.0
      */
     public void postUpdatedFileToServer(
@@ -129,6 +134,7 @@ public class FileFolderSnippets {
 
     /**
      * Creates a new folder in the root of the user's OneDrive for Business drive
+     *
      * @param fullPath The path of the folder to be created
      * @return Item  The created folder
      * @version 1.0
@@ -144,6 +150,7 @@ public class FileFolderSnippets {
 
     /**
      * Deletes a folder from the user's OneDrive for Business drive
+     *
      * @param fullPath The path of the folder to be removed
      * @version 1.0
      */

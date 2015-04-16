@@ -22,6 +22,7 @@ public class ContactsSnippets {
     /**
      * Return a list of contacts and ordered by the
      * contact's surname field.
+     *
      * @return List. A list of the com.microsoft.outlookservices.Contact objects
      * @version 1.0
      */
@@ -37,11 +38,12 @@ public class ContactsSnippets {
 
     /**
      * Creates a new contact
-     * @param emailAddressString The email address of the contact to be added
+     *
+     * @param emailAddressString  The email address of the contact to be added
      * @param businessPhoneString The business telephone number of the new contact
-     * @param firstNameString The first name of the new contact
-     * @param homePhoneString The home telephone number of the new contact
-     * @param lastNameString The surname of the new contact
+     * @param firstNameString     The first name of the new contact
+     * @param homePhoneString     The home telephone number of the new contact
+     * @param lastNameString      The surname of the new contact
      * @return String. The id of the new contact
      * @version 1.0
      */
@@ -76,6 +78,7 @@ public class ContactsSnippets {
 
     /**
      * Gets a contact by the contact Id
+     *
      * @return Contact. The contact corresponding to the id
      * @version 1.0
      */
@@ -89,9 +92,10 @@ public class ContactsSnippets {
 
     /**
      * Updates the first and surname of a contact
-     * @param contactId The id of the contact to be updated
+     *
+     * @param contactId       The id of the contact to be updated
      * @param firstNameString The first name of the new contact
-     * @param lastNameString The surname of the new contact
+     * @param lastNameString  The surname of the new contact
      * @version 1.0
      */
     public void updateContact(
@@ -123,6 +127,7 @@ public class ContactsSnippets {
 
     /**
      * Deletes a contact
+     *
      * @param id The id of the contact to be deleted
      * @version 1.0
      */

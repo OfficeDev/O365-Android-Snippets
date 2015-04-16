@@ -9,7 +9,6 @@ import android.view.View;
 import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
@@ -43,8 +42,7 @@ public abstract class BaseUserStory {
         return java.util.UUID.randomUUID().toString();
     }
 
-    public String getStringResource(int resourceToGet)
-    {
+    public String getStringResource(int resourceToGet) {
         return AndroidSnippetsApplication
                 .getApplication()
                 .getApplicationContext()

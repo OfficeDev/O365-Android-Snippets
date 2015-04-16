@@ -33,7 +33,7 @@ public class AcceptEventInviteStory extends BaseUserStory {
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
 
-         try {
+        try {
             newEventId = calendarSnippets.createCalendarEvent(
                     "Subject"
                     , "<p class=MsoNormal>Hello world!</p>"
