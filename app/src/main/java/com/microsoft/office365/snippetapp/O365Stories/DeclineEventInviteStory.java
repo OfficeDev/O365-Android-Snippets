@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -19,11 +18,6 @@ import java.util.concurrent.ExecutionException;
 
 public class DeclineEventInviteStory extends BaseUserStory {
     public static final String DECLINE_AN_EVENT_INVITE = "Decline an event invite";
-    private Context mContext;
-
-    public DeclineEventInviteStory(Context context) {
-        mContext = context;
-    }
 
     @Override
     public String execute() {
@@ -45,8 +39,8 @@ public class DeclineEventInviteStory extends BaseUserStory {
         //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(
-                    mContext.getString(R.string.calendar_subject_text)
-                    , mContext.getString(R.string.calendar_body_text)
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAddressList);

@@ -12,13 +12,15 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-public class SendEmailMessageStory extends BaseUserStory {
+public class SendEmailWithTextFileAttachmentStory extends BaseUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
 
     @Override
     public String execute() {
         String returnResult = "";
         try {
-
             AuthenticationController
                     .getInstance()
                     .setResourceId(
@@ -29,17 +31,29 @@ public class SendEmailMessageStory extends BaseUserStory {
 
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
+
+            //Add a new email to the user's draft folder
+            String emailID = emailSnippets.addDraftMail(GlobalValues.USER_EMAIL,
                     getStringResource(R.string.mail_subject_text) + uniqueGUID,
                     getStringResource(R.string.mail_body_text));
 
-            //3. Delete the email using the ID
-            Boolean result = emailSnippets.deleteMail(emailID);
+            //Add a text file attachment to the mail added to the draft folder
+            emailSnippets.addAttachmentToDraft(emailID
+                    , getStringResource(R.string.text_attachment_contents)
+                    , getStringResource(R.string.text_attachment_filename));
 
+            String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
+
+            //Send the mail with attachments
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();
-            sb.append("Email is added");
+            sb.append(SENT_NOTICE);
+            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+
+            //Send the draft email to the recipient
+            emailSnippets.sendMail(draftMessageID);
+
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
@@ -51,15 +65,13 @@ public class SendEmailMessageStory extends BaseUserStory {
 
         }
         return returnResult;
+
     }
 
     @Override
     public String getDescription() {
-
-        return "Sends an email message";
+        return STORY_DESCRIPTION;
     }
-
-
 }
 // *********************************************************
 //

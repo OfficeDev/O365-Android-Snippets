@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -27,14 +26,13 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
     private final String DELETE_TAG = "Delete contact story";
     private final String DELETE_SUCCESS = "DeleteContactStory: Contact deleted.";
     private final String DELETE_ERROR = "Delete contact exception: ";
-    private Context mContext;
+
     private String mDescription;
     private String mLogTag;
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteContactStory(Context context, String action) {
-        mContext = context;
+    public CreateOrDeleteContactStory(String action) {
         if (action.equals("CREATE")) {
             mDescription = CREATE_DESCRIPTION;
             mLogTag = CREATE_TAG;
@@ -61,11 +59,11 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
         ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
         try {
             String contactId = contactsSnippets.createContact(
-                    mContext.getString(R.string.contacts_email),
-                    mContext.getString(R.string.contacts_business_phone),
-                    mContext.getString(R.string.contacts_home_phone),
-                    mContext.getString(R.string.contacts_first_name),
-                    mContext.getString(R.string.contacts_last_name));
+                    getStringResource(R.string.contacts_email),
+                    getStringResource(R.string.contacts_business_phone),
+                    getStringResource(R.string.contacts_home_phone),
+                    getStringResource(R.string.contacts_first_name),
+                    getStringResource(R.string.contacts_last_name));
             if (contactId.length() > 0) {
                 contactsSnippets.deleteContact(contactId);
                 return StoryResultFormatter.wrapResult(

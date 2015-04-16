@@ -28,7 +28,15 @@ public class CalendarSnippets {
         mCalendarClient = mailClient;
     }
 
-    //Return a list of calendar events off the default calendar ordered by the Start field.
+    /**
+     * Return a list of calendar events from the default calendar and ordered by the
+     * Start field. The range of events to be returned includes events from
+     * 1 week prior to current date through 1 week into the future. 10 events
+     * are returned per page
+     *
+     * @return List. A list of the com.microsoft.outlookservices.Event objects
+     * @version 1.0
+     */
     public List<Event> getO365Events() throws ExecutionException, InterruptedException {
 
         int EVENT_RANGE_START = 1;
@@ -54,6 +62,13 @@ public class CalendarSnippets {
 
     }
 
+    /**
+     * Removes an event specified by the id
+     * are returned per page
+     *
+     * @param eventId The id of the event to be removed
+     * @version 1.0
+     */
     public void deleteCalendarEvent(String eventId)
             throws ExecutionException
             , InterruptedException {
@@ -64,6 +79,17 @@ public class CalendarSnippets {
 
     }
 
+    /**
+     * Creates an event
+     *
+     * @param subject      The subject of the event
+     * @param itemBodyHtml The body of the event as HTML
+     * @param startDate    The start date of the event
+     * @param endDate      The end date of the event
+     * @param attendees    A list of attendee email addresses
+     * @return String The id of the created event
+     * @version 1.0
+     */
     public String createCalendarEvent(
             String subject
             , String itemBodyHtml
@@ -103,6 +129,18 @@ public class CalendarSnippets {
                 .add(newEvent).get().getId();
     }
 
+    /**
+     * Updates the subject, body, start date, end date, or attendees of an event
+     *
+     * @param subject      The subject of the event
+     * @param allDay       true if event spans a work day
+     * @param itemBodyHtml The body of the event as HTML
+     * @param startDate    The start date of the event
+     * @param endDate      The end date of the event
+     * @param attendees    A list of attendee email addresses
+     * @return String The id of the created event
+     * @version 1.0
+     */
     public Event updateCalendarEvent(
             String eventId
             , String subject
@@ -156,6 +194,13 @@ public class CalendarSnippets {
 
     }
 
+    /**
+     * Gets the invitation status of a given attendee for a given event
+     *
+     * @param eventId        The id of the event to be removed
+     * @param myEmailAddress The email address of the attendee whose status is of interest
+     * @version 1.0
+     */
     public String getEventAttendeeStatus(String eventId, String myEmailAddress) {
         for (Attendee attendee : getCalendarEvent(eventId).getAttendees()) {
             String attendeeEmail = attendee.getEmailAddress().getAddress();
@@ -166,6 +211,13 @@ public class CalendarSnippets {
         return null;
     }
 
+    /**
+     * Accepts an event invitation on behalf of the specified attendee
+     *
+     * @param eventId        The id of the event to be removed
+     * @param myEmailAddress The email address of the attendee whose status is of interest
+     * @version 1.0
+     */
     public Event acceptCalendarEventInvite(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
         Event calendarEvent = getCalendarEvent(eventId);
 
@@ -187,6 +239,13 @@ public class CalendarSnippets {
                 .get();
     }
 
+    /**
+     * Declines an event invitation on behalf of the specified attendee
+     *
+     * @param eventId        The id of the event to be responded to
+     * @param myEmailAddress The email address of the attendee whose status is of interest
+     * @version 1.0
+     */
     public Event declineCalendarEventInvite(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
         Event calendarEvent = getCalendarEvent(eventId);
 
@@ -210,6 +269,12 @@ public class CalendarSnippets {
                 .get();
     }
 
+    /**
+     * Gets the event id of the event specified by an event Id
+     *
+     * @param eventId The id of the event to be responded to
+     * @version 1.0
+     */
     public String getCalendarEventId(String eventId) throws ExecutionException, InterruptedException {
         return mCalendarClient
                 .getMe()
@@ -220,6 +285,13 @@ public class CalendarSnippets {
                 .getId();
     }
 
+    /**
+     * Gets the event object of the event specified by an event Id
+     *
+     * @param eventId The id of the event to be responded to
+     * @return Event The event of interest
+     * @version 1.0
+     */
     public Event getCalendarEvent(String eventId) {
         try {
             return mCalendarClient

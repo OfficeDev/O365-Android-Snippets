@@ -5,20 +5,11 @@
 package com.microsoft.office365.snippetapp.helpers;
 
 import android.os.Build;
-import android.util.Log;
 
 import com.microsoft.aad.adal.AuthenticationSettings;
 import com.microsoft.office365.snippetapp.OperationListActivity;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class AuthUtil {
 

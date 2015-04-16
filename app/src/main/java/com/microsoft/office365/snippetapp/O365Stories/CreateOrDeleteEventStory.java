@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -30,14 +29,14 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
     private final String DELETE_TAG = "Delete event story";
     private final String DELETE_SUCCESS = "DeleteEventStory: Event deleted.";
     private final String DELETE_ERROR = "Delete event exception: ";
-    private Context mContext;
+
     private String mDescription;
     private String mLogTag;
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteEventStory(Context context, String action) {
-        mContext = context;
+    public CreateOrDeleteEventStory(String action) {
+
         if (action.equals("CREATE")) {
             mDescription = CREATE_DESCRIPTION;
             mLogTag = CREATE_TAG;
@@ -68,8 +67,8 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
         //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(
-                    mContext.getString(R.string.calendar_subject_text)
-                    , mContext.getString(R.string.calendar_body_text)
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAdresses);

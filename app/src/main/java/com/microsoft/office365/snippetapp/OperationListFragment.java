@@ -140,13 +140,12 @@ public class OperationListFragment extends ListFragment implements IOperationCom
                 && mO365Operations.getO365MyFilesClient() != null) {
             AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
             asyncUseCaseWrapper.execute(mCommands.ITEMS.toArray(new BaseUserStory[0]));
-        }
-        else{
+        } else {
             Toast.makeText(
-                getActivity(),
-                DISCONNECTED_FROM_OFFICE_365,
-                Toast.LENGTH_LONG
-             ).show();
+                    getActivity(),
+                    DISCONNECTED_FROM_OFFICE_365,
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 

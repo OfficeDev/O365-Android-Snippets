@@ -16,10 +16,12 @@ import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
+import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateFileContentsOnServerStory;
@@ -45,20 +47,22 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
-                new SendEmailMessageStory(context),
+                new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
-                new ReplyToEmailMessageStory(context),
-                new ForwardEmailMessageStory(context),
+                new ReplyToEmailMessageStory(),
+                new ForwardEmailMessageStory(),
+                new SendEmailWithTextFileAttachmentStory(),
+                new GetEmailAttachmentsStory(),
                 new GetContactsStory(),
-                new CreateOrDeleteContactStory(context, "CREATE"),
-                new CreateOrDeleteContactStory(context, "DELETE"),
+                new CreateOrDeleteContactStory("CREATE"),
+                new CreateOrDeleteContactStory("DELETE"),
                 new UpdateContactStory(context),
-                new CreateOrDeleteEventStory(context, "CREATE"),
-                new CreateOrDeleteEventStory(context, "DELETE"),
+                new CreateOrDeleteEventStory("CREATE"),
+                new CreateOrDeleteEventStory("DELETE"),
                 new EventsFetcherStory(),
-                new UpdateEventStory(context),
+                new UpdateEventStory(),
                 new AcceptEventInviteStory(),
-                new DeclineEventInviteStory(context),
+                new DeclineEventInviteStory(),
                 new GetFilesAndFoldersStory(),
                 new CreateOrDeleteFileStory("CREATE"),
                 new UpdateFileContentsOnServerStory(),

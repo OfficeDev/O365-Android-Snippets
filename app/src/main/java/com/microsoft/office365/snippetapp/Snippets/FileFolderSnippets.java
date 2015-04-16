@@ -4,7 +4,6 @@
 package com.microsoft.office365.snippetapp.Snippets;
 
 import com.google.common.base.Charsets;
-import com.microsoft.fileservices.File;
 import com.microsoft.fileservices.Item;
 import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.services.odata.Constants;
@@ -19,6 +18,12 @@ public class FileFolderSnippets {
         mSharePointClient = sharePointClient;
     }
 
+    /**
+     * Gets the folders and files at the user's OneDrive for business root
+     *
+     * @return List. A list of the com.microsoft.fileservices.Item objects
+     * @version 1.0
+     */
     public List<Item> getFilesAndFolders()
             throws ExecutionException
             , InterruptedException {
@@ -26,15 +31,13 @@ public class FileFolderSnippets {
         return filesAndFolders;
     }
 
-    public String getFileFromServerById(String fileId) throws ExecutionException, InterruptedException {
-        File retrievedFile = mSharePointClient.getfiles()
-                .getById(fileId)
-                .asFile()
-                .read().get();
-
-        return retrievedFile.getid();
-    }
-
+    /**
+     * Gets the ID of a file on user's OnDrive for Business by file name
+     *
+     * @param fileName The name of the file whose Id is to be returned
+     * @return String. The Id of the retrieved file
+     * @version 1.0
+     */
     public String getFileFromServerByName(String fileName) throws ExecutionException, InterruptedException {
         String itemID = "";
         List<Item> filesAndFolders = mSharePointClient.getfiles().read().get();
@@ -47,6 +50,13 @@ public class FileFolderSnippets {
         return itemID;
     }
 
+    /**
+     * Gets the contents of a file on user's OnDrive for Business by ID
+     *
+     * @param fileId The Id of the file whose contents are to be returned
+     * @return Byte[]. The contents of the file as a byte array
+     * @version 1.0
+     */
     public byte[] getFileContentsFromServer(String fileId)
             throws ExecutionException
             , InterruptedException {
@@ -57,6 +67,12 @@ public class FileFolderSnippets {
         return fileContents;
     }
 
+    /**
+     * Deletes a file on user's OnDrive for Business by ID
+     *
+     * @param fileId The Id of the file whose contents are to be returned
+     * @version 1.0
+     */
     public void deleteFileFromServer(String fileId)
             throws ExecutionException
             , InterruptedException {
@@ -68,6 +84,13 @@ public class FileFolderSnippets {
 
     }
 
+    /**
+     * Uploads a file to the root folder of a user's OneDrive for Business drive
+     *
+     * @param fileName     The name of the file to be uploaded
+     * @param fileContents Byte[]. The contents of the file as a byte array
+     * @version 1.0
+     */
     public String postNewFileToServer(
             String fileName
             , byte[] fileContents)
@@ -90,6 +113,13 @@ public class FileFolderSnippets {
         return newFile.getid();
     }
 
+    /**
+     * Uploads a an update to a file to the root folder of a user's OneDrive for Business drive
+     *
+     * @param fileId          The id of the file to be uploaded
+     * @param updatedContents The contents of the file as a string
+     * @version 1.0
+     */
     public void postUpdatedFileToServer(
             String fileId
             , String updatedContents)
@@ -102,6 +132,13 @@ public class FileFolderSnippets {
                         updatedContents.getBytes(Charsets.UTF_8)).get();
     }
 
+    /**
+     * Creates a new folder in the root of the user's OneDrive for Business drive
+     *
+     * @param fullPath The path of the folder to be created
+     * @return Item  The created folder
+     * @version 1.0
+     */
     public Item createO365Folder(String fullPath) throws ExecutionException, InterruptedException {
         Item folder = new Item();
 
@@ -111,6 +148,12 @@ public class FileFolderSnippets {
         return createdFolder;
     }
 
+    /**
+     * Deletes a folder from the user's OneDrive for Business drive
+     *
+     * @param fullPath The path of the folder to be removed
+     * @version 1.0
+     */
     public void deleteO365Folder(String fullPath) throws ExecutionException, InterruptedException {
         //Find ID of the path
         Item folder = mSharePointClient
