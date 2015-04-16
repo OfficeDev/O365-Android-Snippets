@@ -57,6 +57,10 @@ We will continue adding snippets to this sample, so make sure to check back.
 April 6, 2015:
 
 * Initial release
+  
+April 16, 2015:
+
+* Added snippets for sending email with text file attachments and getting attachments from email in your inbox
 
 
 ## Device requirements
