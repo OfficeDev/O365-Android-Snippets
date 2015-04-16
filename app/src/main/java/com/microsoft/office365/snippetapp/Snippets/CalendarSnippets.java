@@ -29,7 +29,7 @@ public class CalendarSnippets {
     }
 
     /**
-     * Return a list of calendar events off the default calendar ordered by the
+     * Return a list of calendar events from the default calendar and ordered by the
      * Start field. The range of events to be returned includes events from
      * 1 week prior to current date through 1 week into the future. 10 events
      * are returned per page

@@ -29,7 +29,7 @@ public class SendEmailMessageStory extends BaseUserStory {
 
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.sendMail(GlobalValues.USER_EMAIL,
+            String emailID = emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
                     getStringResource(R.string.mail_subject_text) + uniqueGUID,
                     getStringResource(R.string.mail_body_text));
 

@@ -4,6 +4,7 @@
 
 package com.microsoft.office365.snippetapp.Snippets;
 
+import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.BodyType;
 import com.microsoft.outlookservices.EmailAddress;
 import com.microsoft.outlookservices.FileAttachment;
@@ -12,7 +13,10 @@ import com.microsoft.outlookservices.Message;
 import com.microsoft.outlookservices.Recipient;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +66,7 @@ public class EmailSnippets {
      * Gets a list of all recent email messages in the
      * user Inbox whose subject matches, sorted by date and time received
      *  @param subjectLine The subject of the email to be matched
+     *  @see  'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      * @return List of String. The mail Ids of the matching messages
      * @version 1.0
      */
@@ -71,13 +76,47 @@ public class EmailSnippets {
                 .getFolders()
                 .getById("Inbox")
                 .getMessages()
-                .filter("Subject eq '" + subjectLine + "'")
+                .filter("Subject eq '" + subjectLine.trim() + "'")
                 .read()
                 .get();
 
         ArrayList<String> mailIds = new ArrayList<>();
         for (Message message : inboxMessages) {
             mailIds.add(message.getId());
+        }
+        return mailIds;
+    }
+
+    /**
+     * Gets a list of all recent email messages in the
+     * user Inbox whose subject matches subjectLine and sent date&time are greater than the
+     * sentDate parameter. Results are sorted by date and time received
+     *  @param subjectLine The subject of the email to be matched
+     *  @param sentDate The UTC (Zulu) time that the mail was sent.
+     *  @see  'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
+     * @return List of String. The mail Ids of the matching messages
+     * @version 1.0
+     */
+    public List<String> GetInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate) throws ExecutionException, InterruptedException{
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+        String filterString = "DateTimeReceived ge "
+                + formatter.format(sentDate.getTime())
+                + " and "
+                + "Subject eq '"
+                + subjectLine.trim() + "'";
+        List<Message> inboxMessages = mMailClient
+                .getMe()
+                .getFolders()
+                .getById("Inbox")
+                .getMessages()
+                .filter(filterString)
+                .read()
+                .get();
+        ArrayList<String> mailIds = new ArrayList<>();
+        for (Message message : inboxMessages) {
+            if (message.getSubject().equals(subjectLine.trim()))
+                 mailIds.add(message.getId());
         }
         return mailIds;
     }
@@ -95,7 +134,6 @@ public class EmailSnippets {
         FileAttachment fileAttachment = new FileAttachment();
         fileAttachment.setContentBytes(textContent.getBytes());
         fileAttachment.setName(fileName);
-        fileAttachment.setContentType("Text");
         fileAttachment.setSize(textContent.getBytes().length);
         return fileAttachment;
     }
@@ -119,6 +157,20 @@ public class EmailSnippets {
                 .add(getTextFileAttachment(fileContents,fileName))
                 .get();
         return true;
+    }
+
+    /**
+     * Gets a list of Attachment objects representing the contents of a set of email attachments
+     *  @param mailID The email id of the message whose attachments are wanted
+     * @return List. A list of Byte array objects
+     * @version 1.0
+     */
+    public List<Attachment> getAttachmentsFromEmailMessage(String mailID) throws ExecutionException, InterruptedException {
+        return mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailID)
+                .getAttachments().read().get();
     }
 
     /**
@@ -154,8 +206,6 @@ public class EmailSnippets {
         // the draft folder.
         Message draft = mMailClient
                 .getMe()
-                .getFolders()
-                .getById("Drafts")
                 .getMessages()
                 .add(messageToSend)
                 .get();
@@ -164,26 +214,19 @@ public class EmailSnippets {
     }
 
     /**
-     * Gets a message out of the user's draft folder by id and adds a text file attachment
-     *  @param mailID The email id of the mail to be sent from the draft folder
+     * Sends the Exchange server copy of a new mail message
+     *  @param mailId The email to be sent from the draft folder
      * @return Boolean. The result of the operation
      * @version 1.0
      */
-    public Boolean sendDraftMail(String mailID) throws ExecutionException, InterruptedException
+    public Boolean sendMail(String mailId) throws ExecutionException, InterruptedException
     {
-        //Get a message out of user's draft folder by mail Id
-        Message draft = mMailClient.getMe()
-                .getFolders()
-                .getById("Drafts")
+        mMailClient
+                .getMe()
                 .getMessages()
-                .getById(mailID)
-                .read().get();
-
-        //Send the draft message
-        mMailClient.getMe()
+                .getById(mailId)
                 .getOperations()
-                .sendMail(draft, false)
-                .get();
+                .send();
         return true;
     }
 
@@ -195,7 +238,7 @@ public class EmailSnippets {
      * @return String. The id of the sent email
      * @version 1.0
      */
-    public String sendMail(
+    public String createAndSendMail(
             final String emailAddress
             , final String subject
             , final String body) throws ExecutionException, InterruptedException {

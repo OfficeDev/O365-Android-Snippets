@@ -16,11 +16,12 @@ import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
-import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachment;
+import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateFileContentsOnServerStory;
@@ -50,7 +51,8 @@ public class StoryList {
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),
                 new ForwardEmailMessageStory(),
-                new SendEmailWithTextFileAttachment(),
+                new SendEmailWithTextFileAttachmentStory(),
+                new GetEmailAttachmentsStory(),
                 new GetContactsStory(),
                 new CreateOrDeleteContactStory("CREATE"),
                 new CreateOrDeleteContactStory("DELETE"),

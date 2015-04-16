@@ -10,6 +10,7 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
+import java.util.Date;
 import java.util.List;
 
 public class ForwardEmailMessageStory extends BaseUserStory {
@@ -28,9 +29,11 @@ public class ForwardEmailMessageStory extends BaseUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
+            //Store the date and time that the email is sent in UTC
+            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.sendMail(
+            String emailID = emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
                     , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
@@ -44,9 +47,9 @@ public class ForwardEmailMessageStory extends BaseUserStory {
             //and the loop has tried less than 50 times.
             do {
                 List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject(
+                        .GetInboxMessagesBySubject_DateTimeReceived(
                                 getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID);
+                                        + uniqueGUID,sentDate);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }

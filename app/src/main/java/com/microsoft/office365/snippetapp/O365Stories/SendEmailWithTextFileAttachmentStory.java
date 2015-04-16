@@ -8,14 +8,15 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 /**
  * Created by johnaustin on 4/14/15.
  */
-public class SendEmailWithTextFileAttachment extends  BaseUserStory {
+public class SendEmailWithTextFileAttachmentStory extends  BaseUserStory {
 
     public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
-    public static final String SENT_NOTICE = "Email with attachment has been sent";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
 
     @Override
     public String execute() {
@@ -42,19 +43,17 @@ public class SendEmailWithTextFileAttachment extends  BaseUserStory {
                     , getStringResource(R.string.text_attachment_contents)
                     , getStringResource(R.string.text_attachment_filename));
 
-            //Send the draft email
-            if (emailSnippets.getMailMessageById(emailID).getHasAttachments()) {
-                //build string for test results on UI
-                StringBuilder sb = new StringBuilder();
-                sb.append(SENT_NOTICE);
-                returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
-                //Send the draft email to the recipient
-                emailSnippets.sendDraftMail(emailID);
-            }
+            //Send the mail with attachments
+            //build string for test results on UI
+            StringBuilder sb = new StringBuilder();
+            sb.append(SENT_NOTICE);
+            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
+            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
 
-            //3. Delete the email using the ID
-           // Boolean result = emailSnippets.deleteMail(emailID);
+            //Send the draft email to the recipient
+            emailSnippets.sendMail(draftMessageID);
 
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
