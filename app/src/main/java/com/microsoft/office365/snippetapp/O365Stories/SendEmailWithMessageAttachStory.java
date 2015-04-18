@@ -3,31 +3,37 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
+
+import android.util.Log;
+
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
-import java.util.List;
 
-public class ForwardEmailMessageStory extends BaseUserStory {
-    private static final int MAX_POLL_REQUESTS = 20;
+public class SendEmailWithMessageAttachStory extends BaseUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
+
 
     @Override
     public String execute() {
         String returnResult = "";
-
-        AuthenticationController
-                .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
-
         try {
+            AuthenticationController
+                    .getInstance()
+                    .setResourceId(
+                            getO365MailResourceId());
+
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
+            mEmailSnippets = emailSnippets;
 
             //Store the date and time that the email is sent in UTC
             Date sentDate = new Date();
@@ -38,50 +44,54 @@ public class ForwardEmailMessageStory extends BaseUserStory {
                     , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
 
-            //Get the new message
-            String emailId = "";
-            int tryCount = 0;
 
-            //Try to get the newly sent email from user's inbox at least once.
-            //continue trying to get the email while the email is not found
-            //and the loop has tried less than 50 times.
-            do {
-                List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(
-                                getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID,sentDate,getStringResource(R.string.Email_Folder_Inbox));
-                if (mailIds.size() > 0) {
-                    emailId = mailIds.get(0);
-                }
-                tryCount++;
-                //Stay in loop while these conditions are true.
-                //If either condition becomes false, break
-            } while (emailId.length() == 0 && tryCount < MAX_POLL_REQUESTS);
+            Message messageToAttach = GetAMessageFromInBox(
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID);
 
-            String forwardEmailId = emailSnippets.forwardMail(emailId);
-            //3. Delete the email using the ID
-            emailSnippets.deleteMail(emailId);
-            if (forwardEmailId.length() > 0) {
-                emailSnippets.deleteMail(forwardEmailId);
+            if (messageToAttach != null) {
+                //Create a new email message but do not send yet
+                String newEmailId = emailSnippets.addDraftMail(
+                        GlobalValues.USER_EMAIL
+                        , getStringResource(R.string.mail_subject_text) + uniqueGUID
+                        , getStringResource(R.string.mail_body_text));
+
+                //Attach email message to new draft email
+                emailSnippets.addItemAttachment(newEmailId, messageToAttach);
+
+                //Send draft email
+                emailSnippets.sendMail(newEmailId);
+
+                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
+                        + uniqueGUID, getStringResource(R.string.Email_Folder_Draft));
+                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
+                        + uniqueGUID, getStringResource(R.string.Email_Folder_Sent));
+
+                returnResult = StoryResultFormatter.wrapResult(
+                        STORY_DESCRIPTION, true
+                );
             }
 
-            return StoryResultFormatter.wrapResult(
-                    "Forward email message story: ", true
-            );
-        } catch (Exception ex) {
+
+        }
+        catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            return StoryResultFormatter.wrapResult(
-                    "Forward email message story: " + formattedException, false
+            Log.e("Send msg w/ message ", formattedException);
+            returnResult = StoryResultFormatter.wrapResult(
+                    "Send mail exception: "
+                            + formattedException
+                    , false
             );
         }
+        return returnResult;
     }
 
     @Override
     public String getDescription() {
-        return "Forward an email message";
+        return STORY_DESCRIPTION;
     }
-
 }
+
 // *********************************************************
 //
 // O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets

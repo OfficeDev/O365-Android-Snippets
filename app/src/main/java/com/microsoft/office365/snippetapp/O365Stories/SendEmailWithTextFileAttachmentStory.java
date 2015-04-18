@@ -8,7 +8,6 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
 
 /**
  * Created by johnaustin on 4/14/15.
@@ -39,7 +38,7 @@ public class SendEmailWithTextFileAttachmentStory extends  BaseUserStory {
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
-            emailSnippets.addAttachmentToDraft(emailID
+            emailSnippets.addAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
                     , getStringResource(R.string.text_attachment_filename));
 

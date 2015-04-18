@@ -42,7 +42,7 @@ public class GetEmailAttachmentsStory extends BaseUserStory{
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
-            emailSnippets.addAttachmentToDraft(emailID
+            emailSnippets.addAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
                     , getStringResource(R.string.text_attachment_filename));
 
@@ -62,7 +62,10 @@ public class GetEmailAttachmentsStory extends BaseUserStory{
             //and the loop has tried less than 50 times.
             do {
                 List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(mailSubject, sendDate);
+                        .GetInboxMessagesBySubject_DateTimeReceived(
+                                mailSubject
+                                , sendDate
+                                ,getStringResource(R.string.Email_Folder_Inbox));
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }

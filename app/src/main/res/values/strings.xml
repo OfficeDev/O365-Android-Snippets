@@ -79,4 +79,10 @@
         &lt;/html&gt;
     </string>
     <string name="MainActivity_ClearResults">Clear results</string>
+    <string name="CalendarEvent_Accept">Accepted</string>
+    <string name="CalendarEvent_Decline">Declined</string>
+    <string name="CalendarEvent_Tentative">Tentative</string>
+    <string name="Email_Folder_Inbox">Inbox</string>
+    <string name="Email_Folder_Sent">Sent Items</string>
+    <string name="Email_Folder_Draft">Drafts</string>
 </resources>

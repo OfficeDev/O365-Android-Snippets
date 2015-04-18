@@ -5,17 +5,24 @@ package com.microsoft.office365.snippetapp.O365Stories;
 
 import android.util.Log;
 
+import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class AcceptEventInviteStory extends BaseUserStory {
+public class RespondToCalendarEventInviteStory extends BaseUserStory {
+
+    public static final int MAX_TRY_COUNT = 20;
+
     @Override
     public String execute() {
         //PREPARE
@@ -28,50 +35,88 @@ public class AcceptEventInviteStory extends BaseUserStory {
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
                 getO365MailClient());
+        EmailSnippets emailSnippets = new EmailSnippets(
+                getO365MailClient());
 
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
-
+        String uniqueGUID = java.util.UUID.randomUUID().toString();
+        String subjectLine = getStringResource(R.string.calendar_subject_text)
+                + ":"
+                + uniqueGUID;
          try {
+
+             //Store the date and time that the email is sent in UTC
+             Date sentDate = new Date();
             newEventId = calendarSnippets.createCalendarEvent(
-                    "Subject"
-                    , "<p class=MsoNormal>Hello world!</p>"
+                    subjectLine
+                    , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAddresses);
 
-            String addedEventId = calendarSnippets.getCalendarEventId(newEventId);
-            calendarSnippets.acceptCalendarEventInvite(
-                    newEventId
-                    , GlobalValues.USER_EMAIL);
+            Thread.sleep(20000);
+            if (calendarSnippets.respondToCalendarEventInvite(newEventId
+                    , GlobalValues.USER_EMAIL, getStringResource(R.string.CalendarEvent_Accept)) != null){
 
 
-            String attendeeStatus = calendarSnippets.getEventAttendeeStatus(
-                    newEventId
-                    , GlobalValues.USER_EMAIL);
 
-            calendarSnippets.deleteCalendarEvent(newEventId);
+                Thread.sleep(20000);
+                String attendeeStatus = calendarSnippets.getEventAttendeeStatus(
+                        newEventId
+                        , GlobalValues.USER_EMAIL);
 
-            if (attendeeStatus.toLowerCase().contains("accept")) {
-                return StoryResultFormatter.wrapResult(
-                        "Accept event invite story: Event "
-                                + " accepted.", true
-                );
+                //Get the new message
+                String emailId = "";
+                int tryCount = 0;
 
+                calendarSnippets.deleteCalendarEvent(newEventId);
+                //Try to get the newly sent email event invitation
+                // from user's Sent Items folder at least once.
+                //continue trying to get the email while the email is not found
+                //and the loop has tried less than MAX_TRY_COUNT times.
+                do {
+                    List<Message> mailIds = emailSnippets
+                            .GetMailboxMessagesByFolderName_Subject(
+                                    subjectLine
+                                    , getStringResource(R.string.Email_Folder_Sent));
+                    if (mailIds.size() > 0) {
+                        for (Message message : mailIds) {
+                            emailId = message.getId();
+                            emailSnippets.deleteMail(emailId);
+                        }
+                    }
+                    tryCount++;
+
+                    //Stay in loop while these conditions are true.
+                    //If either condition becomes false, break
+                } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
+
+                if (attendeeStatus.toLowerCase().contains("accept")) {
+                    return StoryResultFormatter.wrapResult(
+                            "Respond to event invite story: Event "
+                                    + " response.", true);
+                } else {
+                    return StoryResultFormatter.wrapResult(
+                            "Respond to event invite story: Event "
+                                    + " response failed. " + attendeeStatus, false
+                    );
+
+                }
             } else {
                 return StoryResultFormatter.wrapResult(
-                        "Accept event invite story: Event "
-                                + " accepted.", false
+                        "Respond to event invite story: Event "
+                                + " is null.", false
                 );
 
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Accept event story", formattedException);
+            Log.e("Respond to event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Accept event exception: "
+                    "Respond to event exception: "
                             + formattedException
                     , false
             );
@@ -79,9 +124,9 @@ public class AcceptEventInviteStory extends BaseUserStory {
         } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Accept event story", formattedException);
+            Log.e("Respond to event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Accept event exception: "
+                    "Respond to event exception: "
                             + formattedException
                     , false
             );
@@ -91,7 +136,7 @@ public class AcceptEventInviteStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Accept event invite";
+        return "Responds to an event invite";
     }
 
 }

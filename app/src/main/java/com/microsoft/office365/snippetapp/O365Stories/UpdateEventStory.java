@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -43,7 +42,7 @@ public class UpdateEventStory extends BaseUserStory {
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAdresses
             );
-
+            Thread.sleep(20000);
             Event updatedEvent = calendarSnippets.updateCalendarEvent(
                     newEventId
                     , getStringResource(R.string.calendar_subject_text)
@@ -54,7 +53,7 @@ public class UpdateEventStory extends BaseUserStory {
                     , null
                     , null
             );
-
+            Thread.sleep(20000);
             String updatedSubject = updatedEvent.getSubject();
             //CLEAN UP
             calendarSnippets.deleteCalendarEvent(newEventId);
@@ -63,18 +62,15 @@ public class UpdateEventStory extends BaseUserStory {
                     + " Updated Subject")) {
                 return StoryResultFormatter.wrapResult(
                         "UpdateEventStory: Event "
-                                + " updated.", true
-                );
-
-            } else {
+                                + " updated.", true);
+            }
+            else {
                 return StoryResultFormatter.wrapResult(
                         "Update Event Story: Update "
-                                + " event.", false
-                );
+                                + " event.", false);
             }
-
-
-        } catch (ExecutionException e) {
+        }
+        catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Update event story", formattedException);
@@ -83,8 +79,8 @@ public class UpdateEventStory extends BaseUserStory {
                             + formattedException
                     , false
             );
-
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Update event story", formattedException);

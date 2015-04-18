@@ -52,7 +52,7 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
                 List<String> mailIds = emailSnippets
                         .GetInboxMessagesBySubject_DateTimeReceived(
                                 getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID, sentDate);
+                                        + uniqueGUID, sentDate,getStringResource(R.string.Email_Folder_Inbox));
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }

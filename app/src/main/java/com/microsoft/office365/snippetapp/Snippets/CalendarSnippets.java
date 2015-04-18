@@ -22,6 +22,9 @@ import java.util.regex.Matcher;
 
 public class CalendarSnippets {
 
+    public static final String ACCEPT = "Accepted";
+    public static final String TENTATIVE = "Tentative";
+    public static final String DECLINE = "Declined";
     OutlookClient mCalendarClient;
 
     public CalendarSnippets(OutlookClient mailClient) {
@@ -83,7 +86,7 @@ public class CalendarSnippets {
      * @param itemBodyHtml The body of the event as HTML
      * @param startDate The start date of the event
      * @param endDate The end date of the event
-     * @param  attendees A list of attendee email addresses
+     * @param  attendeeAddresses A list of attendee email addresses
      * @return String The id of the created event
      * @version 1.0
      */
@@ -92,26 +95,32 @@ public class CalendarSnippets {
             , String itemBodyHtml
             , java.util.Calendar startDate
             , Calendar endDate
-            , List<String> attendees)
+            , List<String> attendeeAddresses)
             throws ExecutionException
             , InterruptedException {
         Event newEvent = new Event();
         newEvent.setSubject(subject);
+
+        //Create an event item body with HTML formatted text
         ItemBody itemBody = new ItemBody();
         itemBody.setContent(itemBodyHtml);
         itemBody.setContentType(BodyType.HTML);
+
+        //Fill new calendar event with body, start date, all day flag
+        //and end date
         newEvent.setBody(itemBody);
         newEvent.setStart(startDate);
         newEvent.setIsAllDay(false);
         newEvent.setEnd(endDate);
+
         Matcher matcher;
         List<Attendee> attendeeList = new ArrayList<>();
-        for (String s : attendees) {
+        for (String attendeeAddress : attendeeAddresses) {
             // Add mail to address if mailToString is an email address
-            matcher = Patterns.EMAIL_ADDRESS.matcher(s);
+            matcher = Patterns.EMAIL_ADDRESS.matcher(attendeeAddress);
             if (matcher.matches()) {
                 EmailAddress emailAddress = new EmailAddress();
-                emailAddress.setAddress(s);
+                emailAddress.setAddress(attendeeAddress);
                 Attendee attendee = new Attendee();
                 attendee.setEmailAddress(emailAddress);
                 attendeeList.add(attendee);
@@ -206,20 +215,37 @@ public class CalendarSnippets {
         return null;
     }
 
+
     /**
-     * Accepts an event invitation on behalf of the specified attendee
+     * Responds to an event invitation on behalf of the specified attendee
      * @param eventId The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
+     * @param response The user's response to the event invitation
      * @version 1.0
      */
-    public Event acceptCalendarEventInvite(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
+    public Event respondToCalendarEventInvite(String eventId, String myEmailAddress, String response) throws ExecutionException, InterruptedException {
         Event calendarEvent = getCalendarEvent(eventId);
+
+        if (calendarEvent == null)
+            return null;
 
         for (Attendee a : calendarEvent.getAttendees()) {
             String thisEmailAddress = a.getEmailAddress().getAddress();
             if (thisEmailAddress.toLowerCase().equals(myEmailAddress.toLowerCase())) {
                 ResponseStatus inviteResponse = new ResponseStatus();
-                inviteResponse.setResponse(ResponseType.Accepted);
+                switch (response)
+                {
+                    case ACCEPT:
+                        inviteResponse.setResponse(ResponseType.Accepted);
+                        break;
+                    case TENTATIVE:
+                        inviteResponse.setResponse(ResponseType.TentativelyAccepted);
+                        break;
+                    case DECLINE:
+                        inviteResponse.setResponse(ResponseType.Declined);
+                        break;
+
+                }
                 a.setStatus(inviteResponse);
                 break;
             }
@@ -233,34 +259,7 @@ public class CalendarSnippets {
                 .get();
     }
 
-    /**
-     * Declines an event invitation on behalf of the specified attendee
-     * @param eventId The id of the event to be responded to
-     * @param myEmailAddress The email address of the attendee whose status is of interest
-     * @version 1.0
-     */
-    public Event declineCalendarEventInvite(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
-        Event calendarEvent = getCalendarEvent(eventId);
 
-        if (calendarEvent.getAttendees().size() > 0) {
-            for (Attendee a : calendarEvent.getAttendees()) {
-                String thisEmailAddress = a.getEmailAddress().getAddress();
-                if (thisEmailAddress.toLowerCase().equals(myEmailAddress.toLowerCase())) {
-                    ResponseStatus inviteResponse = new ResponseStatus();
-                    inviteResponse.setResponse(ResponseType.Declined);
-                    a.setStatus(inviteResponse);
-                    break;
-                }
-            }
-        }
-
-        return mCalendarClient
-                .getMe()
-                .getEvents()
-                .getById(eventId)
-                .update(calendarEvent)
-                .get();
-    }
 
     /**
      * Gets the event id of the event specified by an event Id
