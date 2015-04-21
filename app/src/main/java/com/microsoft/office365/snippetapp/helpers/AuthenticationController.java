@@ -109,7 +109,7 @@ public class AuthenticationController {
                         this.resourceId,
                         Constants.CLIENT_ID,
                         Constants.REDIRECT_URI,
-                        PromptBehavior.Always,
+                        PromptBehavior.Auto,
                         new AuthenticationCallback<AuthenticationResult>() {
 
                             @Override

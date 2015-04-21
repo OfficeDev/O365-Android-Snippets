@@ -19,6 +19,7 @@ import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachmentStory;
@@ -47,6 +48,7 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
+                new GetFilteredImportantEvents(),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),

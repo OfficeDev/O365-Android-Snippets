@@ -195,13 +195,25 @@ public class CalendarSnippets {
     }
 
     /**
+     * Create a calendar event based off a full Event object passed to this method.
+     *
+     * @return the same Event object updated with the ID from the server.
+     */
+    public Event createCalendarEvent(Event eventToCreate) throws ExecutionException, InterruptedException {
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .add(eventToCreate).get();
+    }
+
+    /**
      * Gets the invitation status of a given attendee for a given event
      *
      * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @version 1.0
      */
-    public String getEventAttendeeStatus(String eventId, String myEmailAddress) {
+    public String getEventAttendeeStatus(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
         for (Attendee attendee : getCalendarEvent(eventId).getAttendees()) {
             String attendeeEmail = attendee.getEmailAddress().getAddress();
             if (attendeeEmail.equalsIgnoreCase(myEmailAddress)) {
@@ -292,17 +304,30 @@ public class CalendarSnippets {
      * @return Event The event of interest
      * @version 1.0
      */
-    public Event getCalendarEvent(String eventId) {
-        try {
+    public Event getCalendarEvent(String eventId) throws ExecutionException, InterruptedException {
             return mCalendarClient
                     .getMe()
                     .getEvents()
                     .getById(eventId)
                     .read()
                     .get();
-        } catch (Exception e) {
-            return null;
-        }
+    }
+
+    /**
+     * Runs a filtered query to find all events that are high importance. This snippet can be
+     * modified to run any filtered query. For a complete list of Events properties that
+     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
+     *
+     * @return A list of events
+     * @version 1.0
+     */
+    public List<Event> getImportantEvents() throws ExecutionException, InterruptedException {
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .filter("Importance eq 'High'")
+                .read()
+                .get();
     }
 }
 // *********************************************************
