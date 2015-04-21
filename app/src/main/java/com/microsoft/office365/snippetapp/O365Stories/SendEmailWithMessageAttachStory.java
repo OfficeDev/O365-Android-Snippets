@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -16,7 +15,7 @@ import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
 
-public class SendEmailWithMessageAttachStory extends BaseUserStory {
+public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
 
     public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
     public static final String SENT_NOTICE = "Email sent with subject line:";
@@ -33,7 +32,6 @@ public class SendEmailWithMessageAttachStory extends BaseUserStory {
 
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
-            mEmailSnippets = emailSnippets;
 
             //Store the date and time that the email is sent in UTC
             Date sentDate = new Date();
@@ -45,7 +43,7 @@ public class SendEmailWithMessageAttachStory extends BaseUserStory {
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
 
 
-            Message messageToAttach = GetAMessageFromInBox(
+            Message messageToAttach = GetAMessageFromInBox(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
                             + uniqueGUID);
 
@@ -62,10 +60,14 @@ public class SendEmailWithMessageAttachStory extends BaseUserStory {
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);
 
-                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
-                        + uniqueGUID, getStringResource(R.string.Email_Folder_Draft));
-                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
-                        + uniqueGUID, getStringResource(R.string.Email_Folder_Sent));
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Draft));
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Sent));
 
                 returnResult = StoryResultFormatter.wrapResult(
                         STORY_DESCRIPTION, true

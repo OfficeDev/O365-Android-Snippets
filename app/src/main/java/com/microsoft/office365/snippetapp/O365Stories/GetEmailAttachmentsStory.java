@@ -10,16 +10,15 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.FileAttachment;
+import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-/**
- * Created by johnaustin on 4/15/15.
- */
-public class GetEmailAttachmentsStory extends BaseUserStory{
+
+public class GetEmailAttachmentsStory extends BaseEmailUserStory {
     public static final String SENT_NOTICE = "Attachment email sent with subject line:";
-    public static final int MAX_TRY_COUNT = 20;
 
     @Override
     public String execute() {
@@ -54,38 +53,19 @@ public class GetEmailAttachmentsStory extends BaseUserStory{
             emailSnippets.sendMail(draftMessageID);
 
             //Get the new message
-            String emailId = "";
-            int tryCount = 0;
-
-            //Try to get the newly sent email from user's inbox at least once.
-            //continue trying to get the email while the email is not found
-            //and the loop has tried less than 50 times.
-            do {
-                List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(
-                                mailSubject
-                                , sendDate
-                                ,getStringResource(R.string.Email_Folder_Inbox));
-                if (mailIds.size() > 0) {
-                    emailId = mailIds.get(0);
-                }
-                tryCount++;
-
-
-                //Stay in loop while these conditions are true.
-                //If either condition becomes false, break
-            } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
+            Message sentMessage = GetAMessageFromInBox(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID);
 
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
-            if (emailId.length() > 0)
-            {
-                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(emailId);
+            if (sentMessage.getId().length() > 0) {
+                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(
+                        sentMessage.getId());
                 //Send the mail with attachments
                 //build string for test results on UI
-                for (Attachment attachment : attachments)
-                {
+                for (Attachment attachment : attachments) {
                     if (attachment.getClass().getSimpleName() == "FileAttachment") {
                         FileAttachment fileAttachment = (FileAttachment) attachment;
                         sb.append(fileAttachment.getContentBytes().toString());
@@ -94,14 +74,16 @@ public class GetEmailAttachmentsStory extends BaseUserStory{
                 }
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
             }
-            else
+            else {
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
+            }
 
 
             //3. Delete the email using the ID
             // Boolean result = emailSnippets.deleteMail(emailID);
 
-        } catch (Exception ex) {
+        }
+        catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(

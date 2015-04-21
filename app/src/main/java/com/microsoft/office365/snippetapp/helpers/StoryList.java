@@ -5,6 +5,7 @@ package com.microsoft.office365.snippetapp.helpers;
 
 import android.content.Context;
 
+import com.microsoft.office365.snippetapp.O365Stories.DeleteMessageAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory;
@@ -56,6 +57,7 @@ public class StoryList {
                 new SendEmailWithMessageAttachStory(),
                 new SendEmailWithContactAttachStory(),
                 new GetEmailAttachmentsStory(),
+                new DeleteMessageAttachmentStory(),
                 new GetContactsStory(),
                 new CreateOrDeleteContactStory("CREATE"),
                 new CreateOrDeleteContactStory("DELETE"),

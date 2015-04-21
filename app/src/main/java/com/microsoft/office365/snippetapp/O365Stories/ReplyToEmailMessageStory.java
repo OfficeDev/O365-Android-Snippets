@@ -9,15 +9,14 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
-import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 //Create a new email, send to yourself, reply to the email, and delete sent mail
-public class ReplyToEmailMessageStory extends BaseUserStory {
+public class ReplyToEmailMessageStory extends BaseEmailUserStory {
 
-
-    public static final int MAX_TRY_COUNT = 20;
 
     @Override
     public String execute() {
@@ -42,45 +41,28 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
                     , getStringResource(R.string.mail_body_text));
 
             //Get the new message
-            String emailId = "";
-            int tryCount = 0;
+            Message message = GetAMessageFromInBox(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID);
 
-            //Try to get the newly sent email from user's inbox at least once.
-            //continue trying to get the email while the email is not found
-            //and the loop has tried less than 50 times.
-            do {
-                List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(
-                                getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID, sentDate,getStringResource(R.string.Email_Folder_Inbox));
-                if (mailIds.size() > 0) {
-                    emailId = mailIds.get(0);
-                }
-                tryCount++;
-
-                //Stay in loop while these conditions are true.
-                //If either condition becomes false, break
-            } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
-
-            if (emailId.length() > 0) {
+            if (message.getId().length() > 0) {
                 String replyEmailId = emailSnippets.replyToEmailMessage(
-                        emailId
+                        message.getId()
                         , getStringResource(R.string.mail_body_text));
                 //3. Delete the email using the ID
-                emailSnippets.deleteMail(emailId);
+                emailSnippets.deleteMail(message.getId());
                 if (replyEmailId.length() > 0) {
                     emailSnippets.deleteMail(replyEmailId);
                 }
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", true);
             }
-            else
-            {
+            else {
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", false);
             }
-
-        } catch (Exception ex) {
+        }
+        catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             return StoryResultFormatter.wrapResult(
                     "Reply to email message story: " + formattedException, false

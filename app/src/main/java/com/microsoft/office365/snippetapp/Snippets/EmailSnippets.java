@@ -4,13 +4,12 @@
 
 package com.microsoft.office365.snippetapp.Snippets;
 
-import com.microsoft.outlookservices.Contact;
-import com.microsoft.outlookservices.Item;
 import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.BodyType;
 import com.microsoft.outlookservices.EmailAddress;
 import com.microsoft.outlookservices.FileAttachment;
 import com.microsoft.outlookservices.Folder;
+import com.microsoft.outlookservices.Item;
 import com.microsoft.outlookservices.ItemAttachment;
 import com.microsoft.outlookservices.ItemBody;
 import com.microsoft.outlookservices.Message;
@@ -98,7 +97,7 @@ public class EmailSnippets {
      * named mail folder whose subject matches, sorted by date and time received
      *
      * @param subjectLine The subject of the email to be matched
-     * @param folderName The display name of the mail folder
+     * @param folderName  The display name of the mail folder
      * @return List of String. The mail Ids of the matching messages
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
@@ -184,25 +183,26 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      * @version 1.0
      */
-    public Boolean addAttachmentToMessage(
+    public Attachment addAttachmentToMessage(
             String mailId
             , String fileContents
             , String fileName) throws ExecutionException, InterruptedException {
 
+        Attachment attachment = getTextFileAttachment(fileContents, fileName);
         mMailClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
                 .getAttachments()
-                .add(getTextFileAttachment(fileContents, fileName))
+                .add(attachment)
                 .get();
-        return true;
+        return attachment;
     }
 
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
      *
-     * @param mailId  The id of the draft email that will get the attachment
+     * @param mailId       The id of the draft email that will get the attachment
      * @param itemToAttach The mail message to attach
      * @return Boolean. The result of the operation. True if success
      * @version 1.0
@@ -226,6 +226,19 @@ public class EmailSnippets {
         return true;
     }
 
+    public Boolean removeMessageAttachment(String mailId, Attachment attachment) throws ExecutionException, InterruptedException {
+        Message message = mMailClient
+                .getMe()
+                .getMessage(mailId)
+                .read()
+                .get();
+
+        if (message != null){
+           message.getAttachments().remove(attachment);
+        }
+
+        return true;
+    }
 
     /**
      * Gets a list of Attachment objects representing the contents of a set of email attachments

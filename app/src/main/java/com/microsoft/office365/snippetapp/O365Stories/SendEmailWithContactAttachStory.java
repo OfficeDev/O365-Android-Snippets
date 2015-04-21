@@ -3,7 +3,6 @@
 */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.app.ListFragment;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
@@ -18,7 +17,7 @@ import com.microsoft.outlookservices.Contact;
 import java.util.Date;
 import java.util.List;
 
-public class SendEmailWithContactAttachStory extends BaseUserStory {
+public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
 
     public static final String STORY_DESCRIPTION = "Sends an email message with a contact attachment";
     public static final String SENT_NOTICE = "Email sent with subject line:";
@@ -61,9 +60,9 @@ public class SendEmailWithContactAttachStory extends BaseUserStory {
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);
 
-                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
+                DeleteAMessageFromMailFolder(emailSnippets,getStringResource(R.string.mail_subject_text)
                         + uniqueGUID, getStringResource(R.string.Email_Folder_Draft));
-                DeleteAMessageFromMailFolder(getStringResource(R.string.mail_subject_text)
+                DeleteAMessageFromMailFolder(emailSnippets,getStringResource(R.string.mail_subject_text)
                         + uniqueGUID, getStringResource(R.string.Email_Folder_Sent));
 
                 returnResult = StoryResultFormatter.wrapResult(

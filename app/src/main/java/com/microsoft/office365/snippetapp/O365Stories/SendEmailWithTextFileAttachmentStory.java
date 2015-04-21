@@ -9,10 +9,8 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-/**
- * Created by johnaustin on 4/14/15.
- */
-public class SendEmailWithTextFileAttachmentStory extends  BaseUserStory {
+
+public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
 
     public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
     public static final String SENT_NOTICE = "Email sent with subject line:";
@@ -54,7 +52,8 @@ public class SendEmailWithTextFileAttachmentStory extends  BaseUserStory {
             //Send the draft email to the recipient
             emailSnippets.sendMail(draftMessageID);
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(

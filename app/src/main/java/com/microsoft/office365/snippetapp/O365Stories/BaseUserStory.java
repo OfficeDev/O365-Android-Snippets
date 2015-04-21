@@ -27,8 +27,8 @@ public abstract class BaseUserStory {
     private String mMailResourceId;
     private OnUseCaseStatusChangedListener mUseCaseStatusChangedListener;
     private String mFilesFoldersResourceId;
-    private static final int MAX_POLL_REQUESTS = 20;
-    EmailSnippets mEmailSnippets;
+
+
 
     public String getFilesFoldersResourceId() {
         return mFilesFoldersResourceId;
@@ -56,55 +56,6 @@ public abstract class BaseUserStory {
                 .getApplication()
                 .getApplicationContext()
                 .getString(resourceToGet);
-    }
-    //Gets messages with the given subject line from the user's inbox
-    protected Message GetAMessageFromInBox(String subjectLine) throws ExecutionException, InterruptedException{
-        //Get the new message
-        Message messageToAttach = null;
-        int tryCount = 0;
-
-        //Try to get the newly sent email from user's inbox at least once.
-        //continue trying to get the email while the email is not found
-        //and the loop has tried less than 50 times.
-        do {
-            List<Message> messages = null;
-            messages = mEmailSnippets
-                    .GetMailboxMessagesByFolderName_Subject(
-                            subjectLine
-                            , getStringResource(R.string.Email_Folder_Inbox));
-            if (messages.size() > 0) {
-                messageToAttach = messages.get(0);
-            }
-            tryCount++;
-            //Stay in loop while these conditions are true.
-            //If either condition becomes false, break
-        } while (messageToAttach != null && tryCount < MAX_POLL_REQUESTS);
-
-        return messageToAttach;
-    }
-
-    //Deletes all messages with the given subject line from a named email folder
-    protected void DeleteAMessageFromMailFolder(String subjectLine, String folderName) throws ExecutionException, InterruptedException{
-        List<Message> messagesToDelete = null;
-        int tryCount = 0;
-        //Try to get the newly sent email from user's inbox at least once.
-        //continue trying to get the email while the email is not found
-        //and the loop has tried less than 50 times.
-        do {
-
-            messagesToDelete = mEmailSnippets
-                    .GetMailboxMessagesByFolderName_Subject(
-                            subjectLine
-                            , folderName);
-            for (Message message : messagesToDelete) {
-                //3. Delete the email using the ID
-                mEmailSnippets.deleteMail(message.getId());
-            }
-            tryCount++;
-            //Stay in loop while these conditions are true.
-            //If either condition becomes false, break
-        } while (messagesToDelete.size() > 0 && tryCount < MAX_POLL_REQUESTS);
-
     }
 
     public View getUIResultView() {

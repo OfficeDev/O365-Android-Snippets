@@ -1,7 +1,9 @@
 /*
- *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
- */
+*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+*/
 package com.microsoft.office365.snippetapp.O365Stories;
+
+import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
@@ -9,63 +11,68 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.outlookservices.Attachment;
 
-import java.util.Date;
+public class DeleteMessageAttachmentStory extends BaseEmailUserStory{
 
-public class ForwardEmailMessageStory extends BaseEmailUserStory {
+    public static final String STORY_DESCRIPTION = "Deletes an attachment from a draft email message";
+    public static final String SENT_NOTICE = "Draft email attachment deleted:";
 
     @Override
     public String execute() {
         String returnResult = "";
-
-        AuthenticationController
-                .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
-
         try {
+            AuthenticationController
+                    .getInstance()
+                    .setResourceId(
+                            getO365MailResourceId());
+
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
-            //Store the date and time that the email is sent in UTC
-            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
-                    GlobalValues.USER_EMAIL
-                    , getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID, getStringResource(R.string.mail_body_text));
 
-            //Get the new message
-            Message messageToForward = GetAMessageFromInBox(emailSnippets,
-                    getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
+            //Add a new email to the user's draft folder
+            String emailID = emailSnippets.addDraftMail(GlobalValues.USER_EMAIL,
+                    getStringResource(R.string.mail_subject_text) + uniqueGUID,
+                    getStringResource(R.string.mail_body_text));
 
-            String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
-            //3. Delete the email using the ID
-            emailSnippets.deleteMail(messageToForward.getId());
-            if (forwardEmailId.length() > 0) {
-                emailSnippets.deleteMail(forwardEmailId);
-            }
+            //Add a text file attachment to the mail added to the draft folder
+            Attachment attachment = emailSnippets.addAttachmentToMessage(emailID
+                    , getStringResource(R.string.text_attachment_contents)
+                    , getStringResource(R.string.text_attachment_filename));
 
-            return StoryResultFormatter.wrapResult(
-                    "Forward email message story: ", true
-            );
-        }
-        catch (Exception ex) {
+            String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
+
+            //Send the mail with attachments
+            //build string for test results on UI
+            StringBuilder sb = new StringBuilder();
+            sb.append(SENT_NOTICE);
+            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
+            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+
+            //Send the draft email to the recipient
+            emailSnippets.removeMessageAttachment(draftMessageID,attachment);
+
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
+            Log.e("Delete attachment story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Forward email message story: " + formattedException, false
+                    "Delete mail attachment exception: "
+                            + formattedException
+                    , false
             );
+
         }
+        return returnResult;
+
     }
 
     @Override
     public String getDescription() {
-        return "Forward an email message";
+        return STORY_DESCRIPTION;
     }
-
 }
 // *********************************************************
 //

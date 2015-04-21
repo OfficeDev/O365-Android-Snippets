@@ -12,7 +12,7 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-public class SendEmailMessageStory extends BaseUserStory {
+public class SendEmailMessageStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
@@ -40,7 +40,8 @@ public class SendEmailMessageStory extends BaseUserStory {
             StringBuilder sb = new StringBuilder();
             sb.append("Email is added");
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(
