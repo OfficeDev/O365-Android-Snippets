@@ -48,7 +48,6 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
-                new GetFilteredImportantEvents(),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),
@@ -65,6 +64,7 @@ public class StoryList {
                 new UpdateEventStory(),
                 new AcceptEventInviteStory(),
                 new DeclineEventInviteStory(),
+                new GetFilteredImportantEvents(),
                 new GetFilesAndFoldersStory(),
                 new CreateOrDeleteFileStory("CREATE"),
                 new UpdateFileContentsOnServerStory(),

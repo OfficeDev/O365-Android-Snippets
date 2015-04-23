@@ -31,11 +31,11 @@ public class GetFilteredImportantEvents extends BaseUserStory {
         CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
 
         try {
-            //Next sections create one important event to test with
+            //Set up one important event to test with
             Event testEvent = new Event();
             testEvent.setSubject(getStringResource(R.string.calendar_subject_text));
 
-            //Set body
+            //Set body on test event
             ItemBody itemBody = new ItemBody();
             itemBody.setContent(getStringResource(R.string.calendar_body_text));
             itemBody.setContentType(BodyType.HTML);
@@ -49,7 +49,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
             testEvent.setEnd(eventTime);
             testEvent.setImportance(Importance.High);
 
-            //Create test event
+            //Create test event on tenant
             testEvent = calendarSnippets.createCalendarEvent(testEvent);
 
             //Retrieve important events (should include our test event)
@@ -64,7 +64,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
                 }
             }
 
-            //Delete test event
+            //Delete test event from tenant
             calendarSnippets.deleteCalendarEvent(testEvent.getId());
 
         } catch (ExecutionException | InterruptedException e) {
