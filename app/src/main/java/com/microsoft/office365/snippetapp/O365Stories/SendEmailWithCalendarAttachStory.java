@@ -6,26 +6,24 @@ package com.microsoft.office365.snippetapp.O365Stories;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
-import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
+import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Contact;
+import com.microsoft.outlookservices.Event;
 
 import java.util.Date;
 import java.util.List;
 
-public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
-
-    public static final String STORY_DESCRIPTION = "Sends an email message with a contact attachment";
+public class SendEmailWithCalendarAttachStory extends BaseEmailUserStory {
+    public static final String STORY_DESCRIPTION = "Sends an email message with a calendar event attachment";
     public static final String SENT_NOTICE = "Email sent with subject line:";
     EmailSnippets mEmailSnippets;
 
     @Override
     public String execute() {
-
         String returnResult = "";
         try {
 
@@ -38,8 +36,8 @@ public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
                     getO365MailClient());
             mEmailSnippets = emailSnippets;
 
-            ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
-            List<Contact> contactsToAttach = contactsSnippets.getContacts(10);
+            CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+            List<Event> eventsToAttach = calendarSnippets.getO365Events();
 
             //Store the date and time that the email is sent in UTC
             Date sentDate = new Date();
@@ -52,18 +50,22 @@ public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
                     , getStringResource(R.string.mail_subject_text) + uniqueGUID
                     , getStringResource(R.string.mail_body_text));
 
-            if (contactsToAttach.size() > 0) {
+            if (eventsToAttach.size() > 0) {
 
                 //Attach email message to new draft email
-                emailSnippets.addItemAttachment(newEmailId, contactsToAttach.get(1));
+                emailSnippets.addItemAttachment(newEmailId, eventsToAttach.get(1));
 
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);
 
-                DeleteAMessageFromMailFolder(emailSnippets,getStringResource(R.string.mail_subject_text)
-                        + uniqueGUID, getStringResource(R.string.Email_Folder_Draft));
-                DeleteAMessageFromMailFolder(emailSnippets,getStringResource(R.string.mail_subject_text)
-                        + uniqueGUID, getStringResource(R.string.Email_Folder_Sent));
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Draft));
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Sent));
 
                 returnResult = StoryResultFormatter.wrapResult(
                         STORY_DESCRIPTION, true
@@ -72,7 +74,7 @@ public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
         }
         catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send msg w/ contact ", formattedException);
+            Log.e("Send msg w/ event ", formattedException);
             returnResult = StoryResultFormatter.wrapResult(
                     "Send mail exception: "
                             + formattedException
@@ -81,6 +83,7 @@ public class SendEmailWithContactAttachStory extends BaseEmailUserStory {
         }
 
         return returnResult;
+
     }
 
     @Override

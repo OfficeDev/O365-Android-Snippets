@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 
 public class EmailSnippets {
     private final static int pageSize = 11;
+    public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
     OutlookClient mMailClient;
 
     public EmailSnippets(OutlookClient mailClient) {
@@ -213,7 +214,7 @@ public class EmailSnippets {
         ItemAttachment itemAttachment = new ItemAttachment();
         itemAttachment.setName(itemToAttach.getClass().getName());
         itemAttachment.setItem(itemToAttach);
-        itemAttachment.setContentType(itemToAttach.getClass().getName());
+        itemAttachment.setContentType(MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT);
         itemAttachment.setIsInline(false);
         itemAttachment.setId(itemToAttach.getId());
         mMailClient

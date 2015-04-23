@@ -5,13 +5,12 @@ package com.microsoft.office365.snippetapp.helpers;
 
 import android.content.Context;
 
-import com.microsoft.office365.snippetapp.O365Stories.DeleteMessageAttachmentStory;
-import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
+import com.microsoft.office365.snippetapp.O365Stories.DeleteMessageAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
@@ -20,8 +19,9 @@ import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
+import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
-import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithContactAttachStory;
+import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithCalendarAttachStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithMessageAttachStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateContactStory;
@@ -55,7 +55,7 @@ public class StoryList {
                 new ForwardEmailMessageStory(),
                 new SendEmailWithTextFileAttachmentStory(),
                 new SendEmailWithMessageAttachStory(),
-                new SendEmailWithContactAttachStory(),
+                new SendEmailWithCalendarAttachStory(),
                 new GetEmailAttachmentsStory(),
                 new DeleteMessageAttachmentStory(),
                 new GetContactsStory(),

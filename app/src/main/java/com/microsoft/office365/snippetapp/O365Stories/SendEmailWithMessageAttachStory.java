@@ -60,10 +60,10 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);
 
-                DeleteAMessageFromMailFolder(emailSnippets,
-                        getStringResource(R.string.mail_subject_text)
-                                + uniqueGUID,
-                        getStringResource(R.string.Email_Folder_Draft));
+//                DeleteAMessageFromMailFolder(emailSnippets,
+//                        getStringResource(R.string.mail_subject_text)
+//                                + uniqueGUID,
+//                        getStringResource(R.string.Email_Folder_Draft));
                 DeleteAMessageFromMailFolder(emailSnippets,
                         getStringResource(R.string.mail_subject_text)
                                 + uniqueGUID,

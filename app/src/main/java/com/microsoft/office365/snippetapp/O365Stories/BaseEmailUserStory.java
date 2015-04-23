@@ -45,7 +45,9 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
     }
 
     //Deletes all messages with the given subject line from a named email folder
-    protected void DeleteAMessageFromMailFolder(EmailSnippets emailSnippets, String subjectLine, String folderName) throws ExecutionException, InterruptedException {
+    protected void DeleteAMessageFromMailFolder(
+            EmailSnippets emailSnippets
+            , String subjectLine, String folderName) throws ExecutionException, InterruptedException {
         List<Message> messagesToDelete = null;
         int tryCount = 0;
         //Try to get the newly sent email from user's inbox at least once.
