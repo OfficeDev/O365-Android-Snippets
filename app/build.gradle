@@ -36,7 +36,7 @@ dependencies {
     compile 'com.microsoft.services:discovery-services:0.12.1'
     compile 'com.microsoft.services:directory-services:0.12.1'
     compile 'com.microsoft.services:file-services:0.12.1'
-    compile 'com.microsoft.aad:adal:1.0.5'
+    compile 'com.microsoft.aad:adal:1.1.2'
     compile 'com.google.guava:guava:18.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
 }

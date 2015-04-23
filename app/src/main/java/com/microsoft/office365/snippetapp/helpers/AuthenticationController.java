@@ -29,7 +29,6 @@ public class AuthenticationController {
     private ADALDependencyResolver dependencyResolver;
     private Activity contextActivity;
     private String resourceId;
-    public static String TENANTID="";
 
     private AuthenticationController() {
         resourceId = com.microsoft.office365.snippetapp.helpers.Constants.DISCOVERY_RESOURCE_ID;
@@ -110,7 +109,6 @@ public class AuthenticationController {
                         this.resourceId,
                         Constants.CLIENT_ID,
                         Constants.REDIRECT_URI,
-                        //TODO change this back to Always behavior
                         PromptBehavior.Auto,
                         new AuthenticationCallback<AuthenticationResult>() {
 
@@ -122,7 +120,7 @@ public class AuthenticationController {
                                             getAuthenticationContext(),
                                             resourceId,
                                             Constants.CLIENT_ID);
-                                    TENANTID=authenticationResult.getTenantId();
+                                    O365ServicesManager.initialize(authenticationResult.getTenantId());
                                     result.set(authenticationResult);
                                 }
                             }
