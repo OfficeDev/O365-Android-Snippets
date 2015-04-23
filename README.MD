@@ -43,6 +43,8 @@ This sample includes the following operations:
 * Send new mail.
 * Forward email.
 * Reply to email.
+* Send email with text file attachment
+* Get email attachments from inbox
 
 **Contacts**
 
@@ -57,6 +59,10 @@ We will continue adding snippets to this sample, so make sure to check back.
 April 6, 2015:
 
 * Initial release
+  
+April 16, 2015:
+
+* Added snippets for sending email with text file attachments and getting attachments from email in your inbox
 
 
 ## Device requirements
@@ -187,4 +193,3 @@ We'd love to get your feedback on this Android starter kit. You can send your qu
 ## Copyright
 Copyright (c) 2015 Microsoft. All rights reserved.
 Microsoft and OneDrive are either registered trademarks or trademarks of Microsoft Corporation.
-
