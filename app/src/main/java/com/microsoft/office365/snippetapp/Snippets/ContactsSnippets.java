@@ -13,10 +13,10 @@ import java.util.concurrent.ExecutionException;
 
 public class ContactsSnippets {
 
-    private final OutlookClient mCalendarClient;
+    private final OutlookClient mOutlookClient;
 
     public ContactsSnippets(OutlookClient mailClient) {
-        mCalendarClient = mailClient;
+        mOutlookClient = mailClient;
     }
 
     /**
@@ -27,7 +27,7 @@ public class ContactsSnippets {
      * @version 1.0
      */
     public List<Contact> getContacts(int pageSize) throws ExecutionException, InterruptedException {
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .top(pageSize)
@@ -70,7 +70,7 @@ public class ContactsSnippets {
         contact.setGivenName(firstNameString);
         contact.setSurname(lastNameString);
 
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .add(contact).get().getId();
@@ -83,7 +83,7 @@ public class ContactsSnippets {
      * @version 1.0
      */
     public Contact getAContact(String id) throws ExecutionException, InterruptedException {
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(id).read().get();
@@ -94,17 +94,14 @@ public class ContactsSnippets {
      * Updates the first and surname of a contact
      *
      * @param contactId       The id of the contact to be updated
-     * @param firstNameString The first name of the new contact
-     * @param lastNameString  The surname of the new contact
+     * @param firstNameString The updated first name of the new contact
+     * @param lastNameString  The updated surname of the new contact
      * @version 1.0
      */
-    public void updateContact(
-            String contactId,
-            String firstNameString,
-            String lastNameString
-    ) throws ExecutionException, InterruptedException {
+    public void updateContact(String contactId, String firstNameString, String lastNameString)
+            throws ExecutionException, InterruptedException {
         //Get the contact to update
-        Contact updateContact = mCalendarClient
+        Contact updateContact = mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(contactId)
@@ -116,7 +113,7 @@ public class ContactsSnippets {
         updateContact.setGivenName(firstNameString);
 
         //push the updated contact to the server
-        mCalendarClient
+        mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(contactId)
@@ -129,17 +126,43 @@ public class ContactsSnippets {
      * Deletes a contact
      *
      * @param id The id of the contact to be deleted
-     * @version 1.0
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
-    public void deleteContact(String id) {
-        mCalendarClient
+    public void deleteContact(String id) throws ExecutionException, InterruptedException {
+        mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(id)
                 .addHeader("If-Match", "*")
-                .delete();
+                .delete()
+                .get();
 
     }
+
+    /**
+     * Runs a filtered query to find all contacts with the given surname. This snippet can be
+     * modified to run any filtered query. For a complete list of contact properties that
+     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
+     *
+     * @param surname
+     * @return A list of contacts matching the given surname
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    public List<Contact> getContactsWithSurname(String surname) throws ExecutionException, InterruptedException {
+        StringBuilder query = new StringBuilder();
+        query.append("surname eq '")
+                .append(surname)
+                .append("'");
+        return mOutlookClient
+                .getMe()
+                .getContacts()
+                .filter(query.toString())
+                .read()
+                .get();
+    }
+
 }
 // *********************************************************
 //

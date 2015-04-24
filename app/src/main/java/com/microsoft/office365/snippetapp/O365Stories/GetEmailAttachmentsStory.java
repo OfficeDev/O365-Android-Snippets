@@ -85,7 +85,7 @@ public class GetEmailAttachmentsStory extends BaseUserStory {
                 for (Attachment attachment : attachments) {
                     if (attachment.getClass().getSimpleName() == "FileAttachment") {
                         FileAttachment fileAttachment = (FileAttachment) attachment;
-                        String fileContents = new String(fileAttachment.getContentBytes(),"UTF-8");
+                        String fileContents = new String(fileAttachment.getContentBytes(), "UTF-8");
                         sb.append(fileContents);
                         sb.append("/n");
                     }
