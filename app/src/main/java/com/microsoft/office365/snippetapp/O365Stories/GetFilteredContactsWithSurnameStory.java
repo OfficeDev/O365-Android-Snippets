@@ -36,12 +36,12 @@ public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
                     surname);
 
             if (contactId.length() > 0) {
-                //Query for the new test contact
+                //Find the new test contact
                 List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
                 for (Contact contact : contacts) {
                     if (contact.getSurname().equals(surname)) {
                         isSucceeding = true;
-                        continue;
+                        break;
                     }
                 }
 

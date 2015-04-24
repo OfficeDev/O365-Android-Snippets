@@ -145,20 +145,16 @@ public class ContactsSnippets {
      * modified to run any filtered query. For a complete list of contact properties that
      * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
      *
-     * @param surname
+     * @param surname The surname to match
      * @return A list of contacts matching the given surname
      * @throws ExecutionException
      * @throws InterruptedException
      */
     public List<Contact> getContactsWithSurname(String surname) throws ExecutionException, InterruptedException {
-        StringBuilder query = new StringBuilder();
-        query.append("surname eq '")
-                .append(surname)
-                .append("'");
         return mOutlookClient
                 .getMe()
                 .getContacts()
-                .filter(query.toString())
+                .filter("surname eq '" + surname + "'")
                 .read()
                 .get();
     }

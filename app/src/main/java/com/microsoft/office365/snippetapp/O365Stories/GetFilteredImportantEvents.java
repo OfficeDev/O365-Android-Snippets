@@ -23,7 +23,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
 
     @Override
     public String execute() {
-        boolean isSucceeding = false;
+        boolean isSucceeding;
         AuthenticationController
                 .getInstance()
                 .setResourceId(getO365MailResourceId());
@@ -59,7 +59,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
             for (Event event : importantEvents) {
                 if (event.getImportance() != Importance.High) {
                     isSucceeding = false;
-                    continue;
+                    break;
                 }
             }
 
