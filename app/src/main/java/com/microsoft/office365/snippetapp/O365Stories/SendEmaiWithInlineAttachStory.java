@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
- */
+*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+*/
 package com.microsoft.office365.snippetapp.O365Stories;
 
 import android.util.Log;
@@ -15,17 +15,21 @@ import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
 
-public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
+/**
+ * Created by johnaustin on 4/23/15.
+ */
+public class SendEmaiWithInlineAttachStory extends BaseEmailUserStory{
 
-    public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
-    public static final String SENT_NOTICE = "Email sent with subject line:";
-    public static final boolean IS_INLINE = false;
-
+    public static final String STORY_DESCRIPTION = "Sends an email message with inline photo attachment";
+    public static final boolean IS_INLINE = true;
+    EmailSnippets mEmailSnippets;
 
     @Override
     public String execute() {
         String returnResult = "";
+
         try {
+
             AuthenticationController
                     .getInstance()
                     .setResourceId(
@@ -33,58 +37,40 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
 
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
+            mEmailSnippets = emailSnippets;
 
             //Store the date and time that the email is sent in UTC
             Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
+
+            //Create a new email message but do not send yet
+            String newEmailId = emailSnippets.addDraftMail(
                     GlobalValues.USER_EMAIL
-                    , getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID, getStringResource(R.string.mail_body_text));
+                    , getStringResource(R.string.mail_subject_text) + uniqueGUID
+                    , getStringResource(R.string.mail_body_text));
 
-
-            Message messageToAttach = GetAMessageFromInBox(emailSnippets,
-                    getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
-
-            if (messageToAttach != null) {
-                //Create a new email message but do not send yet
-                String newEmailId = emailSnippets.addDraftMail(
-                        GlobalValues.USER_EMAIL
-                        , getStringResource(R.string.mail_subject_text) + uniqueGUID
-                        , getStringResource(R.string.mail_body_text));
-
-                //Attach email message to new draft email
-                emailSnippets.addItemAttachment(
+            byte[] photoBytes = getDrawableResource(R.drawable.yellowtulip);
+            Message draftMessage = emailSnippets.addInlinePhotoAttachment(
                         newEmailId
-                        , messageToAttach
-                , IS_INLINE);
+                        ,photoBytes
+                        ,"yellowtulips.jpg"
+                        ,true);
 
-                //Send draft email
-                emailSnippets.sendMail(newEmailId);
-
-                DeleteAMessageFromMailFolder(emailSnippets,
-                        getStringResource(R.string.mail_subject_text)
-                                + uniqueGUID,
-                        getStringResource(R.string.Email_Folder_Sent));
-
+            emailSnippets.sendMail(draftMessage.getId());
                 returnResult = StoryResultFormatter.wrapResult(
-                        STORY_DESCRIPTION, true
-                );
-            }
-
-
+                        STORY_DESCRIPTION, true);
         }
         catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send msg w/ message ", formattedException);
+            Log.e("Send msg w/ event ", formattedException);
             returnResult = StoryResultFormatter.wrapResult(
                     "Send mail exception: "
                             + formattedException
                     , false
             );
         }
+
         return returnResult;
     }
 
@@ -93,7 +79,6 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
         return STORY_DESCRIPTION;
     }
 }
-
 // *********************************************************
 //
 // O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets

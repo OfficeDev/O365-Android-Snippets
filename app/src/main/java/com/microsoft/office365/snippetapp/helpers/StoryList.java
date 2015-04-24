@@ -20,6 +20,7 @@ import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
+import com.microsoft.office365.snippetapp.O365Stories.SendEmaiWithInlineAttachStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithCalendarAttachStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithMessageAttachStory;
@@ -56,6 +57,7 @@ public class StoryList {
                 new SendEmailWithTextFileAttachmentStory(),
                 new SendEmailWithMessageAttachStory(),
                 new SendEmailWithCalendarAttachStory(),
+                new SendEmaiWithInlineAttachStory(),
                 new GetEmailAttachmentsStory(),
                 new DeleteMessageAttachmentStory(),
                 new GetContactsStory(),

@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GetEmailAttachmentsStory extends BaseEmailUserStory {
     public static final String SENT_NOTICE = "Attachment email sent with subject line:";
+    public static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
@@ -41,9 +42,10 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
-            emailSnippets.addAttachmentToMessage(emailID
+            emailSnippets.addTextFileAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
-                    , getStringResource(R.string.text_attachment_filename));
+                    , getStringResource(R.string.text_attachment_filename)
+                    , IS_INLINE);
 
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 

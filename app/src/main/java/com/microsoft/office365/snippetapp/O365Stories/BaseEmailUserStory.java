@@ -13,13 +13,16 @@ import java.util.concurrent.ExecutionException;
 public abstract class BaseEmailUserStory extends BaseUserStory {
 
     private static final int MAX_POLL_REQUESTS = 20;
+    public static final int THREAD_SLEEP_TIME = 3000;
 
     public abstract String execute();
 
     public abstract String getDescription();
 
     //Gets messages with the given subject line from the user's inbox
-    protected Message GetAMessageFromInBox(EmailSnippets emailSnippets, String subjectLine) throws ExecutionException, InterruptedException {
+    protected Message GetAMessageFromInBox(EmailSnippets emailSnippets, String subjectLine)
+            throws ExecutionException, InterruptedException {
+
         //Get the new message
         Message messageToAttach = null;
         int tryCount = 0;
@@ -37,6 +40,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
                 messageToAttach = messages.get(0);
             }
             tryCount++;
+            Thread.sleep(THREAD_SLEEP_TIME);
             //Stay in loop while these conditions are true.
             //If either condition becomes false, break
         } while (messageToAttach == null && tryCount < MAX_POLL_REQUESTS);
@@ -47,7 +51,9 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
     //Deletes all messages with the given subject line from a named email folder
     protected void DeleteAMessageFromMailFolder(
             EmailSnippets emailSnippets
-            , String subjectLine, String folderName) throws ExecutionException, InterruptedException {
+            , String subjectLine, String folderName)
+            throws ExecutionException, InterruptedException {
+
         List<Message> messagesToDelete = null;
         int tryCount = 0;
         //Try to get the newly sent email from user's inbox at least once.
@@ -64,6 +70,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
                 emailSnippets.deleteMail(message.getId());
             }
             tryCount++;
+            Thread.sleep(THREAD_SLEEP_TIME);
             //Stay in loop while these conditions are true.
             //If either condition becomes false, break
         } while (messagesToDelete.size() == 0 && tryCount < MAX_POLL_REQUESTS);

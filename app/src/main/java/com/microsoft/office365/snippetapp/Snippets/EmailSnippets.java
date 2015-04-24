@@ -174,6 +174,56 @@ public class EmailSnippets {
         return fileAttachment;
     }
 
+    private FileAttachment getPhotoAttachment(byte[] photo, String fileName) {
+        FileAttachment fileAttachment = new FileAttachment();
+        fileAttachment.setContentBytes(photo);
+        fileAttachment.setName(fileName);
+        fileAttachment.setSize(photo.length);
+        return fileAttachment;
+
+    }
+
+
+    /**
+     * Gets a list of all recent email messages in the
+     * user Inbox whose subject matches, sorted by date and time received
+     *
+     * @param mailId       The id of the draft message that the photo will be attached to
+     * @param fileContents The byte array of image data
+     * @param fileName     The name of the image file to be attached
+     * @param isInline     True if the photo is to be attached 'inline' instead of as an attachment
+     * @return com.microsoft.outlookservices.Message. The Message object
+     * @version 1.0
+     */
+    public Message addInlinePhotoAttachment(
+            String mailId
+            , byte[] fileContents
+            , String fileName
+            , boolean isInline) throws ExecutionException, InterruptedException {
+        FileAttachment attachment = getPhotoAttachment(fileContents, fileName);
+        attachment.setIsInline(isInline);
+        attachment.setContentType("image/jpeg");
+
+        Message draftMessage = mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailId).read().get();
+
+        ItemBody itemBody = new ItemBody();
+        itemBody.setContent(
+                "<html><body>An inline image from the Office 365 Snippets for Android sample: <img width=100 height=100 id='1' src='"
+                        + fileName
+                        + "' alt='tulips'></body></html>");
+
+        itemBody.setContentType(BodyType.HTML);
+        draftMessage.setBody(itemBody);
+        draftMessage = mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailId).update(draftMessage).get();
+
+        return draftMessage;
+    }
 
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
@@ -184,12 +234,15 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      * @version 1.0
      */
-    public Attachment addAttachmentToMessage(
+    public Attachment addTextFileAttachmentToMessage(
             String mailId
             , String fileContents
-            , String fileName) throws ExecutionException, InterruptedException {
+            , String fileName
+            , boolean isInline) throws ExecutionException, InterruptedException {
 
-        Attachment attachment = getTextFileAttachment(fileContents, fileName);
+        FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
+        attachment.setIsInline(isInline);
+
         mMailClient
                 .getMe()
                 .getMessages()
@@ -210,13 +263,15 @@ public class EmailSnippets {
      */
     public Boolean addItemAttachment(
             String mailId
-            , Item itemToAttach) throws ExecutionException, InterruptedException {
+            , Item itemToAttach
+            , boolean isInline) throws ExecutionException, InterruptedException {
         ItemAttachment itemAttachment = new ItemAttachment();
         itemAttachment.setName(itemToAttach.getClass().getName());
         itemAttachment.setItem(itemToAttach);
         itemAttachment.setContentType(MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT);
         itemAttachment.setIsInline(false);
         itemAttachment.setId(itemToAttach.getId());
+        itemAttachment.setIsInline(isInline);
         mMailClient
                 .getMe()
                 .getMessages()
@@ -227,18 +282,56 @@ public class EmailSnippets {
         return true;
     }
 
-    public Boolean removeMessageAttachment(String mailId, Attachment attachment) throws ExecutionException, InterruptedException {
+
+    /**
+     * Removes an attachment from a draft message
+     *
+     * @param mailId     The id of the draft email that will get the attachment
+     * @param attachment The message attachment to be removed
+     * @return Boolean. The result of the operation. True if success
+     * @version 1.0
+     */
+    public String removeMessageAttachment(String mailId, Attachment attachment)
+            throws ExecutionException, InterruptedException {
+
+        //Get the draft message and expand its attachments
         Message message = mMailClient
                 .getMe()
-                .getMessage(mailId)
+                .getFolders()
+                .getById("Drafts")
+                .getMessages()
+                .getById(mailId)
+                .expand("Attachments")
                 .read()
                 .get();
 
-        if (message != null){
-           message.getAttachments().remove(attachment);
-        }
+        //Remove the first attachment from the local list of attachments
+        List<Attachment> attachments1 = message.getAttachments();
+        attachments1.remove(0);
 
-        return true;
+        //Update the local copy of the mail with the new attachment list
+        message.setAttachments(attachments1);
+
+        //Update the server copy of the message (PATCH)
+        message = mMailClient
+                .getMe()
+                .getFolders()
+                .getById("Drafts")
+                .getMessages()
+                .getById(mailId)
+                .expand("Attachments")
+                .update(message)
+                .get();
+
+        //Send the server copy
+        mMailClient
+                .getMe()
+                .getMessages()
+                .getById(mailId)
+                .getOperations()
+                .send().get();
+
+        return message.getId();
     }
 
     /**

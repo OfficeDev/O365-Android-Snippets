@@ -20,6 +20,7 @@ import java.util.List;
 public class SendEmailWithCalendarAttachStory extends BaseEmailUserStory {
     public static final String STORY_DESCRIPTION = "Sends an email message with a calendar event attachment";
     public static final String SENT_NOTICE = "Email sent with subject line:";
+    public static final boolean IS_INLINE = false;
     EmailSnippets mEmailSnippets;
 
     @Override
@@ -53,7 +54,10 @@ public class SendEmailWithCalendarAttachStory extends BaseEmailUserStory {
             if (eventsToAttach.size() > 0) {
 
                 //Attach email message to new draft email
-                emailSnippets.addItemAttachment(newEmailId, eventsToAttach.get(1));
+                emailSnippets.addItemAttachment(
+                        newEmailId
+                        , eventsToAttach.get(1)
+                , IS_INLINE);
 
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);

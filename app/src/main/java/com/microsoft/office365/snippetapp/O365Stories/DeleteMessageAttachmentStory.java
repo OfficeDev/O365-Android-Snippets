@@ -17,6 +17,7 @@ public class DeleteMessageAttachmentStory extends BaseEmailUserStory{
 
     public static final String STORY_DESCRIPTION = "Deletes an attachment from a draft email message";
     public static final String SENT_NOTICE = "Draft email attachment deleted:";
+    public static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
@@ -39,21 +40,26 @@ public class DeleteMessageAttachmentStory extends BaseEmailUserStory{
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
-            Attachment attachment = emailSnippets.addAttachmentToMessage(emailID
+            Attachment attachment = emailSnippets.addTextFileAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
-                    , getStringResource(R.string.text_attachment_filename));
+                    , getStringResource(R.string.text_attachment_filename)
+                    , IS_INLINE);
+//            //Add a text file attachment to the mail added to the draft folder
+//            Attachment attachment2 = emailSnippets.addTextFileAttachmentToMessage(emailID
+//                    , getStringResource(R.string.text_attachment_contents)
+//                    , getStringResource(R.string.text_attachment_filename)
+//                    , IS_INLINE);
 
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
-            //Send the mail with attachments
+            //remove the attachment from the draft message
+             String updatedDraftMessageId = emailSnippets.removeMessageAttachment(draftMessageID,attachment);
+
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-
-            //Send the draft email to the recipient
-            emailSnippets.removeMessageAttachment(draftMessageID,attachment);
 
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
