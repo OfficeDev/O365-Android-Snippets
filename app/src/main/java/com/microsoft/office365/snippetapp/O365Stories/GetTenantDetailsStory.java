@@ -3,10 +3,42 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
+import com.microsoft.directoryservices.TenantDetail;
+import com.microsoft.directoryservices.User;
+import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.Constants;
+import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
+import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 public class GetTenantDetailsStory extends BaseUserStory {
     @Override
     public String execute() {
-        return null;
+        StringBuilder results = new StringBuilder();
+        AuthenticationController
+                .getInstance()
+                .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
+
+        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+        TenantDetail tenant=null;
+        try {
+            tenant = usersAndGroupsSnippets.getTenantDetails();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return StoryResultFormatter.wrapResult("Get tenant detail exception:", false);
+        }
+
+        if (tenant == null){
+            //No tenants were found
+            return StoryResultFormatter.wrapResult("Get tenant detail: No tenant found",true);
+        }
+        results.append("Get Active Directory Users: The following tenant was found:\n");
+        results.append(tenant.getdisplayName())
+                .append("\n");
+        return StoryResultFormatter.wrapResult(results.toString(),true);
     }
 
     @Override

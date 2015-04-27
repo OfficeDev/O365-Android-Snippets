@@ -3,10 +3,43 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
+import com.microsoft.directoryservices.Group;
+import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.Constants;
+import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
+import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 public class GetADGroupsStory extends BaseUserStory {
     @Override
     public String execute() {
-        return null;
+        StringBuilder results = new StringBuilder();
+        AuthenticationController
+                .getInstance()
+                .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
+
+        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+        List<Group> groupList;
+        try {
+            groupList = usersAndGroupsSnippets.getGroups();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return StoryResultFormatter.wrapResult("Get Active Directory groups exception:", false);
+        }
+
+        if (groupList == null) {
+            //No groups were found
+            return StoryResultFormatter.wrapResult("Get Active Directory Groups: No groups found", true);
+        }
+        results.append("Get Active Directory Groups: The following groups were found:\n");
+        for (Group group : groupList) {
+            results.append(group.getdisplayName())
+                    .append("\n");
+        }
+        return StoryResultFormatter.wrapResult(results.toString(), true);
     }
 
     @Override

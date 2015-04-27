@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 public class UsersAndGroupsSnippets {
 
     DirectoryClient mDirectoryClient;
+
     public UsersAndGroupsSnippets(DirectoryClient directoryClient) {
         mDirectoryClient = directoryClient;
     }
@@ -32,6 +33,7 @@ public class UsersAndGroupsSnippets {
     /**
      * Return tenant details from Active Directory.
      * *
+     *
      * @return TenantDetail. The com.microsoft.directoryservices.TenantDetail object for first tenant found.
      * @version 1.0
      */
