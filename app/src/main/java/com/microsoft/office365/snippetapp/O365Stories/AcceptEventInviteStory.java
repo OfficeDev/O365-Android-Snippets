@@ -19,8 +19,6 @@ public class AcceptEventInviteStory extends BaseUserStory {
     @Override
     public String execute() {
         //PREPARE
-        String returnValue = StoryResultFormatter.wrapResult("Create Event story", false);
-
         AuthenticationController
                 .getInstance()
                 .setResourceId(

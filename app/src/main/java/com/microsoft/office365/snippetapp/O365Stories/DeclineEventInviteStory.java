@@ -22,8 +22,6 @@ public class DeclineEventInviteStory extends BaseUserStory {
     @Override
     public String execute() {
         //PREPARE
-        String returnValue = StoryResultFormatter.wrapResult("Decline Event story", false);
-
         AuthenticationController
                 .getInstance()
                 .setResourceId(
