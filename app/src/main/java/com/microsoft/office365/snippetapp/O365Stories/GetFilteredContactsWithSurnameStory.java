@@ -19,7 +19,9 @@ public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        boolean isSucceeding = false;
+        boolean isStoryComplete = false;
+        StringBuilder storyResultText = new StringBuilder("FilterContactsBySurnameStory: ");
+
         String surname = getStringResource(R.string.contacts_last_name);
         AuthenticationController
                 .getInstance()
@@ -35,33 +37,30 @@ public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
                     getStringResource(R.string.contacts_first_name),
                     surname);
 
-            if (contactId.length() > 0) {
-                //Find the new test contact
-                List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
-                for (Contact contact : contacts) {
-                    if (contact.getSurname().equals(surname)) {
-                        isSucceeding = true;
-                        break;
-                    }
+            //Find the new test contact
+            List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
+            for (Contact contact : contacts) {
+                if (contact.getSurname().equals(surname)) {
+                    break;
                 }
-
-                //Delete the test contact from tenant
-                contactsSnippets.deleteContact(contactId);
             }
+            //Delete the test contact from tenant
+            contactsSnippets.deleteContact(contactId);
+
+            //Story is completed
+            isStoryComplete = true;
+            storyResultText.append("Contact with surname ")
+                    .append(surname)
+                    .append(" found.");
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("ContactFilter", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Filter contacts by surname: " + formattedException
-                    , false
-            );
+            storyResultText.append("Filter contacts by surname exception: ")
+                    .append(formattedException);
+            isStoryComplete = false;
         }
-        if (isSucceeding) {
-            return StoryResultFormatter.wrapResult("FilterContactsBySurnameStory: Contact with surname found.", true);
-        } else {
-            return StoryResultFormatter.wrapResult("FilterContactsBySurnameStory: Contact with surname not found.", false);
-        }
+        return StoryResultFormatter.wrapResult(storyResultText.toString(), isStoryComplete);
     }
 
     @Override
