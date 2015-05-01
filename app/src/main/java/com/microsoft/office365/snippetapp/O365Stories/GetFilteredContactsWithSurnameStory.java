@@ -6,85 +6,67 @@ package com.microsoft.office365.snippetapp.O365Stories;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
-import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.BodyType;
-import com.microsoft.outlookservices.Event;
-import com.microsoft.outlookservices.Importance;
-import com.microsoft.outlookservices.ItemBody;
+import com.microsoft.outlookservices.Contact;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetFilteredImportantEvents extends BaseUserStory {
+public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        boolean isSucceeding;
+        boolean isSucceeding = false;
+        String surname = getStringResource(R.string.contacts_last_name);
         AuthenticationController
                 .getInstance()
                 .setResourceId(getO365MailResourceId());
-        CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+        ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
 
         try {
-            //Set up one important event to test with
-            Event testEvent = new Event();
-            testEvent.setSubject(getStringResource(R.string.calendar_subject_text));
+            //Create a contact that we can test against
+            String contactId = contactsSnippets.createContact(
+                    getStringResource(R.string.contacts_email),
+                    getStringResource(R.string.contacts_business_phone),
+                    getStringResource(R.string.contacts_home_phone),
+                    getStringResource(R.string.contacts_first_name),
+                    surname);
 
-            //Set body on test event
-            ItemBody itemBody = new ItemBody();
-            itemBody.setContent(getStringResource(R.string.calendar_body_text));
-            itemBody.setContentType(BodyType.HTML);
-            testEvent.setBody(itemBody);
-
-            //Set start and end time for event
-            Calendar eventTime = Calendar.getInstance();
-            testEvent.setStart(eventTime);
-            eventTime.add(Calendar.HOUR_OF_DAY, 2);
-            testEvent.setIsAllDay(false);
-            testEvent.setEnd(eventTime);
-            testEvent.setImportance(Importance.High);
-
-            //Create test event on tenant
-            testEvent = calendarSnippets.createCalendarEvent(testEvent);
-
-            //Retrieve important events (should include our test event)
-            List<Event> importantEvents = calendarSnippets.getImportantEvents();
-
-            //Check that all events are important to determine if story succeeded.
-            isSucceeding = true;
-            for (Event event : importantEvents) {
-                if (event.getImportance() != Importance.High) {
-                    isSucceeding = false;
-                    break;
+            if (contactId.length() > 0) {
+                //Find the new test contact
+                List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
+                for (Contact contact : contacts) {
+                    if (contact.getSurname().equals(surname)) {
+                        isSucceeding = true;
+                        break;
+                    }
                 }
+
+                //Delete the test contact from tenant
+                contactsSnippets.deleteContact(contactId);
             }
-
-            //Delete test event from tenant
-            calendarSnippets.deleteCalendarEvent(testEvent.getId());
-
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("EventFilter", formattedException);
+            Log.e("ContactFilter", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Filter important events: " + formattedException
+                    "Filter contacts by surname: " + formattedException
                     , false
             );
         }
         if (isSucceeding) {
-            return StoryResultFormatter.wrapResult("FilterImportantEventsStory: Important events found.", true);
+            return StoryResultFormatter.wrapResult("FilterContactsBySurnameStory: Contact with surname found.", true);
         } else {
-            return StoryResultFormatter.wrapResult("FilterImportantEventsStory: Important events not found.", false);
+            return StoryResultFormatter.wrapResult("FilterContactsBySurnameStory: Contact with surname not found.", false);
         }
     }
 
     @Override
     public String getDescription() {
-        return "Gets events filtered by most important";
+        return "Gets contacts filtered by surname";
     }
 
 

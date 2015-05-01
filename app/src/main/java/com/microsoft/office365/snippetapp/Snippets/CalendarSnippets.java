@@ -305,12 +305,12 @@ public class CalendarSnippets {
      * @version 1.0
      */
     public Event getCalendarEvent(String eventId) throws ExecutionException, InterruptedException {
-            return mCalendarClient
-                    .getMe()
-                    .getEvents()
-                    .getById(eventId)
-                    .read()
-                    .get();
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .getById(eventId)
+                .read()
+                .get();
     }
 
     /**

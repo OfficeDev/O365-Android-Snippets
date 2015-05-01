@@ -19,6 +19,7 @@ import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetFilteredContactsWithSurnameStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
@@ -58,6 +59,7 @@ public class StoryList {
                 new CreateOrDeleteContactStory("CREATE"),
                 new CreateOrDeleteContactStory("DELETE"),
                 new UpdateContactStory(context),
+                new GetFilteredContactsWithSurnameStory(),
                 new CreateOrDeleteEventStory("CREATE"),
                 new CreateOrDeleteEventStory("DELETE"),
                 new EventsFetcherStory(),
