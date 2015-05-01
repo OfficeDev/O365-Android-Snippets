@@ -34,7 +34,7 @@
             android:name=".OperationDetailActivity"
             android:label="@string/title_operation_detail"
             android:parentActivityName=".OperationListActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

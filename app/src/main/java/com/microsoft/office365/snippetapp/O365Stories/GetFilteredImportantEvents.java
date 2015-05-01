@@ -16,7 +16,6 @@ import com.microsoft.outlookservices.Importance;
 import com.microsoft.outlookservices.ItemBody;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -24,7 +23,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
 
     @Override
     public String execute() {
-        boolean isSucceeding = false;
+        boolean isSucceeding;
         AuthenticationController
                 .getInstance()
                 .setResourceId(getO365MailResourceId());
@@ -56,11 +55,11 @@ public class GetFilteredImportantEvents extends BaseUserStory {
             List<Event> importantEvents = calendarSnippets.getImportantEvents();
 
             //Check that all events are important to determine if story succeeded.
-            isSucceeding=true;
+            isSucceeding = true;
             for (Event event : importantEvents) {
-                if (event.getImportance()!=Importance.High) {
+                if (event.getImportance() != Importance.High) {
                     isSucceeding = false;
-                    continue;
+                    break;
                 }
             }
 

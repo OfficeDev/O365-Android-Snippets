@@ -19,6 +19,7 @@ import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetFilteredContactsWithSurnameStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
@@ -55,23 +56,24 @@ public class StoryList {
                 new SendEmailWithTextFileAttachmentStory(),
                 new GetEmailAttachmentsStory(),
                 new GetContactsStory(),
-                new CreateOrDeleteContactStory("CREATE"),
-                new CreateOrDeleteContactStory("DELETE"),
+                new CreateOrDeleteContactStory(StoryAction.CREATE),
+                new CreateOrDeleteContactStory(StoryAction.DELETE),
                 new UpdateContactStory(context),
-                new CreateOrDeleteEventStory("CREATE"),
-                new CreateOrDeleteEventStory("DELETE"),
+                new GetFilteredContactsWithSurnameStory(),
+                new CreateOrDeleteEventStory(StoryAction.CREATE),
+                new CreateOrDeleteEventStory(StoryAction.DELETE),
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
                 new AcceptEventInviteStory(),
                 new DeclineEventInviteStory(),
                 new GetFilteredImportantEvents(),
                 new GetFilesAndFoldersStory(),
-                new CreateOrDeleteFileStory("CREATE"),
+                new CreateOrDeleteFileStory(StoryAction.CREATE),
                 new UpdateFileContentsOnServerStory(),
-                new CreateOrDeleteFileStory("DELETE"),
+                new CreateOrDeleteFileStory(StoryAction.DELETE),
                 new DownloadFileStory(),
-                new CreateOrDeleteOneDriveFolder("CREATE"),
-                new CreateOrDeleteOneDriveFolder("DELETE")
+                new CreateOrDeleteOneDriveFolder(StoryAction.CREATE),
+                new CreateOrDeleteOneDriveFolder(StoryAction.DELETE)
         );
         for (BaseUserStory object : baseUserStories) {
             ITEM_MAP.put(object.getId(), object);
