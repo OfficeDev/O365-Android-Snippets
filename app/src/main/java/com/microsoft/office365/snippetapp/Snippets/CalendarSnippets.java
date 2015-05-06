@@ -7,16 +7,26 @@ import android.util.Patterns;
 
 import com.microsoft.outlookservices.Attendee;
 import com.microsoft.outlookservices.BodyType;
+import com.microsoft.outlookservices.DayOfWeek;
 import com.microsoft.outlookservices.EmailAddress;
 import com.microsoft.outlookservices.Event;
 import com.microsoft.outlookservices.ItemBody;
+import com.microsoft.outlookservices.PatternedRecurrence;
+import com.microsoft.outlookservices.RecurrencePattern;
+import com.microsoft.outlookservices.RecurrencePatternType;
+import com.microsoft.outlookservices.RecurrenceRange;
+import com.microsoft.outlookservices.RecurrenceRangeType;
 import com.microsoft.outlookservices.ResponseStatus;
 import com.microsoft.outlookservices.ResponseType;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 
@@ -128,6 +138,100 @@ public class CalendarSnippets {
                 .getEvents()
                 .add(newEvent).get().getId();
     }
+
+    /**
+     * Creates a recurring event. This snippet will create an event that recurs
+     * every Tuesday and Thursday from 1PM to 2PM. You can modify this snippet
+     * to work with other recurrence patterns.
+     *
+     * @param subject      The subject of the event
+     * @param itemBodyHtml The body of the event as HTML
+     * @param attendees    A list of attendee email addresses
+     * @return String The id of the created event
+     * @version 1.0
+     */
+    public String createRecurringCalendarEvent(
+            String subject
+            , String itemBodyHtml
+            , List<String> attendees)
+            throws ExecutionException
+            , InterruptedException {
+        Event newEvent = new Event();
+        newEvent.setSubject(subject);
+        ItemBody itemBody = new ItemBody();
+        itemBody.setContent(itemBodyHtml);
+        itemBody.setContentType(BodyType.HTML);
+        newEvent.setBody(itemBody);
+
+        //start date will be the next Tuesday 1 PM
+
+        DateTime startDate = DateTime.now();
+
+        //Set start date to the next occurring Tuesday
+        if (startDate.getDayOfWeek() < DateTimeConstants.TUESDAY) {
+            startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
+        } else {
+            startDate = startDate.plusWeeks(1);
+            startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
+        }
+
+        //zero out minutes, seconds, millis
+        startDate = startDate.hourOfDay().setCopy(13)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+        DateTime endDate = startDate.dayOfWeek().addToCopy(2);
+        endDate = endDate.hourOfDay().setCopy(14);
+
+        newEvent.setStart(startDate.toCalendar(Locale.getDefault()));
+        newEvent.setIsAllDay(false);
+
+        //end date will be the next Thu at 2PM
+        newEvent.setEnd(endDate.toCalendar(Locale.getDefault()));
+
+        //Configure the recurrence pattern for the new event
+        //In this case the meeting will occur every Tuesday and Thursday from 1PM to 2PM
+        RecurrencePattern pattern = new RecurrencePattern();
+        List<DayOfWeek> daysMeetingRecursOn = new ArrayList();
+        daysMeetingRecursOn.add(DayOfWeek.Tuesday);
+        //daysMeetingRecursOn.add(DayOfWeek.Thursday);
+        pattern.setType(RecurrencePatternType.Weekly);
+        pattern.setDaysOfWeek(daysMeetingRecursOn);
+        pattern.setInterval(1);
+
+        //pattern.setFirstDayOfWeek(DayOfWeek.Tuesday);
+
+        PatternedRecurrence recurrencePattern = new PatternedRecurrence();
+        recurrencePattern.setPattern(pattern);
+        RecurrenceRange recurrenceRange = new RecurrenceRange();
+        recurrenceRange.setType(RecurrenceRangeType.NoEnd);
+
+        recurrenceRange.setStartDate(startDate.toCalendar(Locale.getDefault()));
+        recurrencePattern.setRange(recurrenceRange);
+        newEvent.setRecurrence(recurrencePattern);
+
+        Matcher matcher;
+        List<Attendee> attendeeList = new ArrayList<>();
+        for (String s : attendees) {
+            // Add mail to address if mailToString is an email address
+            matcher = Patterns.EMAIL_ADDRESS.matcher(s);
+            if (matcher.matches()) {
+                EmailAddress emailAddress = new EmailAddress();
+                emailAddress.setAddress(s);
+                Attendee attendee = new Attendee();
+                attendee.setEmailAddress(emailAddress);
+                attendeeList.add(attendee);
+            }
+        }
+        newEvent.setAttendees(attendeeList);
+
+
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .add(newEvent).get().getId();
+    }
+
 
     /**
      * Updates the subject, body, start date, end date, or attendees of an event
@@ -305,12 +409,12 @@ public class CalendarSnippets {
      * @version 1.0
      */
     public Event getCalendarEvent(String eventId) throws ExecutionException, InterruptedException {
-            return mCalendarClient
-                    .getMe()
-                    .getEvents()
-                    .getById(eventId)
-                    .read()
-                    .get();
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .getById(eventId)
+                .read()
+                .get();
     }
 
     /**

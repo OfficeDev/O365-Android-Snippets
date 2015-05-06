@@ -29,6 +29,9 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
 
+    //Joda-Time for calendar time
+    compile 'joda-time:joda-time:2.7'
+
     // base Office 365 SDK OData libraries:
     compile 'com.microsoft.services:odata-engine-core:0.12.1'
     compile 'com.microsoft.services:odata-engine-android-impl:0.12.1@aar'
