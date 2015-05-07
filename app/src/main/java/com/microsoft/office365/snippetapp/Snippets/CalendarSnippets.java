@@ -117,19 +117,7 @@ public class CalendarSnippets {
         newEvent.setStart(startDate);
         newEvent.setIsAllDay(false);
         newEvent.setEnd(endDate);
-        Matcher matcher;
-        List<Attendee> attendeeList = new ArrayList<>();
-        for (String s : attendees) {
-            // Add mail to address if mailToString is an email address
-            matcher = Patterns.EMAIL_ADDRESS.matcher(s);
-            if (matcher.matches()) {
-                EmailAddress emailAddress = new EmailAddress();
-                emailAddress.setAddress(s);
-                Attendee attendee = new Attendee();
-                attendee.setEmailAddress(emailAddress);
-                attendeeList.add(attendee);
-            }
-        }
+        List<Attendee> attendeeList = convertEmailStringsToAttendees(attendees);
         newEvent.setAttendees(attendeeList);
 
 
@@ -156,6 +144,8 @@ public class CalendarSnippets {
             , List<String> attendees)
             throws ExecutionException
             , InterruptedException {
+
+        //Create a new Office 365 Event object
         Event newEvent = new Event();
         newEvent.setSubject(subject);
         ItemBody itemBody = new ItemBody();
@@ -163,11 +153,12 @@ public class CalendarSnippets {
         itemBody.setContentType(BodyType.HTML);
         newEvent.setBody(itemBody);
 
-        //start date will be the next Tuesday 1 PM
-
-        DateTime startDate = DateTime.now();
+        //Set the attendee list
+        List<Attendee> attendeeList = convertEmailStringsToAttendees(attendees);
+        newEvent.setAttendees(attendeeList);
 
         //Set start date to the next occurring Tuesday
+        DateTime startDate = DateTime.now();
         if (startDate.getDayOfWeek() < DateTimeConstants.TUESDAY) {
             startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
         } else {
@@ -175,63 +166,51 @@ public class CalendarSnippets {
             startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
         }
 
-        //zero out minutes, seconds, millis
+        //Set start time to 1 PM
         startDate = startDate.hourOfDay().setCopy(13)
                 .withMinuteOfHour(0)
                 .withSecondOfMinute(0)
                 .withMillisOfSecond(0);
-        DateTime endDate = startDate.dayOfWeek().addToCopy(2);
-        endDate = endDate.hourOfDay().setCopy(14);
 
+        //Set end time to 2 PM
+        DateTime endDate = startDate.hourOfDay().setCopy(14);
+
+        //Set start and end time on the new Event (next Tuesday 1-2PM)
         newEvent.setStart(startDate.toCalendar(Locale.getDefault()));
         newEvent.setIsAllDay(false);
-
-        //end date will be the next Thu at 2PM
         newEvent.setEnd(endDate.toCalendar(Locale.getDefault()));
 
         //Configure the recurrence pattern for the new event
         //In this case the meeting will occur every Tuesday and Thursday from 1PM to 2PM
-        RecurrencePattern pattern = new RecurrencePattern();
+        RecurrencePattern recurrencePattern = new RecurrencePattern();
         List<DayOfWeek> daysMeetingRecursOn = new ArrayList();
         daysMeetingRecursOn.add(DayOfWeek.Tuesday);
-        //daysMeetingRecursOn.add(DayOfWeek.Thursday);
-        pattern.setType(RecurrencePatternType.Weekly);
-        pattern.setDaysOfWeek(daysMeetingRecursOn);
-        pattern.setInterval(1);
+        daysMeetingRecursOn.add(DayOfWeek.Thursday);
+        recurrencePattern.setType(RecurrencePatternType.Weekly);
+        recurrencePattern.setDaysOfWeek(daysMeetingRecursOn);
+        recurrencePattern.setInterval(1); //recurs every week
 
-        //pattern.setFirstDayOfWeek(DayOfWeek.Tuesday);
-
-        PatternedRecurrence recurrencePattern = new PatternedRecurrence();
-        recurrencePattern.setPattern(pattern);
+        //Create a recurring range. In this case the range does not end
+        //and the event occurs every Tuesday and Thursday forever.
         RecurrenceRange recurrenceRange = new RecurrenceRange();
         recurrenceRange.setType(RecurrenceRangeType.NoEnd);
-
         recurrenceRange.setStartDate(startDate.toCalendar(Locale.getDefault()));
-        recurrencePattern.setRange(recurrenceRange);
-        newEvent.setRecurrence(recurrencePattern);
 
-        Matcher matcher;
-        List<Attendee> attendeeList = new ArrayList<>();
-        for (String s : attendees) {
-            // Add mail to address if mailToString is an email address
-            matcher = Patterns.EMAIL_ADDRESS.matcher(s);
-            if (matcher.matches()) {
-                EmailAddress emailAddress = new EmailAddress();
-                emailAddress.setAddress(s);
-                Attendee attendee = new Attendee();
-                attendee.setEmailAddress(emailAddress);
-                attendeeList.add(attendee);
-            }
-        }
-        newEvent.setAttendees(attendeeList);
+        //Create a pattern of recurrence. It contains the recurrence pattern
+        //and recurrence range created previously.
+        PatternedRecurrence patternedRecurrence = new PatternedRecurrence();
+        patternedRecurrence.setPattern(recurrencePattern);
+        patternedRecurrence.setRange(recurrenceRange);
 
+        //Finally pass the patterned recurrence to the new Event object.
+        newEvent.setRecurrence(patternedRecurrence);
 
+        //Create the event and return the id
         return mCalendarClient
                 .getMe()
                 .getEvents()
                 .add(newEvent).get().getId();
     }
-
 
     /**
      * Updates the subject, body, start date, end date, or attendees of an event
@@ -273,19 +252,7 @@ public class CalendarSnippets {
         if (attendees != null && attendees.size() > 0) {
             //clear attendee list and set with new list
             calendarEvent.setAttendees(null);
-            Matcher matcher;
-            List<Attendee> attendeeList = new ArrayList<>();
-            for (String s : attendees) {
-                // Add mail to address if mailToString is an email address
-                matcher = Patterns.EMAIL_ADDRESS.matcher(s);
-                if (matcher.matches()) {
-                    EmailAddress emailAddress = new EmailAddress();
-                    emailAddress.setAddress(s);
-                    Attendee attendee = new Attendee();
-                    attendee.setEmailAddress(emailAddress);
-                    attendeeList.add(attendee);
-                }
-            }
+            List<Attendee> attendeeList = convertEmailStringsToAttendees(attendees);
             calendarEvent.setAttendees(attendeeList);
         }
 
@@ -432,6 +399,30 @@ public class CalendarSnippets {
                 .filter("Importance eq 'High'")
                 .read()
                 .get();
+    }
+
+    /**
+     * Local helper method that converts an list of email strings into
+     * a list of attendees.
+     *
+     * @param emails A list of email strings
+     * @return A list of Attendees
+     */
+    private List<Attendee> convertEmailStringsToAttendees(List<String> emails){
+        Matcher matcher;
+        List<Attendee> attendeeList = new ArrayList<>();
+        for (String email : emails) {
+            // Add email to attendee list if email string is a valid email address
+            matcher = Patterns.EMAIL_ADDRESS.matcher(email);
+            if (matcher.matches()) {
+                EmailAddress emailAddress = new EmailAddress();
+                emailAddress.setAddress(email);
+                Attendee attendee = new Attendee();
+                attendee.setEmailAddress(emailAddress);
+                attendeeList.add(attendee);
+            }
+        }
+        return attendeeList;
     }
 }
 // *********************************************************
