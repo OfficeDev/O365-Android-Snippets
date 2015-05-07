@@ -408,7 +408,7 @@ public class CalendarSnippets {
      * @param emails A list of email strings
      * @return A list of Attendees
      */
-    private List<Attendee> convertEmailStringsToAttendees(List<String> emails){
+    private List<Attendee> convertEmailStringsToAttendees(List<String> emails) {
         Matcher matcher;
         List<Attendee> attendeeList = new ArrayList<>();
         for (String email : emails) {
