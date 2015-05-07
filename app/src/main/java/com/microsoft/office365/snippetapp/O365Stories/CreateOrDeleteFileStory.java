@@ -9,6 +9,7 @@ import com.google.common.base.Charsets;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
@@ -33,18 +34,22 @@ public class CreateOrDeleteFileStory extends BaseUserStory {
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteFileStory(String action) {
-
-        if (action.equals("CREATE")) {
-            mDescription = CREATE_DESCRIPTION;
-            mLogTag = CREATE_TAG;
-            mSuccessDescription = CREATE_SUCCESS;
-            mErrorDescription = CREATE_ERROR;
-        } else { //DELETE
-            mDescription = DELETE_DESCRIPTION;
-            mLogTag = DELETE_TAG;
-            mSuccessDescription = DELETE_SUCCESS;
-            mErrorDescription = DELETE_ERROR;
+    public CreateOrDeleteFileStory(StoryAction action) {
+        switch (action) {
+            case CREATE: {
+                mDescription = CREATE_DESCRIPTION;
+                mLogTag = CREATE_TAG;
+                mSuccessDescription = CREATE_SUCCESS;
+                mErrorDescription = CREATE_ERROR;
+                break;
+            }
+            case DELETE: {
+                mDescription = DELETE_DESCRIPTION;
+                mLogTag = DELETE_TAG;
+                mSuccessDescription = DELETE_SUCCESS;
+                mErrorDescription = DELETE_ERROR;
+                break;
+            }
         }
     }
 
