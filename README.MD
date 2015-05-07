@@ -43,6 +43,8 @@ This sample includes the following operations:
 * Send new mail.
 * Forward email.
 * Reply to email.
+* Send email with text file attachment
+* Get email attachments from inbox
 
 **Contacts**
 

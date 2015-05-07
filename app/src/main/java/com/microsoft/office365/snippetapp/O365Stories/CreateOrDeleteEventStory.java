@@ -10,6 +10,7 @@ import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
+import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.ArrayList;
@@ -35,18 +36,22 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteEventStory(String action) {
-
-        if (action.equals("CREATE")) {
-            mDescription = CREATE_DESCRIPTION;
-            mLogTag = CREATE_TAG;
-            mSuccessDescription = CREATE_SUCCESS;
-            mErrorDescription = CREATE_ERROR;
-        } else { //DELETE
-            mDescription = DELETE_DESCRIPTION;
-            mLogTag = DELETE_TAG;
-            mSuccessDescription = DELETE_SUCCESS;
-            mErrorDescription = DELETE_ERROR;
+    public CreateOrDeleteEventStory(StoryAction action) {
+        switch (action) {
+            case CREATE: {
+                mDescription = CREATE_DESCRIPTION;
+                mLogTag = CREATE_TAG;
+                mSuccessDescription = CREATE_SUCCESS;
+                mErrorDescription = CREATE_ERROR;
+                break;
+            }
+            case DELETE: {
+                mDescription = DELETE_DESCRIPTION;
+                mLogTag = DELETE_TAG;
+                mSuccessDescription = DELETE_SUCCESS;
+                mErrorDescription = DELETE_ERROR;
+                break;
+            }
         }
     }
 
