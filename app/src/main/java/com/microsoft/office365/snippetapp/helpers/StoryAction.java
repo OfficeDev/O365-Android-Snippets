@@ -1,27 +1,16 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp;
+package com.microsoft.office365.snippetapp.helpers;
 
-import android.app.Application;
-
-public class AndroidSnippetsApplication extends Application {
-
-    private static AndroidSnippetsApplication mAndroidSnippetsApplication;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mAndroidSnippetsApplication = this;
-    }
-
-    public static AndroidSnippetsApplication getApplication() {
-        return mAndroidSnippetsApplication;
-    }
+//Defines which action a story should take when called by StoryList, when a story can
+//perform both a create, and delete action.
+public enum StoryAction {
+    CREATE, DELETE
 }
 // *********************************************************
 //
-// O365-Android-Snippet, https://github.com/OfficeDev/O365-Android-Snippet
+// O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets
 //
 // Copyright (c) Microsoft Corporation
 // All rights reserved.

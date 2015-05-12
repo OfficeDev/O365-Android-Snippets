@@ -3,8 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import android.content.Context;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
@@ -12,16 +10,11 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
+import java.util.Date;
 import java.util.List;
 
 public class ForwardEmailMessageStory extends BaseUserStory {
-    private static final int MAX_POLL_REQUESTS = 50;
-
-    private Context mContext;
-
-    public ForwardEmailMessageStory(Context context) {
-        mContext = context;
-    }
+    private static final int MAX_POLL_REQUESTS = 20;
 
     @Override
     public String execute() {
@@ -36,12 +29,14 @@ public class ForwardEmailMessageStory extends BaseUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
+            //Store the date and time that the email is sent in UTC
+            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.sendMail(
+            String emailID = emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
-                    , mContext.getString(R.string.mail_subject_text)
-                            + uniqueGUID, mContext.getString(R.string.mail_body_text));
+                    , getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.mail_body_text));
 
             //Get the new message
             String emailId = "";
@@ -52,9 +47,9 @@ public class ForwardEmailMessageStory extends BaseUserStory {
             //and the loop has tried less than 50 times.
             do {
                 List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject(
-                                mContext.getString(R.string.mail_subject_text)
-                                        + uniqueGUID);
+                        .GetInboxMessagesBySubject_DateTimeReceived(
+                                getStringResource(R.string.mail_subject_text)
+                                        + uniqueGUID, sentDate);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }

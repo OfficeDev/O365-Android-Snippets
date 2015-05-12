@@ -13,14 +13,21 @@ import java.util.concurrent.ExecutionException;
 
 public class ContactsSnippets {
 
-    private final OutlookClient mCalendarClient;
+    private final OutlookClient mOutlookClient;
 
     public ContactsSnippets(OutlookClient mailClient) {
-        mCalendarClient = mailClient;
+        mOutlookClient = mailClient;
     }
 
+    /**
+     * Return a list of contacts and ordered by the
+     * contact's surname field.
+     *
+     * @return List. A list of the com.microsoft.outlookservices.Contact objects
+     * @version 1.0
+     */
     public List<Contact> getContacts(int pageSize) throws ExecutionException, InterruptedException {
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .top(pageSize)
@@ -29,6 +36,17 @@ public class ContactsSnippets {
                 .read().get();
     }
 
+    /**
+     * Creates a new contact
+     *
+     * @param emailAddressString  The email address of the contact to be added
+     * @param businessPhoneString The business telephone number of the new contact
+     * @param firstNameString     The first name of the new contact
+     * @param homePhoneString     The home telephone number of the new contact
+     * @param lastNameString      The surname of the new contact
+     * @return String. The id of the new contact
+     * @version 1.0
+     */
     public String createContact(
             String emailAddressString,
             String businessPhoneString,
@@ -52,27 +70,38 @@ public class ContactsSnippets {
         contact.setGivenName(firstNameString);
         contact.setSurname(lastNameString);
 
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .add(contact).get().getId();
     }
 
+    /**
+     * Gets a contact by the contact Id
+     *
+     * @return Contact. The contact corresponding to the id
+     * @version 1.0
+     */
     public Contact getAContact(String id) throws ExecutionException, InterruptedException {
-        return mCalendarClient
+        return mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(id).read().get();
     }
 
 
-    public void updateContact(
-            String contactId,
-            String firstNameString,
-            String lastNameString
-    ) throws ExecutionException, InterruptedException {
+    /**
+     * Updates the first and surname of a contact
+     *
+     * @param contactId       The id of the contact to be updated
+     * @param firstNameString The updated first name of the new contact
+     * @param lastNameString  The updated surname of the new contact
+     * @version 1.0
+     */
+    public void updateContact(String contactId, String firstNameString, String lastNameString)
+            throws ExecutionException, InterruptedException {
         //Get the contact to update
-        Contact updateContact = mCalendarClient
+        Contact updateContact = mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(contactId)
@@ -84,7 +113,7 @@ public class ContactsSnippets {
         updateContact.setGivenName(firstNameString);
 
         //push the updated contact to the server
-        mCalendarClient
+        mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(contactId)
@@ -93,15 +122,43 @@ public class ContactsSnippets {
 
     }
 
-    public void deleteContact(String id) {
-        mCalendarClient
+    /**
+     * Deletes a contact
+     *
+     * @param id The id of the contact to be deleted
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    public void deleteContact(String id) throws ExecutionException, InterruptedException {
+        mOutlookClient
                 .getMe()
                 .getContacts()
                 .getById(id)
                 .addHeader("If-Match", "*")
-                .delete();
+                .delete()
+                .get();
 
     }
+
+    /**
+     * Runs a filtered query to find all contacts with the given surname. This snippet can be
+     * modified to run any filtered query. For a complete list of contact properties that
+     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
+     *
+     * @param surname The surname to match
+     * @return A list of contacts matching the given surname
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    public List<Contact> getContactsWithSurname(String surname) throws ExecutionException, InterruptedException {
+        return mOutlookClient
+                .getMe()
+                .getContacts()
+                .filter("surname eq '" + surname + "'")
+                .read()
+                .get();
+    }
+
 }
 // *********************************************************
 //

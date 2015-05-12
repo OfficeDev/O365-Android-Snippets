@@ -3,45 +3,58 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
+import android.util.Log;
+
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Attachment;
+import com.microsoft.outlookservices.FileAttachment;
 
 import java.util.Date;
 import java.util.List;
 
-//Create a new email, send to yourself, reply to the email, and delete sent mail
-public class ReplyToEmailMessageStory extends BaseUserStory {
 
-
+public class GetEmailAttachmentsStory extends BaseUserStory {
+    public static final String SENT_NOTICE = "Attachment email sent with subject line:";
     public static final int MAX_TRY_COUNT = 20;
 
     @Override
     public String execute() {
-
-        AuthenticationController
-                .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
-
+        String returnResult = "";
         try {
+            AuthenticationController
+                    .getInstance()
+                    .setResourceId(
+                            getO365MailResourceId());
+
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
-
-            //Store the date and time that the email is sent in UTC
-            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
-                    GlobalValues.USER_EMAIL
-                    , getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID
-                    , getStringResource(R.string.mail_body_text));
+            String mailSubject = getStringResource(R.string.mail_subject_text) + uniqueGUID;
 
-            //Get the new message
+            //Add a new email to the user's draft folder
+            String emailID = emailSnippets.addDraftMail(GlobalValues.USER_EMAIL,
+                    mailSubject,
+                    getStringResource(R.string.mail_body_text));
+
+            //Add a text file attachment to the mail added to the draft folder
+            emailSnippets.addAttachmentToDraft(emailID
+                    , getStringResource(R.string.text_attachment_contents)
+                    , getStringResource(R.string.text_attachment_filename));
+
+            String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
+
+            //UTC time Immediately before message is sent
+            Date sendDate = new Date();
+            //Send the draft email to the recipient
+            emailSnippets.sendMail(draftMessageID);
+
+
             String emailId = "";
             int tryCount = 0;
 
@@ -49,46 +62,60 @@ public class ReplyToEmailMessageStory extends BaseUserStory {
             //continue trying to get the email while the email is not found
             //and the loop has tried less than 50 times.
             do {
+                //Get the new message
                 List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(
-                                getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID, sentDate);
+                        .GetInboxMessagesBySubject_DateTimeReceived(mailSubject, sendDate);
                 if (mailIds.size() > 0) {
                     emailId = mailIds.get(0);
                 }
                 tryCount++;
 
+
                 //Stay in loop while these conditions are true.
                 //If either condition becomes false, break
             } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
 
+            StringBuilder sb = new StringBuilder();
+            sb.append(SENT_NOTICE);
+            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
             if (emailId.length() > 0) {
-                String replyEmailId = emailSnippets.replyToEmailMessage(
-                        emailId
-                        , getStringResource(R.string.mail_body_text));
-                //3. Delete the email using the ID
-                emailSnippets.deleteMail(emailId);
-                if (replyEmailId.length() > 0) {
-                    emailSnippets.deleteMail(replyEmailId);
+                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(emailId);
+                //Send the mail with attachments
+                //build string for test results on UI
+                for (Attachment attachment : attachments) {
+//                    if (attachment.getClass().getSimpleName() == "FileAttachment") {
+                    if (attachment instanceof FileAttachment) {
+                        FileAttachment fileAttachment = (FileAttachment) attachment;
+                        String fileContents = new String(fileAttachment.getContentBytes(), "UTF-8");
+                        sb.append(fileContents);
+                        sb.append("/n");
+                    }
                 }
-                return StoryResultFormatter.wrapResult(
-                        "Reply to email message story: ", true);
-            } else {
-                return StoryResultFormatter.wrapResult(
-                        "Reply to email message story: ", false);
-            }
+                returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            } else
+                returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
+
+
+            //3. Delete the email using the ID
+            // Boolean result = emailSnippets.deleteMail(emailID);
 
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
+            Log.e("GetEmailAttachments", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Reply to email message story: " + formattedException, false
+                    "Get email attachments exception: "
+                            + formattedException
+                    , false
             );
+
         }
+        return returnResult;
+
     }
 
     @Override
     public String getDescription() {
-        return "Reply to an email message";
+        return "Gets the attachments from an email message";
     }
 }
 // *********************************************************
