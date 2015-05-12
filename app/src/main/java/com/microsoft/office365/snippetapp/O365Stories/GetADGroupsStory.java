@@ -3,8 +3,11 @@
  */
 package com.microsoft.office365.snippetapp.O365Stories;
 
+import android.util.Log;
+
 import com.microsoft.directoryservices.Group;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.Constants;
 import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
@@ -16,30 +19,39 @@ import java.util.concurrent.ExecutionException;
 public class GetADGroupsStory extends BaseUserStory {
     @Override
     public String execute() {
-        StringBuilder results = new StringBuilder();
+        boolean isStoryComplete;
+        StringBuilder resultMessage = new StringBuilder();
+
         AuthenticationController
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-
         UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
-        List<Group> groupList;
-        try {
-            groupList = usersAndGroupsSnippets.getGroups();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            return StoryResultFormatter.wrapResult("Get Active Directory groups exception:", false);
-        }
 
-        if (groupList == null) {
-            //No groups were found
-            return StoryResultFormatter.wrapResult("Get Active Directory Groups: No groups found", true);
+        try {
+            //Get list of groups
+            List<Group> groupList;
+            groupList = usersAndGroupsSnippets.getGroups();
+            if (groupList == null) {
+                //No groups were found
+                resultMessage.append("Get Active Directory Groups: No groups found");
+            } else {
+                resultMessage.append("Get Active Directory Groups: The following groups were found:\n");
+                for (Group group : groupList) {
+                    resultMessage.append(group.getdisplayName())
+                            .append("\n");
+                }
+            }
+            isStoryComplete=true;
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("GetADGroups", formattedException);
+            resultMessage = new StringBuilder();
+            resultMessage.append("Get Active Directory groups exception: ")
+                    .append(formattedException);
         }
-        results.append("Get Active Directory Groups: The following groups were found:\n");
-        for (Group group : groupList) {
-            results.append(group.getdisplayName())
-                    .append("\n");
-        }
-        return StoryResultFormatter.wrapResult(results.toString(), true);
+        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }
 
     @Override

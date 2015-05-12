@@ -1,7 +1,10 @@
 package com.microsoft.office365.snippetapp.O365Stories;
 
+import android.util.Log;
+
 import com.microsoft.directoryservices.User;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.Constants;
 import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
@@ -14,31 +17,39 @@ public class GetADUsersStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        StringBuilder results = new StringBuilder();
+        boolean isStoryComplete;
+        StringBuilder resultMessage = new StringBuilder();
+
         AuthenticationController
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-
         UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
-        List<User> userList = null;
-        try {
-            userList = usersAndGroupsSnippets.getUsers();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            return StoryResultFormatter.wrapResult("Get Active Directory users exception:", false);
-        }
 
-        //
-        if (userList == null) {
-            //No users were found
-            return StoryResultFormatter.wrapResult("Get Active Directory Users: No users found", true);
+        try {
+            //Get list of users
+            List<User> userList = null;
+            userList = usersAndGroupsSnippets.getUsers();
+            if (userList == null) {
+                //No users were found
+                resultMessage.append("Get Active Directory Users: No users found.");
+            } else {
+                resultMessage.append("Get Active Directory Users: The following users were found:\n");
+                for (User user : userList) {
+                    resultMessage.append(user.getdisplayName())
+                            .append("\n");
+                }
+            }
+            isStoryComplete = true;
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("GetADUsers", formattedException);
+            resultMessage = new StringBuilder();
+            resultMessage.append("Get Active Directory users exception: ")
+                    .append(formattedException);
         }
-        results.append("Get Active Directory Users: The following users were found:\n");
-        for (User user : userList) {
-            results.append(user.getdisplayName())
-                    .append("\n");
-        }
-        return StoryResultFormatter.wrapResult(results.toString(), true);
+        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }
 
     @Override
