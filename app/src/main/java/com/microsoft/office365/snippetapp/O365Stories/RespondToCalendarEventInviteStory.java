@@ -42,15 +42,14 @@ public class RespondToCalendarEventInviteStory extends BaseUserStory {
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
 
-        try {
         String uniqueGUID = java.util.UUID.randomUUID().toString();
         String subjectLine = getStringResource(R.string.calendar_subject_text)
                 + ":"
                 + uniqueGUID;
-         try {
+        try {
 
-             //Store the date and time that the email is sent in UTC
-             Date sentDate = new Date();
+            //Store the date and time that the email is sent in UTC
+            Date sentDate = new Date();
             newEventId = calendarSnippets.createCalendarEvent(
                     subjectLine
                     , getStringResource(R.string.calendar_body_text)
@@ -60,8 +59,7 @@ public class RespondToCalendarEventInviteStory extends BaseUserStory {
 
             Thread.sleep(20000);
             if (calendarSnippets.respondToCalendarEventInvite(newEventId
-                    , GlobalValues.USER_EMAIL, getStringResource(R.string.CalendarEvent_Accept)) != null){
-
+                    , GlobalValues.USER_EMAIL, getStringResource(R.string.CalendarEvent_Accept)) != null) {
 
 
                 Thread.sleep(20000);
@@ -137,7 +135,7 @@ public class RespondToCalendarEventInviteStory extends BaseUserStory {
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription () {
         return "Responds to an event invite";
     }
 

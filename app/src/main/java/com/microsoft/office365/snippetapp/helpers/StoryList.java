@@ -5,14 +5,12 @@ package com.microsoft.office365.snippetapp.helpers;
 
 import android.content.Context;
 
-import com.microsoft.office365.snippetapp.O365Stories.AcceptEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
 import com.microsoft.office365.snippetapp.O365Stories.CreateRecurringEventStory;
-import com.microsoft.office365.snippetapp.O365Stories.DeclineEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;

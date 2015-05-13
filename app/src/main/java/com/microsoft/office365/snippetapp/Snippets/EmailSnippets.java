@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 public class EmailSnippets {
     private final static int pageSize = 11;
     public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
-    OutlookClient mMailClient;
     OutlookClient mOutlookClient;
 
     public EmailSnippets(OutlookClient mailClient) {
@@ -107,12 +106,12 @@ public class EmailSnippets {
     public List<Message> GetMailboxMessagesByFolderName_Subject(
             String subjectLine
             , String folderName) throws ExecutionException, InterruptedException {
-        List<Folder> sentFolder = mMailClient.getMe()
+        List<Folder> sentFolder = mOutlookClient.getMe()
                 .getFolders()
                 .filter("DisplayName eq '" + folderName + "'")
                 .read()
                 .get();
-        return mMailClient
+        return mOutlookClient
                 .getMe()
                 .getFolder(sentFolder.get(0).getId())
                 .getMessages()
@@ -223,7 +222,7 @@ public class EmailSnippets {
         itemAttachment.setIsInline(false);
         itemAttachment.setId(itemToAttach.getId());
         itemAttachment.setIsInline(isInline);
-        mMailClient
+        mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)

@@ -361,16 +361,6 @@ public class CalendarSnippets {
                 .get();
     }
 
-    /**
-     * Declines an event invitation on behalf of the specified attendee
-     *
-     * @param eventId        The id of the event to be responded to
-     * @param myEmailAddress The email address of the attendee whose status is of interest
-     * @version 1.0
-     */
-    public Event declineCalendarEventInvite(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
-        Event calendarEvent = getCalendarEvent(eventId);
-
 
     /**
      * Gets the event id of the event specified by an event Id

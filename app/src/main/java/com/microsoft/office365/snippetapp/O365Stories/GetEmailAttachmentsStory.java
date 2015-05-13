@@ -15,6 +15,7 @@ import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.FileAttachment;
 import com.microsoft.outlookservices.Message;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -98,6 +99,8 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
                     , false
             );
 
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return returnResult;
 
