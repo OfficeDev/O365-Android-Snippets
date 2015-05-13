@@ -13,13 +13,19 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
-public class SendEmailMessageStory extends BaseEmailUserStory {
+import java.util.Date;
+
+public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
+    public static final boolean IS_INLINE = false;
+
 
     @Override
     public String execute() {
         String returnResult = "";
         try {
-
             AuthenticationController
                     .getInstance()
                     .setResourceId(
@@ -28,42 +34,65 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
+            //Store the date and time that the email is sent in UTC
+            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String subject = getStringResource(R.string.mail_subject_text) + uniqueGUID;
-            emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
-                    subject,
-                    getStringResource(R.string.mail_body_text));
+            String emailID = emailSnippets.createAndSendMail(
+                    GlobalValues.USER_EMAIL
+                    , getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.mail_body_text));
 
-            //3. Delete the email using the ID
-            Message message = GetAMessageFromEmailFolder(emailSnippets, subject, getStringResource(R.string.Email_Folder_Inbox));
-            emailSnippets.deleteMail(message.getId());
 
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Email is added");
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            Message messageToAttach = GetAMessageFromEmailFolder(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
+
+            if (messageToAttach != null) {
+                //Create a new email message but do not send yet
+                String newEmailId = emailSnippets.addDraftMail(
+                        GlobalValues.USER_EMAIL
+                        , getStringResource(R.string.mail_subject_text) + uniqueGUID
+                        , getStringResource(R.string.mail_body_text));
+
+                //Attach email message to new draft email
+                emailSnippets.addItemAttachment(
+                        newEmailId
+                        , messageToAttach
+                        , IS_INLINE);
+
+                //Send draft email
+                emailSnippets.sendMail(newEmailId);
+
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Sent));
+
+                returnResult = StoryResultFormatter.wrapResult(
+                        STORY_DESCRIPTION, true
+                );
+            }
+
+
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send email story", formattedException);
-            return StoryResultFormatter.wrapResult(
+            Log.e("Send msg w/ message ", formattedException);
+            returnResult = StoryResultFormatter.wrapResult(
                     "Send mail exception: "
                             + formattedException
                     , false
             );
-
         }
         return returnResult;
     }
 
     @Override
     public String getDescription() {
-
-        return "Sends an email message";
+        return STORY_DESCRIPTION;
     }
-
-
 }
+
 // *********************************************************
 //
 // O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets

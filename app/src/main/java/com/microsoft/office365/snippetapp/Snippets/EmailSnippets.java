@@ -8,6 +8,9 @@ import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.BodyType;
 import com.microsoft.outlookservices.EmailAddress;
 import com.microsoft.outlookservices.FileAttachment;
+import com.microsoft.outlookservices.Folder;
+import com.microsoft.outlookservices.Item;
+import com.microsoft.outlookservices.ItemAttachment;
 import com.microsoft.outlookservices.ItemBody;
 import com.microsoft.outlookservices.Message;
 import com.microsoft.outlookservices.Recipient;
@@ -23,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 
 public class EmailSnippets {
     private final static int pageSize = 11;
+    public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
     OutlookClient mOutlookClient;
 
     public EmailSnippets(OutlookClient mailClient) {
@@ -91,6 +95,33 @@ public class EmailSnippets {
 
     /**
      * Gets a list of all recent email messages in the
+     * named mail folder whose subject matches, sorted by date and time received
+     *
+     * @param subjectLine The subject of the email to be matched
+     * @param folderName  The display name of the mail folder
+     * @return List of String. The mail Ids of the matching messages
+     * @version 1.0
+     * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
+     */
+    public List<Message> GetMailboxMessagesByFolderName_Subject(
+            String subjectLine
+            , String folderName) throws ExecutionException, InterruptedException {
+        List<Folder> sentFolder = mOutlookClient.getMe()
+                .getFolders()
+                .filter("DisplayName eq '" + folderName + "'")
+                .read()
+                .get();
+        return mOutlookClient
+                .getMe()
+                .getFolder(sentFolder.get(0).getId())
+                .getMessages()
+                .filter("Subject eq '" + subjectLine.trim() + "'")
+                .read()
+                .get();
+    }
+
+    /**
+     * Gets a list of all recent email messages in the
      * user Inbox whose subject matches subjectLine and sent date&time are greater than the
      * sentDate parameter. Results are sorted by date and time received
      *
@@ -100,7 +131,7 @@ public class EmailSnippets {
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> GetInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate) throws ExecutionException, InterruptedException {
+    public List<String> GetInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate, String mailFolder) throws ExecutionException, InterruptedException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         String filterString = "DateTimeReceived ge "
@@ -111,7 +142,7 @@ public class EmailSnippets {
         List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
-                .getById("Inbox")
+                .getById(mailFolder)
                 .getMessages()
                 .filter(filterString)
                 .read()
@@ -124,6 +155,16 @@ public class EmailSnippets {
         return mailIds;
     }
 
+
+    /**
+     * Gets a list of all recent email messages in the
+     * user Inbox whose subject matches, sorted by date and time received
+     *
+     * @param textContent The content of the file to be attached
+     * @param fileName    The name of the file to be attached
+     * @return com.microsoft.outlookservices.FileAttachment. The Attachment object
+     * @version 1.0
+     */
     private FileAttachment getTextFileAttachment(String textContent, String fileName) {
         FileAttachment fileAttachment = new FileAttachment();
         fileAttachment.setContentBytes(textContent.getBytes());
@@ -142,14 +183,51 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      * @version 1.0
      */
-    public Boolean addAttachmentToDraft(String mailId, String fileContents, String fileName) throws ExecutionException, InterruptedException {
+    public Attachment addTextFileAttachmentToMessage(
+            String mailId
+            , String fileContents
+            , String fileName
+            , boolean isInline) throws ExecutionException, InterruptedException {
+
+
+        FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
+        attachment.setIsInline(isInline);
 
         mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
                 .getAttachments()
-                .add(getTextFileAttachment(fileContents, fileName))
+                .add(attachment)
+                .get();
+        return attachment;
+    }
+
+    /**
+     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     *
+     * @param mailId       The id of the draft email that will get the attachment
+     * @param itemToAttach The mail message to attach
+     * @return Boolean. The result of the operation. True if success
+     * @version 1.0
+     */
+    public Boolean addItemAttachment(
+            String mailId
+            , Item itemToAttach
+            , boolean isInline) throws ExecutionException, InterruptedException {
+        ItemAttachment itemAttachment = new ItemAttachment();
+        itemAttachment.setName(itemToAttach.getClass().getName());
+        itemAttachment.setItem(itemToAttach);
+        itemAttachment.setContentType(MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT);
+        itemAttachment.setIsInline(false);
+        itemAttachment.setId(itemToAttach.getId());
+        itemAttachment.setIsInline(isInline);
+        mOutlookClient
+                .getMe()
+                .getMessages()
+                .getById(mailId)
+                .getAttachments()
+                .add(itemAttachment)
                 .get();
         return true;
     }
@@ -178,7 +256,8 @@ public class EmailSnippets {
      * @return String. The id of the email added to the draft folder
      * @version 1.0
      */
-    public String addDraftMail(final String emailAddress
+    public String addDraftMail(
+            final String emailAddress
             , final String subject
             , final String body) throws ExecutionException, InterruptedException {
         // Prepare the message.
