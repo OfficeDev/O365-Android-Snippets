@@ -38,9 +38,9 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
 
             //Get the new message
-            Message messageToForward = GetAMessageFromInBox(emailSnippets,
+            Message messageToForward = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
             String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
             //3. Delete the email using the ID

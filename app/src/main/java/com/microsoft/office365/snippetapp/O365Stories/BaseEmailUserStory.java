@@ -19,33 +19,41 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
 
     public abstract String getDescription();
 
-    //Gets messages with the given subject line from the user's inbox
-    protected Message GetAMessageFromInBox(EmailSnippets emailSnippets, String subjectLine)
+    /**
+     * Gets first message found with the given subject line from the user's inbox.
+     * Uses a polling technique because typically the message was just sent and there
+     * is a small wait time until it arrives.
+     *
+     * @param emailSnippets Snippets which contains a message search snippet that is needed
+     * @param subjectLine The subject line to search for
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    protected Message GetAMessageFromEmailFolder(EmailSnippets emailSnippets, String subjectLine, String folderName)
             throws ExecutionException, InterruptedException {
 
-        //Get the new message
-        Message messageToAttach = null;
+        Message message = null;
         int tryCount = 0;
 
-        //Try to get the newly sent email from user's inbox at least once.
-        //continue trying to get the email while the email is not found
-        //and the loop has tried less than 50 times.
+        //Continue trying to get the email while the email is not found
+        //and the loop has tried less than MAX_POLL_REQUESTS times.
         do {
             List<Message> messages = null;
             messages = emailSnippets
                     .GetMailboxMessagesByFolderName_Subject(
                             subjectLine
-                            , getStringResource(R.string.Email_Folder_Inbox));
+                            , folderName);
             if (messages.size() > 0) {
-                messageToAttach = messages.get(0);
+                message = messages.get(0);
             }
             tryCount++;
             Thread.sleep(THREAD_SLEEP_TIME);
             //Stay in loop while these conditions are true.
             //If either condition becomes false, break
-        } while (messageToAttach == null && tryCount < MAX_POLL_REQUESTS);
+        } while (message == null && tryCount < MAX_POLL_REQUESTS);
 
-        return messageToAttach;
+        return message;
     }
 
     //Deletes all messages with the given subject line from a named email folder

@@ -13,21 +13,19 @@ import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
+import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class RespondToCalendarEventInviteStory extends BaseUserStory {
-
-    public static final int MAX_TRY_COUNT = 20;
+public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
         //PREPARE
-        String returnValue = StoryResultFormatter.wrapResult("Create Event story", false);
-
+        boolean isStoryComplete;
+        String resultMessage = "";
         AuthenticationController
                 .getInstance()
                 .setResourceId(
@@ -40,103 +38,63 @@ public class RespondToCalendarEventInviteStory extends BaseUserStory {
 
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
         String uniqueGUID = java.util.UUID.randomUUID().toString();
         String subjectLine = getStringResource(R.string.calendar_subject_text)
                 + ":"
                 + uniqueGUID;
-         try {
-
-             //Store the date and time that the email is sent in UTC
-             Date sentDate = new Date();
-            newEventId = calendarSnippets.createCalendarEvent(
+        try {
+            String newEventId = calendarSnippets.createCalendarEvent(
                     subjectLine
                     , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAddresses);
 
-            Thread.sleep(20000);
+//            Thread.sleep(20000);//wait for server to create event
             if (calendarSnippets.respondToCalendarEventInvite(newEventId
-                    , GlobalValues.USER_EMAIL, getStringResource(R.string.CalendarEvent_Accept)) != null){
-
-
-
-                Thread.sleep(20000);
-                String attendeeStatus = calendarSnippets.getEventAttendeeStatus(
+                    , GlobalValues.USER_EMAIL, ResponseType.Accepted) != null) {
+  //              Thread.sleep(20000);//wait for server to update event
+                ResponseType attendeeStatus = calendarSnippets.getEventAttendeeStatus(
                         newEventId
                         , GlobalValues.USER_EMAIL);
 
-                //Get the new message
-                String emailId = "";
-                int tryCount = 0;
-
-                calendarSnippets.deleteCalendarEvent(newEventId);
-                //Try to get the newly sent email event invitation
-                // from user's Sent Items folder at least once.
-                //continue trying to get the email while the email is not found
-                //and the loop has tried less than MAX_TRY_COUNT times.
-                do {
-                    List<Message> mailIds = emailSnippets
-                            .GetMailboxMessagesByFolderName_Subject(
-                                    subjectLine
-                                    , getStringResource(R.string.Email_Folder_Sent));
-                    if (mailIds.size() > 0) {
-                        for (Message message : mailIds) {
-                            emailId = message.getId();
-                            emailSnippets.deleteMail(emailId);
-                        }
-                    }
-                    tryCount++;
-
-                    //Stay in loop while these conditions are true.
-                    //If either condition becomes false, break
-                } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
-
-                if (attendeeStatus.toLowerCase().contains("accept")) {
-                    return StoryResultFormatter.wrapResult(
-                            "Respond to event invite story: Event "
-                                    + " response.", true);
+                //Validate the attendee status was set to accepted as expected
+                if (attendeeStatus == ResponseType.Accepted) {
+                    isStoryComplete = true;
+                    resultMessage = "Respond to event invite story: Event response.";
                 } else {
-                    return StoryResultFormatter.wrapResult(
-                            "Respond to event invite story: Event "
-                                    + " response failed. " + attendeeStatus, false
-                    );
-
+                    isStoryComplete = false;
+                    resultMessage = "Respond to event invite story: Event response failed. "
+                            + attendeeStatus;
                 }
+
+                //CLEANUP by cancelling event
+//                calendarSnippets.respondToCalendarEventInvite(newEventId
+//                        , GlobalValues.USER_EMAIL, ResponseType.Declined);
+                calendarSnippets.deleteCalendarEvent(newEventId);
+//                Message message = GetAMessageFromEmailFolder(emailSnippets, subjectLine, getStringResource(R.string.Email_Folder_Sent));
+//                if (message!=null){
+//                    emailSnippets.deleteMail(message.getId());
+//                }
+
             } else {
-                return StoryResultFormatter.wrapResult(
-                        "Respond to event invite story: Event "
-                                + " is null.", false
-                );
-
+                isStoryComplete = false;
+                resultMessage = "Respond to event invite story: Event is null.";
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Respond to event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Respond to event exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (InterruptedException e) {
+            resultMessage = "Respond to event exception: "
+                    + formattedException;
             e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Respond to event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Respond to event exception: "
-                            + formattedException
-                    , false
-            );
         }
-
+        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Responds to an event invite";
+        return "Responds to accept an event invite";
     }
 
 }

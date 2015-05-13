@@ -44,9 +44,9 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
 
 
-            Message messageToAttach = GetAMessageFromInBox(emailSnippets,
+            Message messageToAttach = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
+                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
 
             if (messageToAttach != null) {
                 //Create a new email message but do not send yet

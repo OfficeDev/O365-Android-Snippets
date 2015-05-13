@@ -41,9 +41,9 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
                     , getStringResource(R.string.mail_body_text));
 
             //Get the new message
-            Message message = GetAMessageFromInBox(emailSnippets,
+            Message message = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
+                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
 
             if (message.getId().length() > 0) {
                 String replyEmailId = emailSnippets.replyToEmailMessage(

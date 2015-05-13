@@ -55,9 +55,9 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
             emailSnippets.sendMail(draftMessageID);
 
             //Get the new message
-            Message sentMessage = GetAMessageFromInBox(emailSnippets,
+            Message sentMessage = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID);
+                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
 
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
