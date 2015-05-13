@@ -50,10 +50,10 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAddresses);
 
-//            Thread.sleep(20000);//wait for server to create event
+            Thread.sleep(5000);//wait for server to send event invitation
             if (calendarSnippets.respondToCalendarEventInvite(newEventId
                     , GlobalValues.USER_EMAIL, ResponseType.Accepted) != null) {
-  //              Thread.sleep(20000);//wait for server to update event
+                Thread.sleep(5000);//wait for server to update attendee status in event
                 ResponseType attendeeStatus = calendarSnippets.getEventAttendeeStatus(
                         newEventId
                         , GlobalValues.USER_EMAIL);

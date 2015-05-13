@@ -11,6 +11,7 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 public class SendEmailMessageStory extends BaseEmailUserStory {
 
@@ -29,12 +30,14 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
 
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
-                    getStringResource(R.string.mail_subject_text) + uniqueGUID,
+            String subject = getStringResource(R.string.mail_subject_text) + uniqueGUID;
+            emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
+                    subject,
                     getStringResource(R.string.mail_body_text));
 
             //3. Delete the email using the ID
-            Boolean result = emailSnippets.deleteMail(emailID);
+            Message message = GetAMessageFromEmailFolder(emailSnippets,subject,getStringResource(R.string.Email_Folder_Inbox));
+            emailSnippets.deleteMail(message.getId());
 
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();

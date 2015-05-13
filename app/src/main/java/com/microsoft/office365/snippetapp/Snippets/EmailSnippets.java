@@ -381,17 +381,10 @@ public class EmailSnippets {
      * @version 1.0
      */
     public Boolean deleteMail(String emailID) throws ExecutionException, InterruptedException {
-//        Message messageToDelete = mMailClient
-//                .getMe()
-//                .getMessages()
-//                .getById(emailID)
-//                .read()
-//                .get();
-
         mOutlookClient
                 .getMe()
-                .getFolder("Sent Items")
-                .getMessage(emailID)
+                .getMessages()
+                .getById(emailID)
                 .delete()
                 .get();
 
