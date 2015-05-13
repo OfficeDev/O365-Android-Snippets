@@ -41,6 +41,8 @@ public class RespondToCalendarEventInviteStory extends BaseUserStory {
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
+
+        try {
         String uniqueGUID = java.util.UUID.randomUUID().toString();
         String subjectLine = getStringResource(R.string.calendar_subject_text)
                 + ":"

@@ -1,3 +1,6 @@
+/*
+ *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+ */
 package com.microsoft.office365.snippetapp.O365Stories;
 
 import android.util.Log;
@@ -59,6 +62,7 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
                     getStringResource(R.string.mail_subject_text)
                             + uniqueGUID);
 
+  
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
@@ -70,15 +74,15 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
                 for (Attachment attachment : attachments) {
                     if (attachment.getClass().getSimpleName() == "FileAttachment") {
                         FileAttachment fileAttachment = (FileAttachment) attachment;
-                        sb.append(fileAttachment.getContentBytes().toString());
+                        String fileContents = new String(fileAttachment.getContentBytes(), "UTF-8");
+                        sb.append(fileContents);
                         sb.append("/n");
                     }
                 }
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-            }
-            else {
+            } else
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
-            }
+            
 
 
             //3. Delete the email using the ID
@@ -87,9 +91,9 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
         }
         catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send email story", formattedException);
+            Log.e("GetEmailAttachments", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Send mail exception: "
+                    "Get email attachments exception: "
                             + formattedException
                     , false
             );
@@ -104,3 +108,31 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
         return "Gets the attachments from an email message";
     }
 }
+// *********************************************************
+//
+// O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets
+//
+// Copyright (c) Microsoft Corporation
+// All rights reserved.
+//
+// MIT License:
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// *********************************************************
