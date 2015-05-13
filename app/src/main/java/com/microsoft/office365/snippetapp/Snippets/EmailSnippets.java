@@ -27,10 +27,10 @@ import java.util.concurrent.ExecutionException;
 public class EmailSnippets {
     private final static int pageSize = 11;
     public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
-    OutlookClient mMailClient;
+    OutlookClient mOutlookClient;
 
     public EmailSnippets(OutlookClient mailClient) {
-        mMailClient = mailClient;
+        mOutlookClient = mailClient;
     }
 
     /**
@@ -41,7 +41,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public List<Message> getMailMessages() throws ExecutionException, InterruptedException {
-        List<Message> messages = mMailClient
+        List<Message> messages = mOutlookClient
                 .getMe()
                 .getFolders().getById("Inbox")
                 .getMessages()
@@ -59,7 +59,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public Message getMailMessageById(String mailId) throws ExecutionException, InterruptedException {
-        return mMailClient
+        return mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
@@ -77,7 +77,7 @@ public class EmailSnippets {
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
     public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
-        List<Message> inboxMessages = mMailClient
+        List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
                 .getById("Inbox")
@@ -106,12 +106,12 @@ public class EmailSnippets {
     public List<Message> GetMailboxMessagesByFolderName_Subject(
             String subjectLine
             , String folderName) throws ExecutionException, InterruptedException {
-        List<Folder> sentFolder = mMailClient.getMe()
+        List<Folder> sentFolder = mOutlookClient.getMe()
                 .getFolders()
                 .filter("DisplayName eq '" + folderName + "'")
                 .read()
                 .get();
-        return mMailClient
+        return mOutlookClient
                 .getMe()
                 .getFolder(sentFolder.get(0).getId())
                 .getMessages()
@@ -139,7 +139,7 @@ public class EmailSnippets {
                 + " and "
                 + "Subject eq '"
                 + subjectLine.trim() + "'";
-        List<Message> inboxMessages = mMailClient
+        List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
                 .getById(mailFolder)
@@ -149,9 +149,8 @@ public class EmailSnippets {
                 .get();
         ArrayList<String> mailIds = new ArrayList<>();
         for (Message message : inboxMessages) {
-            if (message.getSubject().equals(subjectLine.trim())) {
+            if (message.getSubject().equals(subjectLine.trim()))
                 mailIds.add(message.getId());
-            }
         }
         return mailIds;
     }
@@ -174,6 +173,7 @@ public class EmailSnippets {
         return fileAttachment;
     }
 
+
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
      *
@@ -189,10 +189,11 @@ public class EmailSnippets {
             , String fileName
             , boolean isInline) throws ExecutionException, InterruptedException {
 
+
         FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
         attachment.setIsInline(isInline);
 
-        mMailClient
+        mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
@@ -221,7 +222,7 @@ public class EmailSnippets {
         itemAttachment.setIsInline(false);
         itemAttachment.setId(itemToAttach.getId());
         itemAttachment.setIsInline(isInline);
-        mMailClient
+        mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
@@ -239,7 +240,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public List<Attachment> getAttachmentsFromEmailMessage(String mailID) throws ExecutionException, InterruptedException {
-        return mMailClient
+        return mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailID)
@@ -279,7 +280,7 @@ public class EmailSnippets {
 
         // Contact the Office 365 service and try to add the message to
         // the draft folder.
-        Message draft = mMailClient
+        Message draft = mOutlookClient
                 .getMe()
                 .getMessages()
                 .add(messageToSend)
@@ -296,7 +297,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public Boolean sendMail(String mailId) throws ExecutionException, InterruptedException {
-        mMailClient
+        mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(mailId)
@@ -338,12 +339,12 @@ public class EmailSnippets {
         messageToSend.setSubject(subject);
 
         // Contact the Office 365 service and try to deliver the message.
-        Message draft = mMailClient
+        Message draft = mOutlookClient
                 .getMe()
                 .getMessages()
                 .add(messageToSend)
                 .get();
-        mMailClient.getMe()
+        mOutlookClient.getMe()
                 .getOperations()
                 .sendMail(draft, false)
                 .get();
@@ -358,7 +359,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public String forwardMail(String emailId) throws ExecutionException, InterruptedException {
-        Message forwardMessage = mMailClient
+        Message forwardMessage = mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(emailId)
@@ -387,7 +388,7 @@ public class EmailSnippets {
 //                .read()
 //                .get();
 
-        mMailClient
+        mOutlookClient
                 .getMe()
                 .getFolder("Sent Items")
                 .getMessage(emailID)
@@ -420,7 +421,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public List<Message> getDraftMessages() throws ExecutionException, InterruptedException {
-        return mMailClient
+        return mOutlookClient
                 .getMe()
                 .getFolder("Drafts")
                 .getMessages()
@@ -431,7 +432,7 @@ public class EmailSnippets {
     /**
      * Forwards a message out of the user's Inbox folder by id
      *
-     * @param emailId     The id of the mail to be replied
+     * @param emailId     The id of the mail to be forwarded
      * @param messageBody The body of the message as a string
      * @return String. The id of the sent email
      * @version 1.0
@@ -443,7 +444,7 @@ public class EmailSnippets {
 
 
         //Create a new message in the user draft items folder
-        Message replyEmail = mMailClient
+        Message replyEmail = mOutlookClient
                 .getMe()
                 .getFolder("Draft")
                 .getMessages()
@@ -460,15 +461,14 @@ public class EmailSnippets {
             replyEmail.setBody(bodyItem);
 
             // Send the email reply
-            mMailClient
+            mOutlookClient
                     .getMe()
                     .getOperations()
                     .sendMail(replyEmail, false)
                     .get();
 
             return replyEmail.getId();
-        }
-        else {
+        } else {
             return "";
         }
 

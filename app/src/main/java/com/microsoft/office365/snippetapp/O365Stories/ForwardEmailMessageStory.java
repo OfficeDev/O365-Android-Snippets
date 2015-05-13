@@ -52,8 +52,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             return StoryResultFormatter.wrapResult(
                     "Forward email message story: ", true
             );
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             return StoryResultFormatter.wrapResult(
                     "Forward email message story: " + formattedException, false

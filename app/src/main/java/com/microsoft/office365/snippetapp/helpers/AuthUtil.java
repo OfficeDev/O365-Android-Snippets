@@ -5,28 +5,21 @@
 package com.microsoft.office365.snippetapp.helpers;
 
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.microsoft.aad.adal.AuthenticationSettings;
 import com.microsoft.office365.snippetapp.OperationListActivity;
 
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class AuthUtil {
-
-    public static final int MIN_SDK_VERSION_FOR_ENCRYPT = 18;
+    private static final String TAG = "AuthUtil";
+    public static final int MIN_VERSION_CODE_FOR_ENCRYPT = Build.VERSION_CODES.JELLY_BEAN_MR2;
 
     public static void configureAuthSettings(OperationListActivity activity) {
         // Devices with API level lower than 18 must setup an encryption key.
-        if (Build.VERSION.SDK_INT < MIN_SDK_VERSION_FOR_ENCRYPT && AuthenticationSettings.INSTANCE.getSecretKeyData() == null) {
+        if (Build.VERSION.SDK_INT < MIN_VERSION_CODE_FOR_ENCRYPT && AuthenticationSettings.INSTANCE.getSecretKeyData() == null) {
             AuthenticationSettings.INSTANCE.setSecretKey(generateSecretKey());
         }
 
@@ -40,13 +33,28 @@ public class AuthUtil {
     }
 
     /**
-     * Randomly generates an encryption key for devices with API level lower than 18.
+     * Generates an encryption key for devices with API level lower than 18 using the
+     * ANDROID_ID value as a seed.
+     * In production scenarios, you should come up with your own implementation of this method.
+     * Consider that your algorithm must return the same key so it can encrypt/decrypt values
+     * successfully.
      *
      * @return The encryption key in a 32 byte long array.
      */
-    protected static byte[] generateSecretKey() {
+    private static byte[] generateSecretKey() {
         byte[] key = new byte[32];
-        new SecureRandom().nextBytes(key);
+        byte[] android_id = null;
+
+        try {
+            android_id = Settings.Secure.ANDROID_ID.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "generateSecretKey - " + e.getMessage());
+        }
+
+        for (int i = 0; i < key.length; i++) {
+            key[i] = android_id[i % android_id.length];
+        }
+
         return key;
     }
 }

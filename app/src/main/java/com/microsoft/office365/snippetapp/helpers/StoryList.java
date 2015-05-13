@@ -10,6 +10,7 @@ import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
+import com.microsoft.office365.snippetapp.O365Stories.CreateRecurringEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
@@ -17,6 +18,8 @@ import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetFilteredContactsWithSurnameStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
@@ -47,6 +50,7 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
+                new CreateRecurringEventStory(),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),
@@ -55,21 +59,23 @@ public class StoryList {
                 new SendEmailWithMessageAttachStory(),
                 new GetEmailAttachmentsStory(),
                 new GetContactsStory(),
-                new CreateOrDeleteContactStory("CREATE"),
-                new CreateOrDeleteContactStory("DELETE"),
+                new CreateOrDeleteContactStory(StoryAction.CREATE),
+                new CreateOrDeleteContactStory(StoryAction.DELETE),
                 new UpdateContactStory(context),
-                new CreateOrDeleteEventStory("CREATE"),
-                new CreateOrDeleteEventStory("DELETE"),
+                new GetFilteredContactsWithSurnameStory(),
+                new CreateOrDeleteEventStory(StoryAction.CREATE),
+                new CreateOrDeleteEventStory(StoryAction.DELETE),
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
                 new RespondToCalendarEventInviteStory(),
+                new GetFilteredImportantEvents(),
                 new GetFilesAndFoldersStory(),
-                new CreateOrDeleteFileStory("CREATE"),
+                new CreateOrDeleteFileStory(StoryAction.CREATE),
                 new UpdateFileContentsOnServerStory(),
-                new CreateOrDeleteFileStory("DELETE"),
+                new CreateOrDeleteFileStory(StoryAction.DELETE),
                 new DownloadFileStory(),
-                new CreateOrDeleteOneDriveFolder("CREATE"),
-                new CreateOrDeleteOneDriveFolder("DELETE")
+                new CreateOrDeleteOneDriveFolder(StoryAction.CREATE),
+                new CreateOrDeleteOneDriveFolder(StoryAction.DELETE)
         );
         for (BaseUserStory object : baseUserStories) {
             ITEM_MAP.put(object.getId(), object);

@@ -7,16 +7,26 @@ import android.util.Patterns;
 
 import com.microsoft.outlookservices.Attendee;
 import com.microsoft.outlookservices.BodyType;
+import com.microsoft.outlookservices.DayOfWeek;
 import com.microsoft.outlookservices.EmailAddress;
 import com.microsoft.outlookservices.Event;
 import com.microsoft.outlookservices.ItemBody;
+import com.microsoft.outlookservices.PatternedRecurrence;
+import com.microsoft.outlookservices.RecurrencePattern;
+import com.microsoft.outlookservices.RecurrencePatternType;
+import com.microsoft.outlookservices.RecurrenceRange;
+import com.microsoft.outlookservices.RecurrenceRangeType;
 import com.microsoft.outlookservices.ResponseStatus;
 import com.microsoft.outlookservices.ResponseType;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 
@@ -85,11 +95,11 @@ public class CalendarSnippets {
     /**
      * Creates an event
      *
-     * @param subject           The subject of the event
-     * @param itemBodyHtml      The body of the event as HTML
-     * @param startDate         The start date of the event
-     * @param endDate           The end date of the event
-     * @param attendeeAddresses A list of attendee email addresses
+     * @param subject      The subject of the event
+     * @param itemBodyHtml The body of the event as HTML
+     * @param startDate    The start date of the event
+     * @param endDate      The end date of the event
+     * @param attendeeAddresses    A list of attendee email addresses
      * @return String The id of the created event
      * @version 1.0
      */
@@ -139,6 +149,91 @@ public class CalendarSnippets {
     }
 
     /**
+     * Creates a recurring event. This snippet will create an event that recurs
+     * every Tuesday and Thursday from 1PM to 2PM. You can modify this snippet
+     * to work with other recurrence patterns.
+     *
+     * @param subject      The subject of the event
+     * @param itemBodyHtml The body of the event as HTML
+     * @param attendees    A list of attendee email addresses
+     * @return String The id of the created event
+     * @version 1.0
+     */
+    public String createRecurringCalendarEvent(
+            String subject
+            , String itemBodyHtml
+            , List<String> attendees)
+            throws ExecutionException
+            , InterruptedException {
+
+        //Create a new Office 365 Event object
+        Event newEvent = new Event();
+        newEvent.setSubject(subject);
+        ItemBody itemBody = new ItemBody();
+        itemBody.setContent(itemBodyHtml);
+        itemBody.setContentType(BodyType.HTML);
+        newEvent.setBody(itemBody);
+
+        //Set the attendee list
+        List<Attendee> attendeeList = convertEmailStringsToAttendees(attendees);
+        newEvent.setAttendees(attendeeList);
+
+        //Set start date to the next occurring Tuesday
+        DateTime startDate = DateTime.now();
+        if (startDate.getDayOfWeek() < DateTimeConstants.TUESDAY) {
+            startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
+        } else {
+            startDate = startDate.plusWeeks(1);
+            startDate = startDate.dayOfWeek().setCopy(DateTimeConstants.TUESDAY);
+        }
+
+        //Set start time to 1 PM
+        startDate = startDate.hourOfDay().setCopy(13)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+
+        //Set end time to 2 PM
+        DateTime endDate = startDate.hourOfDay().setCopy(14);
+
+        //Set start and end time on the new Event (next Tuesday 1-2PM)
+        newEvent.setStart(startDate.toCalendar(Locale.getDefault()));
+        newEvent.setIsAllDay(false);
+        newEvent.setEnd(endDate.toCalendar(Locale.getDefault()));
+
+        //Configure the recurrence pattern for the new event
+        //In this case the meeting will occur every Tuesday and Thursday from 1PM to 2PM
+        RecurrencePattern recurrencePattern = new RecurrencePattern();
+        List<DayOfWeek> daysMeetingRecursOn = new ArrayList();
+        daysMeetingRecursOn.add(DayOfWeek.Tuesday);
+        daysMeetingRecursOn.add(DayOfWeek.Thursday);
+        recurrencePattern.setType(RecurrencePatternType.Weekly);
+        recurrencePattern.setDaysOfWeek(daysMeetingRecursOn);
+        recurrencePattern.setInterval(1); //recurs every week
+
+        //Create a recurring range. In this case the range does not end
+        //and the event occurs every Tuesday and Thursday forever.
+        RecurrenceRange recurrenceRange = new RecurrenceRange();
+        recurrenceRange.setType(RecurrenceRangeType.NoEnd);
+        recurrenceRange.setStartDate(startDate.toCalendar(Locale.getDefault()));
+
+        //Create a pattern of recurrence. It contains the recurrence pattern
+        //and recurrence range created previously.
+        PatternedRecurrence patternedRecurrence = new PatternedRecurrence();
+        patternedRecurrence.setPattern(recurrencePattern);
+        patternedRecurrence.setRange(recurrenceRange);
+
+        //Finally pass the patterned recurrence to the new Event object.
+        newEvent.setRecurrence(patternedRecurrence);
+
+        //Create the event and return the id
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .add(newEvent).get().getId();
+    }
+
+    /**
      * Updates the subject, body, start date, end date, or attendees of an event
      *
      * @param subject      The subject of the event
@@ -178,19 +273,7 @@ public class CalendarSnippets {
         if (attendees != null && attendees.size() > 0) {
             //clear attendee list and set with new list
             calendarEvent.setAttendees(null);
-            Matcher matcher;
-            List<Attendee> attendeeList = new ArrayList<>();
-            for (String s : attendees) {
-                // Add mail to address if mailToString is an email address
-                matcher = Patterns.EMAIL_ADDRESS.matcher(s);
-                if (matcher.matches()) {
-                    EmailAddress emailAddress = new EmailAddress();
-                    emailAddress.setAddress(s);
-                    Attendee attendee = new Attendee();
-                    attendee.setEmailAddress(emailAddress);
-                    attendeeList.add(attendee);
-                }
-            }
+            List<Attendee> attendeeList = convertEmailStringsToAttendees(attendees);
             calendarEvent.setAttendees(attendeeList);
         }
 
@@ -204,13 +287,25 @@ public class CalendarSnippets {
     }
 
     /**
+     * Create a calendar event based off a full Event object passed to this method.
+     *
+     * @return the same Event object updated with the ID from the server.
+     */
+    public Event createCalendarEvent(Event eventToCreate) throws ExecutionException, InterruptedException {
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .add(eventToCreate).get();
+    }
+
+    /**
      * Gets the invitation status of a given attendee for a given event
      *
      * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @version 1.0
      */
-    public ResponseType getEventAttendeeStatus(String eventId, String myEmailAddress) {
+    public ResponseType getEventAttendeeStatus(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
         for (Attendee attendee : getCalendarEvent(eventId).getAttendees()) {
             String attendeeEmail = attendee.getEmailAddress().getAddress();
             if (attendeeEmail.equalsIgnoreCase(myEmailAddress)) {
@@ -220,8 +315,10 @@ public class CalendarSnippets {
         return null;
     }
 
-
     /**
+     * Accepts an event invitation on behalf of the specified attendee
+     *
+     * @param eventId        The id of the event to be removed
      * Responds to an event invitation on behalf of the specified attendee
      *
      * @param eventId        The id of the event to be removed
@@ -278,17 +375,54 @@ public class CalendarSnippets {
      * @return Event The event of interest
      * @version 1.0
      */
-    public Event getCalendarEvent(String eventId) {
-        try {
-            return mCalendarClient
-                    .getMe()
-                    .getEvents()
-                    .getById(eventId)
-                    .read()
-                    .get();
-        } catch (Exception e) {
-            return null;
+    public Event getCalendarEvent(String eventId) throws ExecutionException, InterruptedException {
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .getById(eventId)
+                .read()
+                .get();
+    }
+
+    /**
+     * Runs a filtered query to find all events that are high importance. This snippet can be
+     * modified to run any filtered query. For a complete list of Events properties that
+     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
+     *
+     * @return A list of events
+     * @version 1.0
+     */
+    public List<Event> getImportantEvents() throws ExecutionException, InterruptedException {
+        return mCalendarClient
+                .getMe()
+                .getEvents()
+                .filter("Importance eq 'High'")
+                .read()
+                .get();
+    }
+
+    /**
+     * Local helper method that converts an list of email strings into
+     * a list of attendees.
+     *
+     * @param emails A list of email strings
+     * @return A list of Attendees
+     */
+    private List<Attendee> convertEmailStringsToAttendees(List<String> emails) {
+        Matcher matcher;
+        List<Attendee> attendeeList = new ArrayList<>();
+        for (String email : emails) {
+            // Add email to attendee list if email string is a valid email address
+            matcher = Patterns.EMAIL_ADDRESS.matcher(email);
+            if (matcher.matches()) {
+                EmailAddress emailAddress = new EmailAddress();
+                emailAddress.setAddress(email);
+                Attendee attendee = new Attendee();
+                attendee.setEmailAddress(emailAddress);
+                attendeeList.add(attendee);
+            }
         }
+        return attendeeList;
     }
 }
 // *********************************************************
