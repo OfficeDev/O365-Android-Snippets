@@ -60,7 +60,7 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
                 //Validate the attendee status was set to accepted as expected
                 if (attendeeStatus == ResponseType.Accepted) {
                     isStoryComplete = true;
-                    resultMessage = "Respond to event invite story: Event response.";
+                    resultMessage = "Respond to event invite story: Event accepted.";
                 } else {
                     isStoryComplete = false;
                     resultMessage = "Respond to event invite story: Event response failed. "
