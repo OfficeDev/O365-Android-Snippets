@@ -5,23 +5,17 @@ package com.microsoft.office365.snippetapp.O365Stories;
 
 
 import android.content.res.AssetFileDescriptor;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
 import android.view.View;
 
 import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public abstract class BaseUserStory {
 
@@ -60,7 +54,7 @@ public abstract class BaseUserStory {
                 .getString(resourceToGet);
     }
 
-    public byte[] getDrawableResource(int resourceToGet){
+    public byte[] getDrawableResource(int resourceToGet) {
 
         //Get the photo from the resource/drawable folder as a raw image
         final AssetFileDescriptor raw = AndroidSnippetsApplication
@@ -84,13 +78,13 @@ public abstract class BaseUserStory {
 
             buffer.flush();
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return buffer.toByteArray();
 
     }
+
     public View getUIResultView() {
         return mUpdateView;
     }

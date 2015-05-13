@@ -36,15 +36,14 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
                     getStringResource(R.string.mail_body_text));
 
             //3. Delete the email using the ID
-            Message message = GetAMessageFromEmailFolder(emailSnippets,subject,getStringResource(R.string.Email_Folder_Inbox));
+            Message message = GetAMessageFromEmailFolder(emailSnippets, subject, getStringResource(R.string.Email_Folder_Inbox));
             emailSnippets.deleteMail(message.getId());
 
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();
             sb.append("Email is added");
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(

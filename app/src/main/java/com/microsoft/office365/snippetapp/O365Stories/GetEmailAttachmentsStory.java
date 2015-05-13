@@ -61,9 +61,9 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
             //Get the new message
             Message sentMessage = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-  
+
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
@@ -83,14 +83,12 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
             } else
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
-            
 
 
             //3. Delete the email using the ID
             // Boolean result = emailSnippets.deleteMail(emailID);
 
-        }
-        catch (ExecutionException | InterruptedException ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("GetEmailAttachments", formattedException);
             return StoryResultFormatter.wrapResult(

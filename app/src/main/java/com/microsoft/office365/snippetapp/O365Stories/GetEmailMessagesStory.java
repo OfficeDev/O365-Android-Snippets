@@ -42,8 +42,7 @@ public class GetEmailMessagesStory extends BaseEmailUserStory {
                 sb.append("\n");
             }
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        }
-        catch (ExecutionException e) {
+        } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Get email story", formattedException);
@@ -51,8 +50,7 @@ public class GetEmailMessagesStory extends BaseEmailUserStory {
                     "Get email exception: "
                             + formattedException, false
             );
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Get email story", formattedException);

@@ -63,14 +63,12 @@ public class UpdateEventStory extends BaseUserStory {
                 return StoryResultFormatter.wrapResult(
                         "UpdateEventStory: Event "
                                 + " updated.", true);
-            }
-            else {
+            } else {
                 return StoryResultFormatter.wrapResult(
                         "Update Event Story: Update "
                                 + " event.", false);
             }
-        }
-        catch (ExecutionException e) {
+        } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Update event story", formattedException);
@@ -79,8 +77,7 @@ public class UpdateEventStory extends BaseUserStory {
                             + formattedException
                     , false
             );
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e("Update event story", formattedException);

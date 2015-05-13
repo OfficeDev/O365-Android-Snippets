@@ -46,7 +46,7 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
 
             Message messageToAttach = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
             if (messageToAttach != null) {
                 //Create a new email message but do not send yet
@@ -59,7 +59,7 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
                 emailSnippets.addItemAttachment(
                         newEmailId
                         , messageToAttach
-                , IS_INLINE);
+                        , IS_INLINE);
 
                 //Send draft email
                 emailSnippets.sendMail(newEmailId);
@@ -75,8 +75,7 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
             }
 
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("Send msg w/ message ", formattedException);
             returnResult = StoryResultFormatter.wrapResult(

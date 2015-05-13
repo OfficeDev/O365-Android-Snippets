@@ -95,11 +95,11 @@ public class CalendarSnippets {
     /**
      * Creates an event
      *
-     * @param subject      The subject of the event
-     * @param itemBodyHtml The body of the event as HTML
-     * @param startDate    The start date of the event
-     * @param endDate      The end date of the event
-     * @param attendeeAddresses    A list of attendee email addresses
+     * @param subject           The subject of the event
+     * @param itemBodyHtml      The body of the event as HTML
+     * @param startDate         The start date of the event
+     * @param endDate           The end date of the event
+     * @param attendeeAddresses A list of attendee email addresses
      * @return String The id of the created event
      * @version 1.0
      */
@@ -319,8 +319,7 @@ public class CalendarSnippets {
      * Accepts an event invitation on behalf of the specified attendee
      *
      * @param eventId        The id of the event to be removed
-     * Responds to an event invitation on behalf of the specified attendee
-     *
+     *                       Responds to an event invitation on behalf of the specified attendee
      * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @param response       The user's response to the event invitation

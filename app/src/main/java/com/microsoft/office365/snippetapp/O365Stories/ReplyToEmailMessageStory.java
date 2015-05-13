@@ -43,7 +43,7 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
             //Get the new message
             Message message = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID,getStringResource(R.string.Email_Folder_Inbox));
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
             if (message.getId().length() > 0) {
                 String replyEmailId = emailSnippets.replyToEmailMessage(
@@ -56,13 +56,11 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
                 }
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", true);
-            }
-             else {
+            } else {
                 return StoryResultFormatter.wrapResult(
                         "Reply to email message story: ", false);
             }
-        }
-        catch (ExecutionException | InterruptedException ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             return StoryResultFormatter.wrapResult(
                     "Reply to email message story: " + formattedException, false

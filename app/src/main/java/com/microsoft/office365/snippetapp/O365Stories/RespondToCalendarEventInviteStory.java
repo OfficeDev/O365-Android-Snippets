@@ -12,7 +12,6 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
 import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
@@ -69,14 +68,7 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
                 }
 
                 //CLEANUP by cancelling event
-//                calendarSnippets.respondToCalendarEventInvite(newEventId
-//                        , GlobalValues.USER_EMAIL, ResponseType.Declined);
                 calendarSnippets.deleteCalendarEvent(newEventId);
-//                Message message = GetAMessageFromEmailFolder(emailSnippets, subjectLine, getStringResource(R.string.Email_Folder_Sent));
-//                if (message!=null){
-//                    emailSnippets.deleteMail(message.getId());
-//                }
-
             } else {
                 isStoryComplete = false;
                 resultMessage = "Respond to event invite story: Event is null.";

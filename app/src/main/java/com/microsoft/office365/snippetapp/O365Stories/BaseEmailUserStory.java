@@ -3,7 +3,6 @@
 */
 package com.microsoft.office365.snippetapp.O365Stories;
 
-import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.outlookservices.Message;
 
@@ -25,7 +24,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
      * is a small wait time until it arrives.
      *
      * @param emailSnippets Snippets which contains a message search snippet that is needed
-     * @param subjectLine The subject line to search for
+     * @param subjectLine   The subject line to search for
      * @return
      * @throws ExecutionException
      * @throws InterruptedException
