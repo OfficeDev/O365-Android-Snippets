@@ -4,27 +4,25 @@
 package com.microsoft.office365.snippetapp.helpers;
 
 import com.microsoft.directoryservices.odata.DirectoryClient;
-import com.microsoft.outlookservices.odata.OutlookClient;
-import com.microsoft.services.odata.impl.ADALDependencyResolver;
 import com.microsoft.services.odata.interfaces.DependencyResolver;
 
 public class O365ServicesManager {
-    static DirectoryClient mDirectoryClient=null;
-    static String mTenantId=null;
+    static DirectoryClient mDirectoryClient = null;
+    static String mTenantId = null;
 
-    public static void initialize(String tenantId){
-        mTenantId=tenantId;
+    public static void initialize(String tenantId) {
+        mTenantId = tenantId;
     }
 
-    public static DirectoryClient getDirectoryClient(){
-        if (mDirectoryClient==null&&mTenantId!=null){
+    public static DirectoryClient getDirectoryClient() {
+        if (mDirectoryClient == null && mTenantId != null) {
             DependencyResolver dependencyResolver = AuthenticationController.getInstance().getDependencyResolver();
             StringBuilder endpoint = new StringBuilder();
             endpoint.append(Constants.DIRECTORY_RESOURCE_URL)
                     .append(mTenantId)
                     .append("?")
                     .append(Constants.DIRECTORY_API_VERSION);
-            mDirectoryClient=new DirectoryClient(endpoint.toString(),dependencyResolver);
+            mDirectoryClient = new DirectoryClient(endpoint.toString(), dependencyResolver);
         }
         return mDirectoryClient;
     }

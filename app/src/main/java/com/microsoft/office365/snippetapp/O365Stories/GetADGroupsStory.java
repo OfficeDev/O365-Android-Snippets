@@ -41,7 +41,7 @@ public class GetADGroupsStory extends BaseUserStory {
                             .append("\n");
                 }
             }
-            isStoryComplete=true;
+            isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
             isStoryComplete = false;
             e.printStackTrace();

@@ -27,8 +27,7 @@ public class GetADUsersStory extends BaseUserStory {
 
         try {
             //Get list of users
-            List<User> userList = null;
-            userList = usersAndGroupsSnippets.getUsers();
+            List<User> userList = usersAndGroupsSnippets.getUsers();
             if (userList == null) {
                 //No users were found
                 resultMessage.append("Get Active Directory Users: No users found.");
