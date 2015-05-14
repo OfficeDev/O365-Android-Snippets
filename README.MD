@@ -53,6 +53,12 @@ This sample includes the following operations:
 * Update a contact.
 * Delete a contact.
 
+**Unified API**
+
+* Get users.
+* Get groups.
+* Get tenant details.
+
 We will continue adding snippets to this sample, so make sure to check back.
 
 ## Change History
@@ -64,6 +70,8 @@ April 16, 2015:
 
 * Added snippets for sending email with text file attachments and getting attachments from email in your inbox
 
+May 14, 2015:
+* Added snippets for getting organization users and groups with the Office 365 unified API
 
 ## Device requirements
 To run the snippets project your device needs to meet the following requirements:
