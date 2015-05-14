@@ -120,6 +120,7 @@ public class AuthenticationController {
                                             getAuthenticationContext(),
                                             resourceId,
                                             Constants.CLIENT_ID);
+                                    O365ServicesManager.initialize(authenticationResult.getTenantId());
                                     result.set(authenticationResult);
                                 }
                             }

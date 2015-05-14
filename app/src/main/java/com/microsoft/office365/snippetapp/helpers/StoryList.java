@@ -14,12 +14,15 @@ import com.microsoft.office365.snippetapp.O365Stories.CreateRecurringEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetADGroupsStory;
+import com.microsoft.office365.snippetapp.O365Stories.GetADUsersStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetContactsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetEmailMessagesStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilteredContactsWithSurnameStory;
 import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
+import com.microsoft.office365.snippetapp.O365Stories.GetTenantDetailsStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
 import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
@@ -50,6 +53,9 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
+                new GetADUsersStory(),
+                new GetTenantDetailsStory(),
+                new GetADGroupsStory(),
                 new CreateRecurringEventStory(),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),

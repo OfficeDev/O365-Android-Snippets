@@ -43,5 +43,5 @@ dependencies {
     compile 'com.microsoft.services:file-services:0.13.0'
 
     // Azure Active Directory Library
-    compile 'com.microsoft.aad:adal:1.1.2'
+    compile 'com.microsoft.aad:adal:1.1.3'
 }

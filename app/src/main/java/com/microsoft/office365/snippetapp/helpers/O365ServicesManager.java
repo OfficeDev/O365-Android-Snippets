@@ -3,23 +3,30 @@
  */
 package com.microsoft.office365.snippetapp.helpers;
 
-public interface Constants {
-    public static final String AUTHORITY_URL = "https://login.microsoftonline.com/common";
-    public static final String DISCOVERY_RESOURCE_URL = "https://api.office.com/discovery/v1.0/me/";
-    public static final String DISCOVERY_RESOURCE_ID = "https://api.office.com/discovery/";
-    public static final String DIRECTORY_RESOURCE_URL = "https://graph.windows.net/";
-    public static final String DIRECTORY_RESOURCE_ID = "https://graph.windows.net/";
-    public static final String DIRECTORY_API_VERSION = "api-version=1.5";
-    public static final String MAIL_CAPABILITY = "Mail";
-    public static final String MYFILES_CAPABILITY = "MyFiles";
-    public static final String CALENDAR_CAPABILITY = "Calendar";
-    public static final String CONTACTS_CAPABILITY = "Contacts";
+import com.microsoft.directoryservices.odata.DirectoryClient;
+import com.microsoft.services.odata.interfaces.DependencyResolver;
 
-    // Update these two constants with the values for your application:
-    public static final String CLIENT_ID = "<Your client ID HERE>";
-    public static final String REDIRECT_URI = "<Your redirect URI HERE>";
+public class O365ServicesManager {
+    static DirectoryClient mDirectoryClient = null;
+    static String mTenantId = null;
+
+    public static void initialize(String tenantId) {
+        mTenantId = tenantId;
+    }
+
+    public static DirectoryClient getDirectoryClient() {
+        if (mDirectoryClient == null && mTenantId != null) {
+            DependencyResolver dependencyResolver = AuthenticationController.getInstance().getDependencyResolver();
+            StringBuilder endpoint = new StringBuilder();
+            endpoint.append(Constants.DIRECTORY_RESOURCE_URL)
+                    .append(mTenantId)
+                    .append("?")
+                    .append(Constants.DIRECTORY_API_VERSION);
+            mDirectoryClient = new DirectoryClient(endpoint.toString(), dependencyResolver);
+        }
+        return mDirectoryClient;
+    }
 }
-
 // *********************************************************
 //
 // O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets

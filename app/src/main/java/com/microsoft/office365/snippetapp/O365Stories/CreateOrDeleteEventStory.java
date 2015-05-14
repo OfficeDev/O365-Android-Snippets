@@ -66,8 +66,8 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
         CalendarSnippets calendarSnippets = new CalendarSnippets(
                 getO365MailClient());
 
-        List<String> attendeeEmailAdresses = new ArrayList<>();
-        attendeeEmailAdresses.add(GlobalValues.USER_EMAIL);
+        List<String> attendeeEmailAddresses = new ArrayList<>();
+        attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
         //ACT
         try {
@@ -76,7 +76,7 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
                     , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
-                    , attendeeEmailAdresses);
+                    , attendeeEmailAddresses);
 
             //Delete event
             calendarSnippets.deleteCalendarEvent(newEventId);
