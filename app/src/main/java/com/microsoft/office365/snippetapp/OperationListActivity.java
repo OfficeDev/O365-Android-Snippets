@@ -149,6 +149,8 @@ public class OperationListActivity extends Activity
 
                         //obtain email address for logged in user to use for email snippets
                         GlobalValues.USER_EMAIL = result.getUserInfo().getDisplayableId();
+                        GlobalValues.USER_NAME = result.getUserInfo().getGivenName() + "  " + result.getUserInfo().getFamilyName();
+                        mSignOut.setTitle("Disconnect " +  GlobalValues.USER_NAME);
 
                     }
 
@@ -373,6 +375,7 @@ public class OperationListActivity extends Activity
                                 R.string.discover_toast_text,
                                 Toast.LENGTH_SHORT
                         ).show();
+                        mSignOut.setTitle("Disconnect " + GlobalValues.USER_NAME);
                     }
                 }
         );

@@ -5,6 +5,7 @@ package com.microsoft.office365.snippetapp.helpers;
 
 public class GlobalValues {
     public static String USER_EMAIL;
+    public static String USER_NAME;
 }
 // *********************************************************
 //
