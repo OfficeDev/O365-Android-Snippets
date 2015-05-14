@@ -194,6 +194,8 @@ public class OperationListActivity extends Activity
                     OperationListActivity.this,
                     DISCONNECTED_FROM_OFFICE,
                     Toast.LENGTH_LONG).show();
+            mSignOut.setTitle("Disconnect");
+
         }
 
     }
