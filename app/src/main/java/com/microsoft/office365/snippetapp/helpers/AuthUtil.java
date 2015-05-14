@@ -38,19 +38,20 @@ public class AuthUtil {
      * In production scenarios, you should come up with your own implementation of this method.
      * Consider that your algorithm must return the same key so it can encrypt/decrypt values
      * successfully.
+     *
      * @return The encryption key in a 32 byte long array.
      */
     private static byte[] generateSecretKey() {
         byte[] key = new byte[32];
         byte[] android_id = null;
 
-        try{
+        try {
             android_id = Settings.Secure.ANDROID_ID.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "generateSecretKey - " + e.getMessage());
         }
 
-        for(int i = 0; i < key.length; i++){
+        for (int i = 0; i < key.length; i++) {
             key[i] = android_id[i % android_id.length];
         }
 

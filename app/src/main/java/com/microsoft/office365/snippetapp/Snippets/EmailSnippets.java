@@ -166,7 +166,7 @@ public class EmailSnippets {
                 .getMe()
                 .getMessages()
                 .getById(mailID)
-                .getAttachments().read().get();
+                .getAttachments().expand("ContentType").read().get();
     }
 
     /**

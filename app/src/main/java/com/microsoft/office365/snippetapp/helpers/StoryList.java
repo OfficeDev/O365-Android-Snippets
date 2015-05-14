@@ -11,6 +11,7 @@ import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
+import com.microsoft.office365.snippetapp.O365Stories.CreateRecurringEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.DeclineEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
@@ -55,6 +56,7 @@ public class StoryList {
                 new GetADUsersStory(),
                 new GetTenantDetailsStory(),
                 new GetADGroupsStory(),
+                new CreateRecurringEventStory(),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),
