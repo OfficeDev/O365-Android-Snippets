@@ -194,6 +194,8 @@ public class OperationListActivity extends Activity
                     OperationListActivity.this,
                     DISCONNECTED_FROM_OFFICE,
                     Toast.LENGTH_LONG).show();
+
+            //Clear last connected user name from Disconnect action menu item
             mSignOut.setTitle("Disconnect");
 
         }
@@ -377,7 +379,6 @@ public class OperationListActivity extends Activity
                                 R.string.discover_toast_text,
                                 Toast.LENGTH_SHORT
                         ).show();
-                        mSignOut.setTitle("Disconnect " + GlobalValues.USER_NAME);
                     }
                 }
         );
