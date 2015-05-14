@@ -21,13 +21,17 @@ public class UsersAndGroupsSnippets {
     }
 
     /**
-     * Return a list of users from Active Directory.
+     * Return a list of users from Active Directory, sorted by display name..
      *
      * @return List. A list of the com.microsoft.directoryservices.User objects.
      * @version 1.0
      */
     public List<User> getUsers() throws ExecutionException, InterruptedException {
-        return mDirectoryClient.getusers().read().get();
+        return mDirectoryClient
+                .getusers()
+                .orderBy("displayName")
+                .read()
+                .get();
     }
 
     /**
@@ -49,7 +53,11 @@ public class UsersAndGroupsSnippets {
      * @version 1.0
      */
     public List<Group> getGroups() throws ExecutionException, InterruptedException {
-        return mDirectoryClient.getgroups().read().get();
+        return mDirectoryClient
+                .getgroups()
+                .orderBy("displayName")
+                .read()
+                .get();
     }
 }
 // *********************************************************
