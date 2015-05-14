@@ -9,12 +9,11 @@ import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
-import java.util.List;
 
-public class ForwardEmailMessageStory extends BaseUserStory {
-    private static final int MAX_POLL_REQUESTS = 20;
+public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
@@ -39,28 +38,13 @@ public class ForwardEmailMessageStory extends BaseUserStory {
                             + uniqueGUID, getStringResource(R.string.mail_body_text));
 
             //Get the new message
-            String emailId = "";
-            int tryCount = 0;
+            Message messageToForward = GetAMessageFromEmailFolder(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-            //Try to get the newly sent email from user's inbox at least once.
-            //continue trying to get the email while the email is not found
-            //and the loop has tried less than 50 times.
-            do {
-                List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(
-                                getStringResource(R.string.mail_subject_text)
-                                        + uniqueGUID, sentDate);
-                if (mailIds.size() > 0) {
-                    emailId = mailIds.get(0);
-                }
-                tryCount++;
-                //Stay in loop while these conditions are true.
-                //If either condition becomes false, break
-            } while (emailId.length() == 0 && tryCount < MAX_POLL_REQUESTS);
-
-            String forwardEmailId = emailSnippets.forwardMail(emailId);
+            String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
             //3. Delete the email using the ID
-            emailSnippets.deleteMail(emailId);
+            emailSnippets.deleteMail(messageToForward.getId());
             if (forwardEmailId.length() > 0) {
                 emailSnippets.deleteMail(forwardEmailId);
             }

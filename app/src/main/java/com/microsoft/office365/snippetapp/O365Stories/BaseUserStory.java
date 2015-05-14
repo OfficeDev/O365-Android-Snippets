@@ -4,6 +4,7 @@
 package com.microsoft.office365.snippetapp.O365Stories;
 
 
+import android.content.res.AssetFileDescriptor;
 import android.view.View;
 
 import com.microsoft.fileservices.odata.SharePointClient;
@@ -11,6 +12,10 @@ import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public abstract class BaseUserStory {
 
@@ -49,6 +54,37 @@ public abstract class BaseUserStory {
                 .getString(resourceToGet);
     }
 
+    public byte[] getDrawableResource(int resourceToGet) {
+
+        //Get the photo from the resource/drawable folder as a raw image
+        final AssetFileDescriptor raw = AndroidSnippetsApplication
+                .getApplication()
+                .getApplicationContext()
+                .getResources()
+                .openRawResourceFd(resourceToGet);
+
+        //Load raw image into a buffer
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try {
+            final FileInputStream is = raw.createInputStream();
+            int nRead;
+
+            //Read 16kb at a time
+            final byte[] data = new byte[16384];
+
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer.toByteArray();
+
+    }
+
     public View getUIResultView() {
         return mUpdateView;
     }
@@ -70,6 +106,7 @@ public abstract class BaseUserStory {
                 .getInstance()
                 .setResourceId(
                         this.getO365MailResourceId());
+
         return mO365MailClient;
     }
 

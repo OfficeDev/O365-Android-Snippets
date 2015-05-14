@@ -193,4 +193,3 @@ We'd love to get your feedback on this Android starter kit. You can send your qu
 ## Copyright
 Copyright (c) 2015 Microsoft. All rights reserved.
 Microsoft and OneDrive are either registered trademarks or trademarks of Microsoft Corporation.
-

@@ -13,14 +13,17 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.FileAttachment;
+import com.microsoft.outlookservices.Message;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
-public class GetEmailAttachmentsStory extends BaseUserStory {
+public class GetEmailAttachmentsStory extends BaseEmailUserStory {
     public static final String SENT_NOTICE = "Attachment email sent with subject line:";
-    public static final int MAX_TRY_COUNT = 20;
+    public static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
@@ -43,9 +46,10 @@ public class GetEmailAttachmentsStory extends BaseUserStory {
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
-            emailSnippets.addAttachmentToDraft(emailID
+            emailSnippets.addTextFileAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
-                    , getStringResource(R.string.text_attachment_filename));
+                    , getStringResource(R.string.text_attachment_filename)
+                    , IS_INLINE);
 
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
@@ -54,36 +58,21 @@ public class GetEmailAttachmentsStory extends BaseUserStory {
             //Send the draft email to the recipient
             emailSnippets.sendMail(draftMessageID);
 
+            //Get the new message
+            Message sentMessage = GetAMessageFromEmailFolder(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-            String emailId = "";
-            int tryCount = 0;
-
-            //Try to get the newly sent email from user's inbox at least once.
-            //continue trying to get the email while the email is not found
-            //and the loop has tried less than 50 times.
-            do {
-                //Get the new message
-                List<String> mailIds = emailSnippets
-                        .GetInboxMessagesBySubject_DateTimeReceived(mailSubject, sendDate);
-                if (mailIds.size() > 0) {
-                    emailId = mailIds.get(0);
-                }
-                tryCount++;
-
-
-                //Stay in loop while these conditions are true.
-                //If either condition becomes false, break
-            } while (emailId.length() == 0 && tryCount < MAX_TRY_COUNT);
 
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
-            if (emailId.length() > 0) {
-                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(emailId);
+            if (sentMessage.getId().length() > 0) {
+                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(
+                        sentMessage.getId());
                 //Send the mail with attachments
                 //build string for test results on UI
                 for (Attachment attachment : attachments) {
-//                    if (attachment.getClass().getSimpleName() == "FileAttachment") {
                     if (attachment instanceof FileAttachment) {
                         FileAttachment fileAttachment = (FileAttachment) attachment;
                         String fileContents = new String(fileAttachment.getContentBytes(), "UTF-8");
@@ -99,7 +88,7 @@ public class GetEmailAttachmentsStory extends BaseUserStory {
             //3. Delete the email using the ID
             // Boolean result = emailSnippets.deleteMail(emailID);
 
-        } catch (Exception ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
             Log.e("GetEmailAttachments", formattedException);
             return StoryResultFormatter.wrapResult(
@@ -108,6 +97,8 @@ public class GetEmailAttachmentsStory extends BaseUserStory {
                     , false
             );
 
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return returnResult;
 

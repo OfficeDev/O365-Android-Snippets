@@ -149,6 +149,8 @@ public class OperationListActivity extends Activity
 
                         //obtain email address for logged in user to use for email snippets
                         GlobalValues.USER_EMAIL = result.getUserInfo().getDisplayableId();
+                        GlobalValues.USER_NAME = result.getUserInfo().getGivenName() + "  " + result.getUserInfo().getFamilyName();
+                        mSignOut.setTitle("Disconnect " +  GlobalValues.USER_NAME);
 
                     }
 
@@ -192,6 +194,10 @@ public class OperationListActivity extends Activity
                     OperationListActivity.this,
                     DISCONNECTED_FROM_OFFICE,
                     Toast.LENGTH_LONG).show();
+
+            //Clear last connected user name from Disconnect action menu item
+            mSignOut.setTitle("Disconnect");
+
         }
 
     }

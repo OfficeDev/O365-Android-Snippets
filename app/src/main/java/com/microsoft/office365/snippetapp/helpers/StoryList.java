@@ -5,14 +5,12 @@ package com.microsoft.office365.snippetapp.helpers;
 
 import android.content.Context;
 
-import com.microsoft.office365.snippetapp.O365Stories.AcceptEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.CreateOrDeleteOneDriveFolder;
 import com.microsoft.office365.snippetapp.O365Stories.CreateRecurringEventStory;
-import com.microsoft.office365.snippetapp.O365Stories.DeclineEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.O365Stories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.O365Stories.ForwardEmailMessageStory;
@@ -26,7 +24,9 @@ import com.microsoft.office365.snippetapp.O365Stories.GetFilteredContactsWithSur
 import com.microsoft.office365.snippetapp.O365Stories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.O365Stories.GetTenantDetailsStory;
 import com.microsoft.office365.snippetapp.O365Stories.ReplyToEmailMessageStory;
+import com.microsoft.office365.snippetapp.O365Stories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailMessageStory;
+import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithMessageAttachStory;
 import com.microsoft.office365.snippetapp.O365Stories.SendEmailWithTextFileAttachmentStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateContactStory;
 import com.microsoft.office365.snippetapp.O365Stories.UpdateEventStory;
@@ -62,6 +62,7 @@ public class StoryList {
                 new ReplyToEmailMessageStory(),
                 new ForwardEmailMessageStory(),
                 new SendEmailWithTextFileAttachmentStory(),
+                new SendEmailWithMessageAttachStory(),
                 new GetEmailAttachmentsStory(),
                 new GetContactsStory(),
                 new CreateOrDeleteContactStory(StoryAction.CREATE),
@@ -72,8 +73,7 @@ public class StoryList {
                 new CreateOrDeleteEventStory(StoryAction.DELETE),
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
-                new AcceptEventInviteStory(),
-                new DeclineEventInviteStory(),
+                new RespondToCalendarEventInviteStory(),
                 new GetFilteredImportantEvents(),
                 new GetFilesAndFoldersStory(),
                 new CreateOrDeleteFileStory(StoryAction.CREATE),

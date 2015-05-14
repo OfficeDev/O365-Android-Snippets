@@ -7,21 +7,24 @@ import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class DeclineEventInviteStory extends BaseUserStory {
-    public static final String DECLINE_AN_EVENT_INVITE = "Decline an event invite";
+public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
         //PREPARE
+        boolean isStoryComplete;
+        String resultMessage = "";
         AuthenticationController
                 .getInstance()
                 .setResourceId(
@@ -29,71 +32,65 @@ public class DeclineEventInviteStory extends BaseUserStory {
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
                 getO365MailClient());
+        EmailSnippets emailSnippets = new EmailSnippets(
+                getO365MailClient());
 
-
-        List<String> attendeeEmailAddressList = new ArrayList<>();
-        attendeeEmailAddressList.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
-        //ACT
+        List<String> attendeeEmailAddresses = new ArrayList<>();
+        attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
+        String uniqueGUID = java.util.UUID.randomUUID().toString();
+        String subjectLine = getStringResource(R.string.calendar_subject_text)
+                + ":"
+                + uniqueGUID;
         try {
-            newEventId = calendarSnippets.createCalendarEvent(
-                    getStringResource(R.string.calendar_subject_text)
+            String newEventId = calendarSnippets.createCalendarEvent(
+                    subjectLine
                     , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
-                    , attendeeEmailAddressList);
+                    , attendeeEmailAddresses);
 
-            String addedEventId = calendarSnippets.getCalendarEventId(newEventId);
-            calendarSnippets.declineCalendarEventInvite(
-                    newEventId
-                    , GlobalValues.USER_EMAIL);
+            //wait for server to send event invitation
+            Thread.sleep(5000);
 
+            if (calendarSnippets.respondToCalendarEventInvite(newEventId
+                    , GlobalValues.USER_EMAIL, ResponseType.Accepted) != null) {
 
-            String attendeeStatus = calendarSnippets.getEventAttendeeStatus(
-                    newEventId
-                    , GlobalValues.USER_EMAIL);
-            //CLEAN UP
-            calendarSnippets.deleteCalendarEvent(newEventId);
-            //ASSERT
-            if (attendeeStatus.toLowerCase().contains("decline")) {
-                return StoryResultFormatter.wrapResult(
-                        "Decline event invite story: Event "
-                                + " declined.", true
-                );
+                //wait for server to update attendee status in event
+                Thread.sleep(5000);
+                ResponseType attendeeStatus = calendarSnippets.getEventAttendeeStatus(
+                        newEventId
+                        , GlobalValues.USER_EMAIL);
 
+                //Validate the attendee status was set to accepted as expected
+                if (attendeeStatus == ResponseType.Accepted) {
+                    isStoryComplete = true;
+                    resultMessage = "Respond to event invite story: Event accepted.";
+                } else {
+                    isStoryComplete = false;
+                    resultMessage = "Respond to event invite story: Event response failed. "
+                            + attendeeStatus;
+                }
+
+                //CLEANUP by cancelling event
+                calendarSnippets.deleteCalendarEvent(newEventId);
             } else {
-                return StoryResultFormatter.wrapResult(
-                        "Decline event invite story: Event "
-                                + " declined.", false
-                );
-
+                isStoryComplete = false;
+                resultMessage = "Respond to event invite story: Event is null.";
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Decline event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Decline event exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (InterruptedException e) {
+            resultMessage = "Respond to event exception: "
+                    + formattedException;
             e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Decline event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Decline event exception: "
-                            + formattedException
-                    , false
-            );
+            Log.e("Respond to event story", formattedException);
         }
-
+        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return DECLINE_AN_EVENT_INVITE;
+        return "Responds to accept an event invite";
     }
 
 }

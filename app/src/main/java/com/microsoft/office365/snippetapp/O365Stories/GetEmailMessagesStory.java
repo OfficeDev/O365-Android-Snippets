@@ -14,7 +14,7 @@ import com.microsoft.outlookservices.Message;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetEmailMessagesStory extends BaseUserStory {
+public class GetEmailMessagesStory extends BaseEmailUserStory {
     @Override
     public String execute() {
         String returnResult = "";
