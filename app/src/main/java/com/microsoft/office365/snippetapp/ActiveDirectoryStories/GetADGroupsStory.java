@@ -1,61 +1,63 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ActiveDirectoryStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.R;
-import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.directoryservices.Group;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
-import com.microsoft.office365.snippetapp.helpers.GlobalValues;
+import com.microsoft.office365.snippetapp.helpers.Constants;
+import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class CreateRecurringEventStory extends BaseUserStory {
+public class GetADGroupsStory extends BaseUserStory {
     @Override
     public String execute() {
         boolean isStoryComplete;
-        String resultMessage;
+        StringBuilder resultMessage = new StringBuilder();
 
         AuthenticationController
                 .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
-
-        CalendarSnippets calendarSnippets = new CalendarSnippets(
-                getO365MailClient());
-        List<String> attendeeEmailAdresses = new ArrayList<>();
-        attendeeEmailAdresses.add(GlobalValues.USER_EMAIL);
+                .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
+        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
 
         try {
-            //Create a recurring event
-            String newEventId = calendarSnippets.createRecurringCalendarEvent(
-                    getStringResource(R.string.calendar_subject_text)
-                    , getStringResource(R.string.calendar_body_text)
-                    , attendeeEmailAdresses);
-
-            //Cleanup by deleting the event
-            calendarSnippets.deleteCalendarEvent(newEventId);
+            //Get list of groups
+            List<Group> groupList;
+            groupList = usersAndGroupsSnippets.getGroups();
+            if (groupList == null) {
+                //No groups were found
+                resultMessage.append("Get Active Directory Groups: No groups found");
+            } else {
+                resultMessage.append("Get Active Directory Groups: The following groups were found:\n");
+                for (Group group : groupList) {
+                    resultMessage.append(group.getdisplayName())
+                            .append("\n");
+                }
+            }
             isStoryComplete = true;
-            resultMessage = "Create recurring event: Recurring event created";
         } catch (ExecutionException | InterruptedException e) {
             isStoryComplete = false;
+            e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("CreateRecurringEvent", formattedException);
-            resultMessage = "Create recurring event exception: " + formattedException;
+            Log.e("GetADGroups", formattedException);
+            resultMessage = new StringBuilder();
+            resultMessage.append("Get Active Directory groups exception: ")
+                    .append(formattedException);
         }
-
-        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
+        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Create a recurring event";
+        return "Gets groups from Active Directory";
     }
 }
 // *********************************************************

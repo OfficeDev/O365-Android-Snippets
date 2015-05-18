@@ -1,63 +1,70 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.FileFolderStories;
 
 import android.util.Log;
 
-import com.microsoft.directoryservices.Group;
-import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.fileservices.Item;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
-import com.microsoft.office365.snippetapp.helpers.Constants;
-import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetADGroupsStory extends BaseUserStory {
+public class GetFilesAndFoldersStory extends BaseUserStory {
     @Override
     public String execute() {
-        boolean isStoryComplete;
-        StringBuilder resultMessage = new StringBuilder();
-
         AuthenticationController
                 .getInstance()
-                .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+                .setResourceId(
+                        getFilesFoldersResourceId());
 
+        FileFolderSnippets fileFolderSnippets = new FileFolderSnippets(
+                getO365MyFilesClient());
         try {
-            //Get list of groups
-            List<Group> groupList;
-            groupList = usersAndGroupsSnippets.getGroups();
-            if (groupList == null) {
-                //No groups were found
-                resultMessage.append("Get Active Directory Groups: No groups found");
-            } else {
-                resultMessage.append("Get Active Directory Groups: The following groups were found:\n");
-                for (Group group : groupList) {
-                    resultMessage.append(group.getdisplayName())
-                            .append("\n");
-                }
+            List<Item> items = fileFolderSnippets.getFilesAndFolders();
+            //build string for test results on UI
+            StringBuilder sb = new StringBuilder();
+            sb.append("Gets items: "
+                    + items.size()
+                    + " items returned");
+            sb.append("\n");
+            for (Item item : items) {
+                sb.append("\t\t");
+                sb.append(item.gettype() + ": " + item.getname());
+                sb.append("\n");
             }
-            isStoryComplete = true;
-        } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
+            return StoryResultFormatter.wrapResult(sb.toString(), true);
+
+        } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("GetADGroups", formattedException);
-            resultMessage = new StringBuilder();
-            resultMessage.append("Get Active Directory groups exception: ")
-                    .append(formattedException);
+            Log.e("Get Files/folders", formattedException);
+            return StoryResultFormatter.wrapResult(
+                    "Get Files and folders exception: "
+                            + formattedException, false
+            );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("Get Files/folders", formattedException);
+            return StoryResultFormatter.wrapResult(
+                    "Get Files and folders exception: "
+                            + formattedException, false
+            );
         }
-        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
+
     }
 
     @Override
     public String getDescription() {
-        return "Gets groups from Active Directory";
+        return "Gets files and folders from user's OneDrive";
     }
+
 }
 // *********************************************************
 //

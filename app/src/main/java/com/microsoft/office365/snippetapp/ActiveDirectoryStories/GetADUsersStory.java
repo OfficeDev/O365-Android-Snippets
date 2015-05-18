@@ -1,8 +1,9 @@
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ActiveDirectoryStories;
 
 import android.util.Log;
 
 import com.microsoft.directoryservices.User;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;

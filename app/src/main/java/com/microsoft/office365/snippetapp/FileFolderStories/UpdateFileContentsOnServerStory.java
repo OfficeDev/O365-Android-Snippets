@@ -1,69 +1,71 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.FileFolderStories;
 
 import android.util.Log;
 
-import com.microsoft.fileservices.Item;
+import com.google.common.base.Charsets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetFilesAndFoldersStory extends BaseUserStory {
+public class UpdateFileContentsOnServerStory extends BaseUserStory {
     @Override
     public String execute() {
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getFilesFoldersResourceId());
-
         FileFolderSnippets fileFolderSnippets = new FileFolderSnippets(
                 getO365MyFilesClient());
         try {
-            List<Item> items = fileFolderSnippets.getFilesAndFolders();
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets items: "
-                    + items.size()
-                    + " items returned");
-            sb.append("\n");
-            for (Item item : items) {
-                sb.append("\t\t");
-                sb.append(item.gettype() + ": " + item.getname());
-                sb.append("\n");
+
+            String fileContents = "Test create file";
+            String newFileId = fileFolderSnippets
+                    .postNewFileToServer(
+                            "test_UpdateFile.txt"
+                            , fileContents.getBytes(Charsets.UTF_8));
+
+
+            String updatedFileContents = fileContents + " updated";
+            fileFolderSnippets.postUpdatedFileToServer(newFileId, updatedFileContents);
+            byte[] fileContentsBytes = fileFolderSnippets.getFileContentsFromServer(newFileId);
+            fileFolderSnippets.deleteFileFromServer(newFileId);
+
+            if (fileContentsBytes.length == updatedFileContents.length()) {
+                return StoryResultFormatter.wrapResult("Update file contents on server", true);
+            } else {
+                return StoryResultFormatter.wrapResult("Update file contents on server", false);
             }
-            return StoryResultFormatter.wrapResult(sb.toString(), true);
 
         } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Files/folders", formattedException);
+            Log.e("Update file on server", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get Files and folders exception: "
+                    "Update file contents on server exception: "
                             + formattedException, false
             );
         } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Files/folders", formattedException);
+            Log.e("Update file on server", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get Files and folders exception: "
+                    "Update file contents on server exception: "
                             + formattedException, false
             );
         }
-
     }
 
     @Override
     public String getDescription() {
-        return "Gets files and folders from user's OneDrive";
+        return "Update file contents on server";
     }
-
 }
 // *********************************************************
 //

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 
 import java.util.List;
 

@@ -1,72 +1,75 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ContactStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.outlookservices.Contact;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetEmailMessagesStory extends BaseEmailUserStory {
+public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
+
     @Override
     public String execute() {
-        String returnResult = "";
+        boolean isStoryComplete = false;
+        StringBuilder storyResultText = new StringBuilder("FilterContactsBySurnameStory: ");
 
+        String surname = getStringResource(R.string.contacts_last_name);
         AuthenticationController
                 .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
+                .setResourceId(getO365MailResourceId());
+        ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
 
         try {
+            //Create a contact that we can test against
+            String contactId = contactsSnippets.createContact(
+                    getStringResource(R.string.contacts_email),
+                    getStringResource(R.string.contacts_business_phone),
+                    getStringResource(R.string.contacts_home_phone),
+                    getStringResource(R.string.contacts_first_name),
+                    surname);
 
-            EmailSnippets emailSnippets = new EmailSnippets(
-                    getO365MailClient());
-
-            //O365 API called in this helper
-            List<Message> messages = emailSnippets.getMailMessages();
-
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets email: " + messages.size() + " messages returned");
-            sb.append("\n");
-            for (Message m : messages) {
-                sb.append("\t\t");
-                sb.append(m.getSubject());
-                sb.append("\n");
+            //Find the new test contact
+            List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
+            for (Contact contact : contacts) {
+                if (contact.getSurname().equals(surname)) {
+                    break;
+                }
             }
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        } catch (ExecutionException e) {
+            //Delete the test contact from tenant
+            contactsSnippets.deleteContact(contactId);
+
+            //Story is completed
+            isStoryComplete = true;
+            storyResultText.append("Contact with surname ")
+                    .append(surname)
+                    .append(" found.");
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
-            );
+            Log.e("ContactFilter", formattedException);
+            storyResultText.append("Filter contacts by surname exception: ")
+                    .append(formattedException);
+            isStoryComplete = false;
         }
-        return returnResult;
+        return StoryResultFormatter.wrapResult(storyResultText.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-
-        return "Gets 10 newest email messages";
+        return "Gets contacts filtered by surname";
     }
+
+
 }
 // *********************************************************
 //

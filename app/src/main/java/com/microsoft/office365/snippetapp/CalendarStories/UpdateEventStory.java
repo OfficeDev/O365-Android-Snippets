@@ -1,71 +1,98 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Contact;
+import com.microsoft.outlookservices.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetContactsStory extends BaseUserStory {
+public class UpdateEventStory extends BaseUserStory {
+
 
     @Override
     public String execute() {
+        //PREPARE
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
-        ContactsSnippets contactsSnippets = new ContactsSnippets(
-                getO365MailClient());
+        CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+        List<String> attendeeEmailAddresses = new ArrayList<>();
+        attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
+        String newEventId = "";
+        //ACT
         try {
-            List<Contact> contacts = contactsSnippets.getContacts(11);
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets contacts: "
-                    + contacts.size()
-                    + " contacts returned");
-            sb.append("\n");
-            for (Contact contact : contacts) {
-                sb.append("\t\t");
-                sb.append(contact.getDisplayName());
-                sb.append("\n");
+            newEventId = calendarSnippets.createCalendarEvent(
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
+                    , java.util.Calendar.getInstance()
+                    , java.util.Calendar.getInstance()
+                    , attendeeEmailAddresses
+            );
+            Thread.sleep(20000);
+            Event updatedEvent = calendarSnippets.updateCalendarEvent(
+                    newEventId
+                    , getStringResource(R.string.calendar_subject_text)
+                            + " Updated Subject"
+                    , false
+                    , null
+                    , null
+                    , null
+                    , null
+            );
+            Thread.sleep(20000);
+            String updatedSubject = updatedEvent.getSubject();
+            //CLEAN UP
+            calendarSnippets.deleteCalendarEvent(newEventId);
+            //ASSERT
+            if (updatedSubject.equals(getStringResource(R.string.calendar_subject_text)
+                    + " Updated Subject")) {
+                return StoryResultFormatter.wrapResult(
+                        "UpdateEventStory: Event "
+                                + " updated.", true);
+            } else {
+                return StoryResultFormatter.wrapResult(
+                        "Update Event Story: Update "
+                                + " event.", false);
             }
-            return StoryResultFormatter.wrapResult(sb.toString(), true);
-
         } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
+            Log.e("Update event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
+                    "Update event exception: "
+                            + formattedException
+                    , false
             );
         } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
+            Log.e("Update event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
+                    "Update event exception: "
+                            + formattedException
+                    , false
             );
         }
     }
 
     @Override
     public String getDescription() {
-
-        return "Gets your contacts";
+        return "Update a calendar event";
     }
-
-
 }
 // *********************************************************
 //

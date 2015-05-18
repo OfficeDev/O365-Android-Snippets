@@ -1,12 +1,12 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.FileFolderStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.R;
-import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
@@ -16,24 +16,25 @@ import java.util.concurrent.ExecutionException;
 
 //This story handles both of the following stories that appear in the UI list
 // based on strings passed in the constructor...
-//- Create a contact (which is then deleted for cleanup)
-//- Delete a contact (which is created first and then deleted)
-public class CreateOrDeleteContactStory extends BaseUserStory {
-    private final String CREATE_DESCRIPTION = "Creates a new contact";
-    private final String CREATE_TAG = "Create contact story";
-    private final String CREATE_SUCCESS = "CreateContactStory: Contact created.";
-    private final String CREATE_ERROR = "Create contact exception: ";
-    private final String DELETE_DESCRIPTION = "Deletes a contact";
-    private final String DELETE_TAG = "Delete contact story";
-    private final String DELETE_SUCCESS = "DeleteContactStory: Contact deleted.";
-    private final String DELETE_ERROR = "Delete contact exception: ";
-
+//- Create a OneDrive Folder (which is then deleted for cleanup)
+//- Delete a OneDrive Folder (which is created first and then deleted)
+public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
+    //Unique names used for tracking and cleanup of items created by running snippets
+    private static final String FOLDER_NAME = "O365SnippetFolder_";
+    private final String CREATE_DESCRIPTION = "Create new folder on OneDrive";
+    private final String CREATE_TAG = "CreateOneDriveFolder";
+    private final String CREATE_SUCCESS = "OneDrive create folder story: Folder created.";
+    private final String CREATE_ERROR = "Create OneDrive folder exception: ";
+    private final String DELETE_DESCRIPTION = "Delete folder from OneDrive";
+    private final String DELETE_TAG = "DeleteOneDriveFolder";
+    private final String DELETE_SUCCESS = "OneDrive delete folder story: Folder deleted.";
+    private final String DELETE_ERROR = "Decline OneDrive folder exception: ";
     private String mDescription;
     private String mLogTag;
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteContactStory(StoryAction action) {
+    public CreateOrDeleteOneDriveFolder(StoryAction action) {
         switch (action) {
             case CREATE: {
                 mDescription = CREATE_DESCRIPTION;
@@ -54,39 +55,36 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        String returnValue = StoryResultFormatter.wrapResult(
-                mLogTag, false
-        );
         AuthenticationController
                 .getInstance()
                 .setResourceId(
-                        getO365MailResourceId());
+                        getFilesFoldersResourceId());
+        FileFolderSnippets fileFolderSnippets = new FileFolderSnippets(getO365MyFilesClient());
 
-        ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
         try {
-            String contactId = contactsSnippets.createContact(
-                    getStringResource(R.string.contacts_email),
-                    getStringResource(R.string.contacts_business_phone),
-                    getStringResource(R.string.contacts_home_phone),
-                    getStringResource(R.string.contacts_first_name),
-                    getStringResource(R.string.contacts_last_name));
-            if (contactId.length() > 0) {
-                contactsSnippets.deleteContact(contactId);
-                return StoryResultFormatter.wrapResult(
-                        mSuccessDescription, true
-                );
-            }
+            String folderName = FOLDER_NAME + java
+                    .util
+                    .UUID
+                    .randomUUID()
+                    .toString();
+
+            //Create folder
+            fileFolderSnippets.createO365Folder(folderName);
+
+            //Delete folder
+            fileFolderSnippets.deleteO365Folder(folderName);
+
+            return StoryResultFormatter.wrapResult(
+                    mSuccessDescription, true);
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e(mLogTag, formattedException);
-            return StoryResultFormatter.wrapResult(
-                    mErrorDescription + formattedException
+            return StoryResultFormatter.wrapResult(mErrorDescription + formattedException
                     , false
             );
-
         }
-        return returnValue;
     }
 
     @Override
