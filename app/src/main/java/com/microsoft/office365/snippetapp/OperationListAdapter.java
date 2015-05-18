@@ -54,16 +54,28 @@ class OperationListAdapter extends BaseAdapter {
         CharSequence opDescription = getStoryDescription(position);
         int progressVisibility = isStoryExecuting(position) ? View.VISIBLE : View.INVISIBLE;
 
-        if (null == convertView) {
-            convertView = mLayoutInflater.inflate(R.layout.list_item_task, parent, false);
+        if (!getStoryGroupingFlag(position)){
+            if (null == convertView) {
+                convertView = mLayoutInflater.inflate(R.layout.list_item_task, parent, false);
+            }
+        }
+        else {
+            if (null == convertView) {
+                convertView = mLayoutInflater.inflate(R.layout.list_item_grouper, parent, false);
+            }
+
         }
 
-        mOperationName = (TextView) convertView.findViewById(R.id.use_case_name);
-        mOperationProgressBar = convertView.findViewById(R.id.use_case_progress);
+        if (!getStoryGroupingFlag(position)) {
+            mOperationName = (TextView) convertView.findViewById(R.id.use_case_name);
+            mOperationProgressBar = convertView.findViewById(R.id.use_case_progress);
+            mOperationProgressBar.setVisibility(progressVisibility);
+        }
+        else{
+            mOperationName = (TextView) convertView.findViewById(R.id.Group_name);
+        }
 
         mOperationName.setText(opDescription);
-        mOperationProgressBar.setVisibility(progressVisibility);
-
         return convertView;
     }
 
@@ -77,6 +89,15 @@ class OperationListAdapter extends BaseAdapter {
         return getItem(position).getDescription();
     }
 
+    /**
+     * Gets the story grouping flag of a story
+     *
+     * @param position the story to examine
+     * @return the grouping flag
+     */
+    protected boolean getStoryGroupingFlag(int position){
+        return getItem(position).getGroupingFlag();
+    }
     /**
      * Check if a story is executing
      *

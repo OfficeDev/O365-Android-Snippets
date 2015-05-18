@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <!-- Task name -->
+    <TextView
+        android:id="@+id/Group_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:paddingRight="2dp"
+        android:text="@string/app_name"
+        android:backgroundTint="#ffd1ffb6"
+        android:textColor="#ff1a6726" />
+
+</LinearLayout>
