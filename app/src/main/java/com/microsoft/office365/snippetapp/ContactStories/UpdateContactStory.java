@@ -1,11 +1,12 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ContactStories;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;

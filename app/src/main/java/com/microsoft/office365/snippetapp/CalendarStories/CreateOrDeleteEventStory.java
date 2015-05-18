@@ -1,98 +1,102 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
+import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create an event (which is then deleted for cleanup)
+//- Delete an event (which is created first and then deleted)
+public class CreateOrDeleteEventStory extends BaseUserStory {
+    private final String CREATE_DESCRIPTION = "Adds a new calendar event";
+    private final String CREATE_TAG = "Create event story";
+    private final String CREATE_SUCCESS = "CreateEventStory: Event created.";
+    private final String CREATE_ERROR = "Create event exception: ";
+    private final String DELETE_DESCRIPTION = "Deletes a calendar event";
+    private final String DELETE_TAG = "Delete event story";
+    private final String DELETE_SUCCESS = "DeleteEventStory: Event deleted.";
+    private final String DELETE_ERROR = "Delete event exception: ";
+
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
+
+    public CreateOrDeleteEventStory(StoryAction action) {
+        switch (action) {
+            case CREATE: {
+                mDescription = CREATE_DESCRIPTION;
+                mLogTag = CREATE_TAG;
+                mSuccessDescription = CREATE_SUCCESS;
+                mErrorDescription = CREATE_ERROR;
+                break;
+            }
+            case DELETE: {
+                mDescription = DELETE_DESCRIPTION;
+                mLogTag = DELETE_TAG;
+                mSuccessDescription = DELETE_SUCCESS;
+                mErrorDescription = DELETE_ERROR;
+                break;
+            }
+        }
+    }
 
     @Override
     public String execute() {
         //PREPARE
-        boolean isStoryComplete;
-        String resultMessage = "";
         AuthenticationController
                 .getInstance()
                 .setResourceId(
-                        getO365MailResourceId());
+                        super.getO365MailResourceId());
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
-                getO365MailClient());
-        EmailSnippets emailSnippets = new EmailSnippets(
                 getO365MailClient());
 
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String uniqueGUID = java.util.UUID.randomUUID().toString();
-        String subjectLine = getStringResource(R.string.calendar_subject_text)
-                + ":"
-                + uniqueGUID;
+        String newEventId = "";
+        //ACT
         try {
-            String newEventId = calendarSnippets.createCalendarEvent(
-                    subjectLine
+            newEventId = calendarSnippets.createCalendarEvent(
+                    getStringResource(R.string.calendar_subject_text)
                     , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
                     , attendeeEmailAddresses);
 
-            //wait for server to send event invitation
-            Thread.sleep(5000);
-
-            if (calendarSnippets.respondToCalendarEventInvite(newEventId
-                    , GlobalValues.USER_EMAIL, ResponseType.Accepted) != null) {
-
-                //wait for server to update attendee status in event
-                Thread.sleep(5000);
-                ResponseType attendeeStatus = calendarSnippets.getEventAttendeeStatus(
-                        newEventId
-                        , GlobalValues.USER_EMAIL);
-
-                //Validate the attendee status was set to accepted as expected
-                if (attendeeStatus == ResponseType.Accepted) {
-                    isStoryComplete = true;
-                    resultMessage = "Respond to event invite story: Event accepted.";
-                } else {
-                    isStoryComplete = false;
-                    resultMessage = "Respond to event invite story: Event response failed. "
-                            + attendeeStatus;
-                }
-
-                //CLEANUP by cancelling event
-                calendarSnippets.deleteCalendarEvent(newEventId);
-            } else {
-                isStoryComplete = false;
-                resultMessage = "Respond to event invite story: Event is null.";
-            }
+            //Delete event
+            calendarSnippets.deleteCalendarEvent(newEventId);
         } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            resultMessage = "Respond to event exception: "
-                    + formattedException;
             e.printStackTrace();
-            Log.e("Respond to event story", formattedException);
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e(mLogTag, formattedException);
+            return StoryResultFormatter.wrapResult(
+                    mErrorDescription + formattedException
+                    , false
+            );
         }
-        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
+        return StoryResultFormatter.wrapResult(mSuccessDescription, true);
     }
 
     @Override
     public String getDescription() {
-        return "Responds to accept an event invite";
+        return mDescription;
     }
-
 }
 // *********************************************************
 //

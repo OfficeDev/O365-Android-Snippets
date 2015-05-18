@@ -1,71 +1,80 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.EmailStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Event;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Locale;
 
-public class EventsFetcherStory extends BaseUserStory {
+public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
+    public static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
         String returnResult = "";
-        if (getO365MailClient() == null) {
-            returnResult = "Null OutlookClient";
-        }
         try {
             AuthenticationController
                     .getInstance()
                     .setResourceId(
                             getO365MailResourceId());
 
-            CalendarSnippets calendarSnippets = new CalendarSnippets(
+            EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
-            //get the calendar events
-            List<Event> events = calendarSnippets.getO365Events();
+            //1. Send an email and store the ID
+            String uniqueGUID = java.util.UUID.randomUUID().toString();
 
+            //Add a new email to the user's draft folder
+            String emailID = emailSnippets.addDraftMail(GlobalValues.USER_EMAIL,
+                    getStringResource(R.string.mail_subject_text) + uniqueGUID,
+                    getStringResource(R.string.mail_body_text));
+
+            //Add a text file attachment to the mail added to the draft folder
+            emailSnippets.addTextFileAttachmentToMessage(emailID
+                    , getStringResource(R.string.text_attachment_contents)
+                    , getStringResource(R.string.text_attachment_filename)
+                    , IS_INLINE);
+
+            String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
+
+            //Send the mail with attachments
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();
-            sb.append("The following events were retrieved:\n");
-            for (Event event : events) {
-                sb.append("\t\t" + event.getSubject() + ". " + formatEventDates(event));
-                sb.append("\n");
-            }
+            sb.append(SENT_NOTICE);
+            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+
+            //Send the draft email to the recipient
+            emailSnippets.sendMail(draftMessageID);
+
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("GetEventsTask", formattedException);
+            Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get events exception: "
+                    "Send mail exception: "
                             + formattedException
                     , false
             );
+
         }
         return returnResult;
-    }
 
-    private String formatEventDates(Event thisEvent) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy - hh:ss a", Locale.US);
-        return simpleDateFormat.format(thisEvent.getStart().getTime()).toString();
     }
 
     @Override
     public String getDescription() {
-        return "Gets Events";
+        return STORY_DESCRIPTION;
     }
-
 }
 // *********************************************************
 //

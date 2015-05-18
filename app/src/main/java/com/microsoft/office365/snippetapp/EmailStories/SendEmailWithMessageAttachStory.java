@@ -1,7 +1,9 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.EmailStories;
+
+import android.util.Log;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
@@ -12,21 +14,23 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
-//Create a new email, send to yourself, reply to the email, and delete sent mail
-public class ReplyToEmailMessageStory extends BaseEmailUserStory {
+public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
+    public static final boolean IS_INLINE = false;
 
 
     @Override
     public String execute() {
-
-        AuthenticationController
-                .getInstance()
-                .setResourceId(
-                        getO365MailResourceId());
-
+        String returnResult = "";
         try {
+            AuthenticationController
+                    .getInstance()
+                    .setResourceId(
+                            getO365MailResourceId());
+
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
@@ -37,42 +41,58 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
             String emailID = emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
                     , getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID
-                    , getStringResource(R.string.mail_body_text));
+                            + uniqueGUID, getStringResource(R.string.mail_body_text));
 
-            //Get the new message
-            Message message = GetAMessageFromEmailFolder(emailSnippets,
+
+            Message messageToAttach = GetAMessageFromEmailFolder(emailSnippets,
                     getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-            if (message.getId().length() > 0) {
-                String replyEmailId = emailSnippets.replyToEmailMessage(
-                        message.getId()
+            if (messageToAttach != null) {
+                //Create a new email message but do not send yet
+                String newEmailId = emailSnippets.addDraftMail(
+                        GlobalValues.USER_EMAIL
+                        , getStringResource(R.string.mail_subject_text) + uniqueGUID
                         , getStringResource(R.string.mail_body_text));
-                //3. Delete the email using the ID
-                emailSnippets.deleteMail(message.getId());
-                if (replyEmailId.length() > 0) {
-                    emailSnippets.deleteMail(replyEmailId);
-                }
-                return StoryResultFormatter.wrapResult(
-                        "Reply to email message story: ", true);
-            } else {
-                return StoryResultFormatter.wrapResult(
-                        "Reply to email message story: ", false);
+
+                //Attach email message to new draft email
+                emailSnippets.addItemAttachment(
+                        newEmailId
+                        , messageToAttach
+                        , IS_INLINE);
+
+                //Send draft email
+                emailSnippets.sendMail(newEmailId);
+
+                DeleteAMessageFromMailFolder(emailSnippets,
+                        getStringResource(R.string.mail_subject_text)
+                                + uniqueGUID,
+                        getStringResource(R.string.Email_Folder_Sent));
+
+                returnResult = StoryResultFormatter.wrapResult(
+                        STORY_DESCRIPTION, true
+                );
             }
-        } catch (ExecutionException | InterruptedException ex) {
+
+
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            return StoryResultFormatter.wrapResult(
-                    "Reply to email message story: " + formattedException, false
+            Log.e("Send msg w/ message ", formattedException);
+            returnResult = StoryResultFormatter.wrapResult(
+                    "Send mail exception: "
+                            + formattedException
+                    , false
             );
         }
+        return returnResult;
     }
 
     @Override
     public String getDescription() {
-        return "Reply to an email message";
+        return STORY_DESCRIPTION;
     }
 }
+
 // *********************************************************
 //
 // O365-Android-Snippets, https://github.com/OfficeDev/O365-Android-Snippets
