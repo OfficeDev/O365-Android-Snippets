@@ -85,6 +85,13 @@ public abstract class BaseUserStory {
 
     }
 
+    public String FormatExceptionMessage(Exception exception)
+    {
+        String formattedException = APIErrorMessageHelper.getErrorMessage(exception.getMessage());
+        return StoryResultFormatter.wrapResult(
+                "Forward email message story: " + formattedException, false);
+
+    }
     public View getUIResultView() {
         return mUpdateView;
     }
