@@ -1,28 +1,23 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.EmailStories;
 
 import android.util.Log;
 
+import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Attachment;
-import com.microsoft.outlookservices.FileAttachment;
-import com.microsoft.outlookservices.Message;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
-public class GetEmailAttachmentsStory extends BaseEmailUserStory {
-    public static final String SENT_NOTICE = "Attachment email sent with subject line:";
+public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
+
+    public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
+    public static final String SENT_NOTICE = "Email sent with subject line:";
     public static final boolean IS_INLINE = false;
 
     @Override
@@ -36,13 +31,13 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
 
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
+
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String mailSubject = getStringResource(R.string.mail_subject_text) + uniqueGUID;
 
             //Add a new email to the user's draft folder
             String emailID = emailSnippets.addDraftMail(GlobalValues.USER_EMAIL,
-                    mailSubject,
+                    getStringResource(R.string.mail_subject_text) + uniqueGUID,
                     getStringResource(R.string.mail_body_text));
 
             //Add a text file attachment to the mail added to the draft folder
@@ -53,52 +48,25 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
 
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
-            //UTC time Immediately before message is sent
-            Date sendDate = new Date();
-            //Send the draft email to the recipient
-            emailSnippets.sendMail(draftMessageID);
-
-            //Get the new message
-            Message sentMessage = GetAMessageFromEmailFolder(emailSnippets,
-                    getStringResource(R.string.mail_subject_text)
-                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
-
-
+            //Send the mail with attachments
+            //build string for test results on UI
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
             sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
-            if (sentMessage.getId().length() > 0) {
-                List<Attachment> attachments = emailSnippets.getAttachmentsFromEmailMessage(
-                        sentMessage.getId());
-                //Send the mail with attachments
-                //build string for test results on UI
-                for (Attachment attachment : attachments) {
-                    if (attachment instanceof FileAttachment) {
-                        FileAttachment fileAttachment = (FileAttachment) attachment;
-                        String fileContents = new String(fileAttachment.getContentBytes(), "UTF-8");
-                        sb.append(fileContents);
-                        sb.append("/n");
-                    }
-                }
-                returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-            } else
-                returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
+            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
 
+            //Send the draft email to the recipient
+            emailSnippets.sendMail(draftMessageID);
 
-            //3. Delete the email using the ID
-            // Boolean result = emailSnippets.deleteMail(emailID);
-
-        } catch (ExecutionException | InterruptedException ex) {
+        } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("GetEmailAttachments", formattedException);
+            Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get email attachments exception: "
+                    "Send mail exception: "
                             + formattedException
                     , false
             );
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
         return returnResult;
 
@@ -106,7 +74,7 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
 
     @Override
     public String getDescription() {
-        return "Gets the attachments from an email message";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

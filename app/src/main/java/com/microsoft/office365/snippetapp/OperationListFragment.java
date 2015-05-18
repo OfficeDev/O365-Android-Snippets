@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.microsoft.office365.snippetapp.Interfaces.IOperationCompleteListener;
 import com.microsoft.office365.snippetapp.Interfaces.O365Operations;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.office365.snippetapp.O365Stories.BaseUserStory;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.AsyncUseCaseWrapper;
 import com.microsoft.office365.snippetapp.helpers.StoryList;
 
