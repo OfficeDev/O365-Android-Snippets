@@ -3,6 +3,7 @@ package com.microsoft.office365.snippetapp.O365Stories;
 import android.util.Log;
 
 import com.microsoft.directoryservices.User;
+import com.microsoft.directoryservices.odata.DirectoryClient;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
@@ -23,7 +24,9 @@ public class GetADUsersStory extends BaseUserStory {
         AuthenticationController
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+        DirectoryClient directoryClient = O365ServicesManager.getDirectoryClient();
+        if (directoryClient==null) return StoryResultFormatter.wrapResult("Tenant ID was null",false);
+        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(directoryClient);
 
         try {
             //Get list of users
@@ -39,7 +42,7 @@ public class GetADUsersStory extends BaseUserStory {
                 }
             }
             isStoryComplete = true;
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException | NullPointerException e) {
             isStoryComplete = false;
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
