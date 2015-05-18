@@ -16,7 +16,7 @@ import com.microsoft.office365.snippetapp.CalendarStories.CreateRecurringEventSt
 import com.microsoft.office365.snippetapp.FileFolderStories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.CalendarStories.EventsFetcherStory;
 import com.microsoft.office365.snippetapp.EmailStories.ForwardEmailMessageStory;
-import com.microsoft.office365.snippetapp.FileFolderStories.FileFolderStories;
+import com.microsoft.office365.snippetapp.FileFolderStories.FileFolderStoryGroup;
 import com.microsoft.office365.snippetapp.UserGroupStories.GetADGroupsStory;
 import com.microsoft.office365.snippetapp.UserGroupStories.GetADUsersStory;
 import com.microsoft.office365.snippetapp.ContactStories.GetContactsStory;
@@ -83,7 +83,7 @@ public class StoryList {
                 new RespondToCalendarEventInviteStory(),
                 new GetFilteredImportantEvents(),
                 new CreateRecurringEventStory(),
-                new FileFolderStories(),
+                new FileFolderStoryGroup(),
                 new GetFilesAndFoldersStory(),
                 new CreateOrDeleteFileStory(StoryAction.CREATE),
                 new UpdateFileContentsOnServerStory(),

@@ -131,8 +131,12 @@ public class OperationListFragment extends ListFragment implements IOperationCom
             return;
         }
         BaseUserStory test = (BaseUserStory) listView.getAdapter().getItem(position);
-        AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
-        asyncUseCaseWrapper.execute(test);
+
+        //Run story if the selected story is not a story group separator for UI listview
+        if (!test.getGroupingFlag()) {
+            AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
+            asyncUseCaseWrapper.execute(test);
+        }
     }
 
     public void runAllUseCases() {

@@ -8,11 +8,13 @@ import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 public class CalendarStoriesGroup extends BaseUserStory{
     @Override
     public String execute() {
-        return null;
+        return "";
     }
 
     @Override
     public String getDescription() {
+
+        //Mark this story as a story group list item for UI list
         setGroupingFlag(true);
         return "Calendar stories";
     }

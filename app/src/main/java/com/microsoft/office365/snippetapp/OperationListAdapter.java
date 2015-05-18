@@ -54,16 +54,13 @@ class OperationListAdapter extends BaseAdapter {
         CharSequence opDescription = getStoryDescription(position);
         int progressVisibility = isStoryExecuting(position) ? View.VISIBLE : View.INVISIBLE;
 
+        //Always re-inflate the view because we have two view layouts and the layout changes
+        //depending on the current scroll position.
         if (!getStoryGroupingFlag(position)){
-            if (null == convertView) {
                 convertView = mLayoutInflater.inflate(R.layout.list_item_task, parent, false);
-            }
         }
         else {
-            if (null == convertView) {
                 convertView = mLayoutInflater.inflate(R.layout.list_item_grouper, parent, false);
-            }
-
         }
 
         if (!getStoryGroupingFlag(position)) {
