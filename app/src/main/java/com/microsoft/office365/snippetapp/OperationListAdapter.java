@@ -69,13 +69,16 @@ class OperationListAdapter extends BaseAdapter {
         if (!getStoryGroupingFlag(position)) {
             mOperationName = (TextView) convertView.findViewById(R.id.use_case_name);
             mOperationProgressBar = convertView.findViewById(R.id.use_case_progress);
-            mOperationProgressBar.setVisibility(progressVisibility);
+            if (mOperationProgressBar != null)
+                 mOperationProgressBar.setVisibility(progressVisibility);
         }
         else{
             mOperationName = (TextView) convertView.findViewById(R.id.Group_name);
         }
 
-        mOperationName.setText(opDescription);
+        if (mOperationName != null)
+            mOperationName.setText(opDescription);
+
         return convertView;
     }
 
