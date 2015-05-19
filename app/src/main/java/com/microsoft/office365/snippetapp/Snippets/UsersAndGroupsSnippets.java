@@ -42,7 +42,10 @@ public class UsersAndGroupsSnippets {
      * @version 1.0
      */
     public TenantDetail getTenantDetails() throws ExecutionException, InterruptedException {
-        List<TenantDetail> tenants = mDirectoryClient.gettenantDetails().read().get();
+        List<TenantDetail> tenants = mDirectoryClient
+                .gettenantDetails()
+                .read()
+                .get();
         return tenants.get(0);
     }
 

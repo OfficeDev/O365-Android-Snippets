@@ -286,8 +286,8 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("Subject")
                 .getById(eventId)
+                .select("Subject")
                 .update(calendarEvent)
                 .get();
 
@@ -336,7 +336,7 @@ public class CalendarSnippets {
     public Event respondToCalendarEventInvite(String eventId, String myEmailAddress, ResponseType response) throws ExecutionException, InterruptedException {
         //Get the event
         Event calendarEvent = getCalendarEvent(eventId);
-        if (calendarEvent == null)
+        if (calendarEvent == null|calendarEvent.getAttendees()==null)
             return null;
 
         //find the correct attendee and set the response status for that attendee
@@ -372,8 +372,8 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
                 .getById(eventId)
+                .select("ID")
                 .read()
                 .get();
     }
@@ -390,7 +390,7 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
+                .select("importance")
                 .filter("Importance eq 'High'")
                 .read()
                 .get();

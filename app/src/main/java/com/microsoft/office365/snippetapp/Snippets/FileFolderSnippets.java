@@ -29,7 +29,7 @@ public class FileFolderSnippets {
             , InterruptedException {
         return mSharePointClient
                 .getfiles()
-                .select("Name")
+                .select("name,type")
                 .read()
                 .get();
     }
