@@ -18,22 +18,17 @@ import android.widget.Toast;
 import com.microsoft.office365.snippetapp.Interfaces.IOperationCompleteListener;
 import com.microsoft.office365.snippetapp.Interfaces.O365Operations;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.AsyncUseCaseWrapper;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryList;
 
 public class OperationListFragment extends ListFragment implements IOperationCompleteListener, OnUseCaseStatusChangedListener {
 
-    public static final String DISCONNECTED_FROM_OFFICE_365 = "You are disconnected from Office 365";
-    public static final String ON_ATTACH_EXCEPTION_MSG = "Activity must implement fragment's callbacks.";
+    private static final String DISCONNECTED_FROM_OFFICE_365 = "You are disconnected from Office 365";
+    private static final String ON_ATTACH_EXCEPTION_MSG = "Activity must implement fragment's callbacks.";
     private StoryList mCommands;
     private O365Operations mO365Operations;
     private BaseAdapter mOperationAdapter;
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,21 +116,23 @@ public class OperationListFragment extends ListFragment implements IOperationCom
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        if (mO365Operations.getO365MailClient() == null
-                || mO365Operations.getMailServiceResourceId() == null) {
-            Toast.makeText(
-                    getActivity(),
-                    DISCONNECTED_FROM_OFFICE_365,
-                    Toast.LENGTH_LONG
-            ).show();
-            return;
-        }
-        BaseUserStory test = (BaseUserStory) listView.getAdapter().getItem(position);
+        BaseUserStory story = (BaseUserStory) listView.getAdapter().getItem(position);
+        //Check that story is not a group separator for story groups
+        if (!story.getGroupingFlag()) {
+            //Check that app is connected to Office 365
+            if (mO365Operations.getO365MailClient() == null
+                    || mO365Operations.getMailServiceResourceId() == null) {
+                Toast.makeText(
+                        getActivity(),
+                        DISCONNECTED_FROM_OFFICE_365,
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                //Run the story
+                AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
+                asyncUseCaseWrapper.execute(story);
+            }
 
-        //Run story if the selected story is not a story group separator for UI listview
-        if (!test.getGroupingFlag()) {
-            AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
-            asyncUseCaseWrapper.execute(test);
         }
     }
 
@@ -143,7 +140,10 @@ public class OperationListFragment extends ListFragment implements IOperationCom
         if (mO365Operations.getO365MailClient() != null
                 && mO365Operations.getO365MyFilesClient() != null) {
             AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
-            asyncUseCaseWrapper.execute(mCommands.ITEMS.toArray(new BaseUserStory[0]));
+
+            //set size with variable to avoid extra construction call with call to toArray
+            int size=0;
+            asyncUseCaseWrapper.execute(mCommands.ITEMS.toArray(new BaseUserStory[size]));
         } else {
             Toast.makeText(
                     getActivity(),
