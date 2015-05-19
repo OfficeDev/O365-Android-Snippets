@@ -85,4 +85,9 @@
     <string name="Email_Folder_Inbox">Inbox</string>
     <string name="Email_Folder_Sent">Sent Items</string>
     <string name="Email_Folder_Draft">Drafts</string>
+    <string name="file_folder_group_placeholder">File and Folder stories</string>
+    <string name="calendar_group_placeholder">Calendar stories</string>
+    <string name="contact_group_placeholder">Contact stories</string>
+    <string name="email_group_placeholder">Email stories</string>
+    <string name="active_directory_group_placeholder">Active Directory stories</string>
 </resources>

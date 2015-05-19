@@ -1,4 +1,4 @@
-﻿# Office 365 Code Snippets for Android
+# Office 365 Code Snippets for Android
 
 **Table of contents**
 
@@ -20,6 +20,7 @@ This sample includes the following operations:
 
 * Get existing calendar events by date range.
 * Create an event.
+* Create a recurring event.
 * Update an event.
 * Delete an event.
 * Accept an event invitation.
@@ -53,7 +54,7 @@ This sample includes the following operations:
 * Update a contact.
 * Delete a contact.
 
-**Unified API**
+**Azure Active Directory**
 
 * Get users.
 * Get groups.
@@ -64,14 +65,14 @@ We will continue adding snippets to this sample, so make sure to check back.
 ## Change History
 April 6, 2015:
 
-* Initial release
+* Initial release.
   
 April 16, 2015:
 
-* Added snippets for sending email with text file attachments and getting attachments from email in your inbox
+* Added snippets for sending email with text file attachments and getting attachments from email in your inbox.
 
 May 14, 2015:
-* Added snippets for getting organization users and groups with the Office 365 unified API
+* Added snippets for getting organization users and groups with Azure Active Directory.
 
 ## Device requirements
 To run the snippets project your device needs to meet the following requirements:
@@ -139,10 +140,12 @@ Once you've built the snippets project you can run it on an emulator or device.
 ## Understand the code
 
 The starter project uses these classes to manage interactions with Office 365:
+
 * [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java)
 * [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java)
 * [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java)
 * [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java) 
+* [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java) 
 
 These classes have snippet methods that wrap calls to the [SharePointClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/file-services/src/main/java/com/microsoft/fileservices/odata/SharePointClient.java) and [OutlookClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/outlook-services/src/main/java/com/microsoft/outlookservices/odata/OutlookClient.java) objects in the Office 365 SDK for Android. Look at the classes in the com.microsoft.office365.snippetapp.O365Stories package to see how the snippets are called. 
 
@@ -179,6 +182,12 @@ The [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/m
 
 The **getContacts** method gets a list of contacts from Office 365 and loads pages of contacts into a local list. Changes, deletions, and additions to this list are posted asynchronously to Office 365 by the **updateContact**, **deleteContact**, and **createContact** methods.
 
+### Azure Active Directory API
+
+The [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java) object wraps the API operations for working with users, groups, and other Azure Active Directory data. Office 365 users and groups are stored in Azure Active Directory.
+
+The **getUsers** method gets a list of all users from the Office 365 tenant. Similarly **getGroups** gets all the groups from the Office 365 tenant. **getTenantDetails** will retrieve information about the Office 365 tenant itself.
+
 ## Questions and comments
 
 We'd love to get your feedback on this Android starter kit. You can send your questions and suggestions to us:
@@ -200,4 +209,3 @@ We'd love to get your feedback on this Android starter kit. You can send your qu
 
 ## Copyright
 Copyright (c) 2015 Microsoft. All rights reserved.
-Microsoft and OneDrive are either registered trademarks or trademarks of Microsoft Corporation.

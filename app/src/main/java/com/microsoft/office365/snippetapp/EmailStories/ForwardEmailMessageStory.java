@@ -1,9 +1,7 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
-
-import android.util.Log;
+package com.microsoft.office365.snippetapp.EmailStories;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
@@ -13,55 +11,59 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
-public class SendEmailMessageStory extends BaseEmailUserStory {
+import java.util.Date;
+
+public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
         String returnResult = "";
+
+        AuthenticationController
+                .getInstance()
+                .setResourceId(
+                        getO365MailResourceId());
+
         try {
-
-            AuthenticationController
-                    .getInstance()
-                    .setResourceId(
-                            getO365MailResourceId());
-
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
+            //Store the date and time that the email is sent in UTC
+            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String subject = getStringResource(R.string.mail_subject_text) + uniqueGUID;
-            emailSnippets.createAndSendMail(GlobalValues.USER_EMAIL,
-                    subject,
-                    getStringResource(R.string.mail_body_text));
+            String emailID = emailSnippets.createAndSendMail(
+                    GlobalValues.USER_EMAIL
+                    , getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.mail_body_text));
 
+            //Get the new message
+            Message messageToForward = GetAMessageFromEmailFolder(emailSnippets,
+                    getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
+
+            String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
             //3. Delete the email using the ID
-            Message message = GetAMessageFromEmailFolder(emailSnippets, subject, getStringResource(R.string.Email_Folder_Inbox));
-            emailSnippets.deleteMail(message.getId());
+            emailSnippets.deleteMail(messageToForward.getId());
+            if (forwardEmailId.length() > 0) {
+                emailSnippets.deleteMail(forwardEmailId);
+            }
 
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Email is added");
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            return StoryResultFormatter.wrapResult(
+                    "Forward email message story: ", true
+            );
         } catch (Exception ex) {
             String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send email story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Send mail exception: "
-                            + formattedException
-                    , false
+                    "Forward email message story: " + formattedException, false
             );
-
         }
-        return returnResult;
     }
 
     @Override
     public String getDescription() {
-
-        return "Sends an email message";
+        return "Forward an email message";
     }
-
 
 }
 // *********************************************************

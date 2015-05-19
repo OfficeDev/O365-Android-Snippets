@@ -1,42 +1,40 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.FileFolderStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.R;
-import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
-import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 //This story handles both of the following stories that appear in the UI list
 // based on strings passed in the constructor...
-//- Create an event (which is then deleted for cleanup)
-//- Delete an event (which is created first and then deleted)
-public class CreateOrDeleteEventStory extends BaseUserStory {
-    private final String CREATE_DESCRIPTION = "Adds a new calendar event";
-    private final String CREATE_TAG = "Create event story";
-    private final String CREATE_SUCCESS = "CreateEventStory: Event created.";
-    private final String CREATE_ERROR = "Create event exception: ";
-    private final String DELETE_DESCRIPTION = "Deletes a calendar event";
-    private final String DELETE_TAG = "Delete event story";
-    private final String DELETE_SUCCESS = "DeleteEventStory: Event deleted.";
-    private final String DELETE_ERROR = "Delete event exception: ";
-
+//- Create a OneDrive Folder (which is then deleted for cleanup)
+//- Delete a OneDrive Folder (which is created first and then deleted)
+public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
+    //Unique names used for tracking and cleanup of items created by running snippets
+    private static final String FOLDER_NAME = "O365SnippetFolder_";
+    private final String CREATE_DESCRIPTION = "Create new folder on OneDrive";
+    private final String CREATE_TAG = "CreateOneDriveFolder";
+    private final String CREATE_SUCCESS = "OneDrive create folder story: Folder created.";
+    private final String CREATE_ERROR = "Create OneDrive folder exception: ";
+    private final String DELETE_DESCRIPTION = "Delete folder from OneDrive";
+    private final String DELETE_TAG = "DeleteOneDriveFolder";
+    private final String DELETE_SUCCESS = "OneDrive delete folder story: Folder deleted.";
+    private final String DELETE_ERROR = "Decline OneDrive folder exception: ";
     private String mDescription;
     private String mLogTag;
     private String mSuccessDescription;
     private String mErrorDescription;
 
-    public CreateOrDeleteEventStory(StoryAction action) {
+    public CreateOrDeleteOneDriveFolder(StoryAction action) {
         switch (action) {
             case CREATE: {
                 mDescription = CREATE_DESCRIPTION;
@@ -57,45 +55,43 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        //PREPARE
         AuthenticationController
                 .getInstance()
                 .setResourceId(
-                        super.getO365MailResourceId());
+                        getFilesFoldersResourceId());
+        FileFolderSnippets fileFolderSnippets = new FileFolderSnippets(getO365MyFilesClient());
 
-        CalendarSnippets calendarSnippets = new CalendarSnippets(
-                getO365MailClient());
-
-        List<String> attendeeEmailAddresses = new ArrayList<>();
-        attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
-        //ACT
         try {
-            newEventId = calendarSnippets.createCalendarEvent(
-                    getStringResource(R.string.calendar_subject_text)
-                    , getStringResource(R.string.calendar_body_text)
-                    , java.util.Calendar.getInstance()
-                    , java.util.Calendar.getInstance()
-                    , attendeeEmailAddresses);
+            String folderName = FOLDER_NAME + java
+                    .util
+                    .UUID
+                    .randomUUID()
+                    .toString();
 
-            //Delete event
-            calendarSnippets.deleteCalendarEvent(newEventId);
+            //Create folder
+            fileFolderSnippets.createO365Folder(folderName);
+
+            //Delete folder
+            fileFolderSnippets.deleteO365Folder(folderName);
+
+            return StoryResultFormatter.wrapResult(
+                    mSuccessDescription, true);
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
             Log.e(mLogTag, formattedException);
-            return StoryResultFormatter.wrapResult(
-                    mErrorDescription + formattedException
+            return StoryResultFormatter.wrapResult(mErrorDescription + formattedException
                     , false
             );
         }
-        return StoryResultFormatter.wrapResult(mSuccessDescription, true);
     }
 
     @Override
     public String getDescription() {
         return mDescription;
     }
+
 }
 // *********************************************************
 //

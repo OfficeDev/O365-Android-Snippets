@@ -1,97 +1,99 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
+import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Event;
+import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class UpdateEventStory extends BaseUserStory {
-
+public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
         //PREPARE
+        boolean isStoryComplete;
+        String resultMessage = "";
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
-        CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+        CalendarSnippets calendarSnippets = new CalendarSnippets(
+                getO365MailClient());
+        EmailSnippets emailSnippets = new EmailSnippets(
+                getO365MailClient());
+
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
-        //ACT
+        String uniqueGUID = java.util.UUID.randomUUID().toString();
+        String subjectLine = getStringResource(R.string.calendar_subject_text)
+                + ":"
+                + uniqueGUID;
         try {
-            newEventId = calendarSnippets.createCalendarEvent(
-                    getStringResource(R.string.calendar_subject_text)
+            String newEventId = calendarSnippets.createCalendarEvent(
+                    subjectLine
                     , getStringResource(R.string.calendar_body_text)
                     , java.util.Calendar.getInstance()
                     , java.util.Calendar.getInstance()
-                    , attendeeEmailAddresses
-            );
-            Thread.sleep(20000);
-            Event updatedEvent = calendarSnippets.updateCalendarEvent(
-                    newEventId
-                    , getStringResource(R.string.calendar_subject_text)
-                            + " Updated Subject"
-                    , false
-                    , null
-                    , null
-                    , null
-                    , null
-            );
-            Thread.sleep(20000);
-            String updatedSubject = updatedEvent.getSubject();
-            //CLEAN UP
-            calendarSnippets.deleteCalendarEvent(newEventId);
-            //ASSERT
-            if (updatedSubject.equals(getStringResource(R.string.calendar_subject_text)
-                    + " Updated Subject")) {
-                return StoryResultFormatter.wrapResult(
-                        "UpdateEventStory: Event "
-                                + " updated.", true);
+                    , attendeeEmailAddresses);
+
+            //wait for server to send event invitation
+            Thread.sleep(5000);
+
+            if (calendarSnippets.respondToCalendarEventInvite(newEventId
+                    , GlobalValues.USER_EMAIL, ResponseType.Accepted) != null) {
+
+                //wait for server to update attendee status in event
+                Thread.sleep(5000);
+                ResponseType attendeeStatus = calendarSnippets.getEventAttendeeStatus(
+                        newEventId
+                        , GlobalValues.USER_EMAIL);
+
+                //Validate the attendee status was set to accepted as expected
+                if (attendeeStatus == ResponseType.Accepted) {
+                    isStoryComplete = true;
+                    resultMessage = "Respond to event invite story: Event accepted.";
+                } else {
+                    isStoryComplete = false;
+                    resultMessage = "Respond to event invite story: Event response failed. "
+                            + attendeeStatus;
+                }
+
+                //CLEANUP by cancelling event
+                calendarSnippets.deleteCalendarEvent(newEventId);
             } else {
-                return StoryResultFormatter.wrapResult(
-                        "Update Event Story: Update "
-                                + " event.", false);
+                isStoryComplete = false;
+                resultMessage = "Respond to event invite story: Event is null.";
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update event exception: "
-                            + formattedException
-                    , false
-            );
-        } catch (InterruptedException e) {
+            resultMessage = "Respond to event exception: "
+                    + formattedException;
             e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update event exception: "
-                            + formattedException
-                    , false
-            );
+            Log.e("Respond to event story", formattedException);
         }
+        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Update a calendar event";
+        return "Responds to accept an event invite";
     }
+
 }
 // *********************************************************
 //
