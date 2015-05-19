@@ -5,7 +5,6 @@ package com.microsoft.office365.snippetapp.EmailStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
@@ -22,7 +21,7 @@ public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
         try {
             AuthenticationController
                     .getInstance()

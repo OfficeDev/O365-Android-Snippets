@@ -5,11 +5,11 @@ package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -69,7 +69,7 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
 
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
+        String newEventId;
         //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(

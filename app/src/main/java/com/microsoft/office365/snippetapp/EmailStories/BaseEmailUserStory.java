@@ -3,8 +3,8 @@
 */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.outlookservices.Message;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
         //Continue trying to get the email while the email is not found
         //and the loop has tried less than MAX_POLL_REQUESTS times.
         do {
-            List<Message> messages = null;
+            List<Message> messages;
             messages = emailSnippets
                     .GetMailboxMessagesByFolderName_Subject(
                             subjectLine
@@ -62,7 +62,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
             , String subjectLine, String folderName)
             throws ExecutionException, InterruptedException {
 
-        List<Message> messagesToDelete = null;
+        List<Message> messagesToDelete;
         int tryCount = 0;
         //Try to get the newly sent email from user's inbox at least once.
         //continue trying to get the email while the email is not found

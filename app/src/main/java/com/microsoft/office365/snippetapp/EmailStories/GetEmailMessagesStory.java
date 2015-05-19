@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 public class GetEmailMessagesStory extends BaseEmailUserStory {
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
 
         AuthenticationController
                 .getInstance()

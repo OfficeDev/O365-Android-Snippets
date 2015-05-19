@@ -35,7 +35,7 @@ public class EmailSnippets {
 
     /**
      * Gets a list of the 10 most recent email messages in the
-     * user Inbox, sorted by date and time received
+     * user Inbox, sorted by date and time received.
      *
      * @return List of type com.microsoft.outlookservices.Message
      * @version 1.0

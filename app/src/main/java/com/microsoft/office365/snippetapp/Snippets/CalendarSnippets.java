@@ -46,7 +46,7 @@ public class CalendarSnippets {
      * Start field. The range of events to be returned includes events from
      * 1 week prior to current date through 1 week into the future. 10 events
      * are returned per page.
-     *
+     * <p/>
      * This snippet only selects the Subject, Start, and End fields
      * to reduce network traffic.
      *
@@ -336,7 +336,7 @@ public class CalendarSnippets {
     public Event respondToCalendarEventInvite(String eventId, String myEmailAddress, ResponseType response) throws ExecutionException, InterruptedException {
         //Get the event
         Event calendarEvent = getCalendarEvent(eventId);
-        if (calendarEvent == null|calendarEvent.getAttendees()==null)
+        if (calendarEvent == null || calendarEvent.getAttendees() == null)
             return null;
 
         //find the correct attendee and set the response status for that attendee
@@ -360,7 +360,6 @@ public class CalendarSnippets {
     }
 
 
-
     /**
      * Gets the event object of the event specified by an event Id
      *
@@ -373,7 +372,7 @@ public class CalendarSnippets {
                 .getMe()
                 .getEvents()
                 .getById(eventId)
-                .select("ID")
+                .select("ID,Attendees")
                 .read()
                 .get();
     }

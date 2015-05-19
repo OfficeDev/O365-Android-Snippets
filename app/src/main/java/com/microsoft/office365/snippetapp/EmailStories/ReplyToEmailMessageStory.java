@@ -3,7 +3,6 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
@@ -31,11 +30,9 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
-            //Store the date and time that the email is sent in UTC
-            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
+            emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
                     , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID

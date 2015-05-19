@@ -12,7 +12,7 @@ public class APIErrorMessageHelper {
     // onFailure event, parses for the JSON object, and gets
     // the actual error message.
     public static String getErrorMessage(String result) {
-        String errorMessage = "";
+        String errorMessage;
         try {
 
             // Gets the JSON object out of the result string.

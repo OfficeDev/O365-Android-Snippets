@@ -122,7 +122,6 @@ public class ContactsSnippets {
                 .getMe()
                 .getContacts()
                 .getById(contactId)
-                .select("ID")
                 .update(updateContact).get();
 
 

@@ -25,15 +25,13 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
     public String execute() {
         //PREPARE
         boolean isStoryComplete;
-        String resultMessage = "";
+        String resultMessage;
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
-                getO365MailClient());
-        EmailSnippets emailSnippets = new EmailSnippets(
                 getO365MailClient());
 
         List<String> attendeeEmailAddresses = new ArrayList<>();

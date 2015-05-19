@@ -17,8 +17,6 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
-
         AuthenticationController
                 .getInstance()
                 .setResourceId(
@@ -28,11 +26,9 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
-            //Store the date and time that the email is sent in UTC
-            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
+            emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
                     , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.mail_body_text));

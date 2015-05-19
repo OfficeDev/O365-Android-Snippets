@@ -6,10 +6,10 @@ package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Event;
 
@@ -21,7 +21,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
         if (getO365MailClient() == null) {
             returnResult = "Null OutlookClient";
         }
@@ -59,7 +59,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     private String formatEventDates(Event thisEvent) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy - hh:ss a", Locale.US);
-        return simpleDateFormat.format(thisEvent.getStart().getTime()).toString();
+        return simpleDateFormat.format(thisEvent.getStart().getTime());
     }
 
     @Override

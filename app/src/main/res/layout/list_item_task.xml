@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="15dp"
         android:layout_height="match_parent"
-        android:text="\t"/>
+        android:text="\t" />
     <!-- Task name -->
     <TextView
         android:id="@+id/use_case_name"

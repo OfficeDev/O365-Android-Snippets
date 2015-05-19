@@ -26,7 +26,8 @@ public class GetADUsersStory extends BaseUserStory {
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
         DirectoryClient directoryClient = O365ServicesManager.getDirectoryClient();
-        if (directoryClient==null) return StoryResultFormatter.wrapResult("Tenant ID was null",false);
+        if (directoryClient == null)
+            return StoryResultFormatter.wrapResult("Tenant ID was null", false);
         UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(directoryClient);
 
         try {

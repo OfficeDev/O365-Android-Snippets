@@ -6,10 +6,10 @@ package com.microsoft.office365.snippetapp.FileFolderStories;
 import android.os.Environment;
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.io.File;
@@ -33,7 +33,7 @@ public class DownloadFileStory extends BaseUserStory {
                 getO365MyFilesClient());
         try {
             String fileContents = FILE_CONTENTS;
-            String itemId = "";
+            String itemId;
 
             //Remove test text file from server if left by previous execute()
             itemId = fileFolderSnippets.getFileFromServerByName(DOWNLOAD_DOC_FILENAME);
