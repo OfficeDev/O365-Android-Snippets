@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.helpers;
 
 
 import android.content.res.AssetFileDescriptor;
@@ -26,6 +26,7 @@ public abstract class BaseUserStory {
     private String mMailResourceId;
     private OnUseCaseStatusChangedListener mUseCaseStatusChangedListener;
     private String mFilesFoldersResourceId;
+    boolean mGroupingFlag = false;
 
     public String getFilesFoldersResourceId() {
         return mFilesFoldersResourceId;
@@ -43,6 +44,14 @@ public abstract class BaseUserStory {
 
     public abstract String getDescription();
 
+
+    public  boolean getGroupingFlag(){
+        return mGroupingFlag;
+    }
+
+    public void setGroupingFlag(boolean groupingFlag){
+        mGroupingFlag = groupingFlag;
+    }
     public String getId() {
         return java.util.UUID.randomUUID().toString();
     }

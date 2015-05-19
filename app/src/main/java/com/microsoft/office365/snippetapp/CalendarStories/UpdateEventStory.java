@@ -1,71 +1,97 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.outlookservices.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetEmailMessagesStory extends BaseEmailUserStory {
+public class UpdateEventStory extends BaseUserStory {
+
+
     @Override
     public String execute() {
-        String returnResult = "";
-
+        //PREPARE
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
+        CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+        List<String> attendeeEmailAddresses = new ArrayList<>();
+        attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
+        String newEventId = "";
+        //ACT
         try {
-
-            EmailSnippets emailSnippets = new EmailSnippets(
-                    getO365MailClient());
-
-            //O365 API called in this helper
-            List<Message> messages = emailSnippets.getMailMessages();
-
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets email: " + messages.size() + " messages returned");
-            sb.append("\n");
-            for (Message m : messages) {
-                sb.append("\t\t");
-                sb.append(m.getSubject());
-                sb.append("\n");
+            newEventId = calendarSnippets.createCalendarEvent(
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
+                    , java.util.Calendar.getInstance()
+                    , java.util.Calendar.getInstance()
+                    , attendeeEmailAddresses
+            );
+            Thread.sleep(20000);
+            Event updatedEvent = calendarSnippets.updateCalendarEvent(
+                    newEventId
+                    , getStringResource(R.string.calendar_subject_text)
+                            + " Updated Subject"
+                    , false
+                    , null
+                    , null
+                    , null
+                    , null
+            );
+            Thread.sleep(20000);
+            String updatedSubject = updatedEvent.getSubject();
+            //CLEAN UP
+            calendarSnippets.deleteCalendarEvent(newEventId);
+            //ASSERT
+            if (updatedSubject.equals(getStringResource(R.string.calendar_subject_text)
+                    + " Updated Subject")) {
+                return StoryResultFormatter.wrapResult(
+                        "UpdateEventStory: Event "
+                                + " updated.", true);
+            } else {
+                return StoryResultFormatter.wrapResult(
+                        "Update Event Story: Update "
+                                + " event.", false);
             }
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
         } catch (ExecutionException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
+            Log.e("Update event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
+                    "Update event exception: "
+                            + formattedException
+                    , false
             );
         } catch (InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
+            Log.e("Update event story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
+                    "Update event exception: "
+                            + formattedException
+                    , false
             );
         }
-        return returnResult;
     }
 
     @Override
     public String getDescription() {
-
-        return "Gets 10 newest email messages";
+        return "Update a calendar event";
     }
 }
 // *********************************************************

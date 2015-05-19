@@ -1,63 +1,75 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ContactStories;
 
 import android.util.Log;
 
-import com.microsoft.directoryservices.Group;
-import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
-import com.microsoft.office365.snippetapp.helpers.Constants;
-import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Contact;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetADGroupsStory extends BaseUserStory {
+public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
+
     @Override
     public String execute() {
-        boolean isStoryComplete;
-        StringBuilder resultMessage = new StringBuilder();
+        boolean isStoryComplete = false;
+        StringBuilder storyResultText = new StringBuilder("FilterContactsBySurnameStory: ");
 
+        String surname = getStringResource(R.string.contacts_last_name);
         AuthenticationController
                 .getInstance()
-                .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+                .setResourceId(getO365MailResourceId());
+        ContactsSnippets contactsSnippets = new ContactsSnippets(getO365MailClient());
 
         try {
-            //Get list of groups
-            List<Group> groupList;
-            groupList = usersAndGroupsSnippets.getGroups();
-            if (groupList == null) {
-                //No groups were found
-                resultMessage.append("Get Active Directory Groups: No groups found");
-            } else {
-                resultMessage.append("Get Active Directory Groups: The following groups were found:\n");
-                for (Group group : groupList) {
-                    resultMessage.append(group.getdisplayName())
-                            .append("\n");
+            //Create a contact that we can test against
+            String contactId = contactsSnippets.createContact(
+                    getStringResource(R.string.contacts_email),
+                    getStringResource(R.string.contacts_business_phone),
+                    getStringResource(R.string.contacts_home_phone),
+                    getStringResource(R.string.contacts_first_name),
+                    surname);
+
+            //Find the new test contact
+            List<Contact> contacts = contactsSnippets.getContactsWithSurname(surname);
+            for (Contact contact : contacts) {
+                if (contact.getSurname().equals(surname)) {
+                    break;
                 }
             }
+            //Delete the test contact from tenant
+            contactsSnippets.deleteContact(contactId);
+
+            //Story is completed
             isStoryComplete = true;
+            storyResultText.append("Contact with surname ")
+                    .append(surname)
+                    .append(" found.");
         } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("GetADGroups", formattedException);
-            resultMessage = new StringBuilder();
-            resultMessage.append("Get Active Directory groups exception: ")
+            Log.e("ContactFilter", formattedException);
+            storyResultText.append("Filter contacts by surname exception: ")
                     .append(formattedException);
+            isStoryComplete = false;
         }
-        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
+        return StoryResultFormatter.wrapResult(storyResultText.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Gets groups from Active Directory";
+        return "Gets contacts filtered by surname";
     }
+
+
 }
 // *********************************************************
 //

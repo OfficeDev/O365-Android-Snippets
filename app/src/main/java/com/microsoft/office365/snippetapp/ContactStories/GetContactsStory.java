@@ -1,70 +1,71 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.ContactStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Event;
+import com.microsoft.outlookservices.Contact;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
-public class EventsFetcherStory extends BaseUserStory {
+public class GetContactsStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
-        if (getO365MailClient() == null) {
-            returnResult = "Null OutlookClient";
-        }
+        AuthenticationController
+                .getInstance()
+                .setResourceId(
+                        getO365MailResourceId());
+
+        ContactsSnippets contactsSnippets = new ContactsSnippets(
+                getO365MailClient());
         try {
-            AuthenticationController
-                    .getInstance()
-                    .setResourceId(
-                            getO365MailResourceId());
-
-            CalendarSnippets calendarSnippets = new CalendarSnippets(
-                    getO365MailClient());
-
-            //get the calendar events
-            List<Event> events = calendarSnippets.getO365Events();
-
+            List<Contact> contacts = contactsSnippets.getContacts(11);
             //build string for test results on UI
             StringBuilder sb = new StringBuilder();
-            sb.append("The following events were retrieved:\n");
-            for (Event event : events) {
-                sb.append("\t\t" + event.getSubject() + ". " + formatEventDates(event));
+            sb.append("Gets contacts: "
+                    + contacts.size()
+                    + " contacts returned");
+            sb.append("\n");
+            for (Contact contact : contacts) {
+                sb.append("\t\t");
+                sb.append(contact.getDisplayName());
                 sb.append("\n");
             }
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        } catch (Exception ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("GetEventsTask", formattedException);
+            return StoryResultFormatter.wrapResult(sb.toString(), true);
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("Get Contacts story", formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Get events exception: "
-                            + formattedException
-                    , false
+                    "Get contacts exception: "
+                            + formattedException, false
+            );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("Get Contacts story", formattedException);
+            return StoryResultFormatter.wrapResult(
+                    "Get contacts exception: "
+                            + formattedException, false
             );
         }
-        return returnResult;
-    }
-
-    private String formatEventDates(Event thisEvent) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy - hh:ss a", Locale.US);
-        return simpleDateFormat.format(thisEvent.getStart().getTime()).toString();
     }
 
     @Override
     public String getDescription() {
-        return "Gets Events";
+
+        return "Gets your contacts";
     }
+
 
 }
 // *********************************************************

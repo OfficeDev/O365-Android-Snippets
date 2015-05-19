@@ -1,71 +1,63 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.CalendarStories;
 
 import android.util.Log;
 
-import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetContactsStory extends BaseUserStory {
-
+public class CreateRecurringEventStory extends BaseUserStory {
     @Override
     public String execute() {
+        boolean isStoryComplete;
+        String resultMessage;
+
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
-        ContactsSnippets contactsSnippets = new ContactsSnippets(
+        CalendarSnippets calendarSnippets = new CalendarSnippets(
                 getO365MailClient());
-        try {
-            List<Contact> contacts = contactsSnippets.getContacts(11);
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets contacts: "
-                    + contacts.size()
-                    + " contacts returned");
-            sb.append("\n");
-            for (Contact contact : contacts) {
-                sb.append("\t\t");
-                sb.append(contact.getDisplayName());
-                sb.append("\n");
-            }
-            return StoryResultFormatter.wrapResult(sb.toString(), true);
+        List<String> attendeeEmailAdresses = new ArrayList<>();
+        attendeeEmailAdresses.add(GlobalValues.USER_EMAIL);
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        try {
+            //Create a recurring event
+            String newEventId = calendarSnippets.createRecurringCalendarEvent(
+                    getStringResource(R.string.calendar_subject_text)
+                    , getStringResource(R.string.calendar_body_text)
+                    , attendeeEmailAdresses);
+
+            //Cleanup by deleting the event
+            calendarSnippets.deleteCalendarEvent(newEventId);
+            isStoryComplete = true;
+            resultMessage = "Create recurring event: Recurring event created";
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
-            );
+            Log.e("CreateRecurringEvent", formattedException);
+            resultMessage = "Create recurring event exception: " + formattedException;
         }
+
+        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-
-        return "Gets your contacts";
+        return "Create a recurring event";
     }
-
-
 }
 // *********************************************************
 //

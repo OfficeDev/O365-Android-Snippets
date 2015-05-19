@@ -3,39 +3,33 @@
  */
 package com.microsoft.office365.snippetapp.helpers;
 
-import android.os.AsyncTask;
+/**
+ * Represents a placeholder in the UI snippet list to separate groups of
+ * snippets visually. For example, this class could represent the
+ * "Mail" group of snippets.
+ */
+public class StoryGroupPlaceholder extends BaseUserStory {
 
-import com.microsoft.office365.snippetapp.Interfaces.IOperationCompleteListener;
+    private String mDescription;
 
-public class AsyncUseCaseWrapper extends AsyncTask<BaseUserStory, IOperationCompleteListener.OperationResult, Void> {
+    private StoryGroupPlaceholder() {
+        //Mark this story as a story group list item for UI list
+        setGroupingFlag(true);
+    }
 
-    private final IOperationCompleteListener mOperationCompletedListener;
-
-
-    public AsyncUseCaseWrapper(IOperationCompleteListener operationCompleteListener) {
-        mOperationCompletedListener = operationCompleteListener;
+    public StoryGroupPlaceholder(String description) {
+        this();
+        mDescription = description;
     }
 
     @Override
-    protected Void doInBackground(BaseUserStory... params) {
-        String result;
-        for (BaseUserStory useCase : params) {
-            useCase.onPreExecute();
-            result = useCase.execute();
-            useCase.onPostExecute();
-            publishProgress(new IOperationCompleteListener.OperationResult("O365 operation",
-                    result));
-        }
-        return null;
+    public String execute() {
+        return "";
     }
 
     @Override
-    protected void onProgressUpdate(IOperationCompleteListener.OperationResult... values) {
-        if (null != mOperationCompletedListener) {
-            for (IOperationCompleteListener.OperationResult result : values) {
-                mOperationCompletedListener.onOperationComplete(result);
-            }
-        }
+    public String getDescription() {
+        return mDescription;
     }
 }
 // *********************************************************

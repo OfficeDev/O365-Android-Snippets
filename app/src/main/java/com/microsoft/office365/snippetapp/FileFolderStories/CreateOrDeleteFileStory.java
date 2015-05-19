@@ -1,19 +1,59 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.O365Stories;
+package com.microsoft.office365.snippetapp.FileFolderStories;
 
 import android.util.Log;
 
 import com.google.common.base.Charsets;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
-public class UpdateFileContentsOnServerStory extends BaseUserStory {
+//This story handles both of the following stories that appear in the UI list
+// based on strings passed in the constructor...
+//- Create a file (which is then deleted for cleanup)
+//- Delete a file (which is created first and then deleted)
+public class CreateOrDeleteFileStory extends BaseUserStory {
+    private final String CREATE_DESCRIPTION = "Create a file on server";
+    private final String CREATE_TAG = "CreateFile";
+    private final String CREATE_SUCCESS = "Create a file on server";
+    private final String CREATE_ERROR = "Create a file on server exception: ";
+
+    private final String DELETE_DESCRIPTION = "Delete a file on server";
+    private final String DELETE_TAG = "DeleteFile";
+    private final String DELETE_SUCCESS = "Delete a file on server";
+    private final String DELETE_ERROR = "Delete a file on server exception: ";
+
+    private String mDescription;
+    private String mLogTag;
+    private String mSuccessDescription;
+    private String mErrorDescription;
+
+    public CreateOrDeleteFileStory(StoryAction action) {
+        switch (action) {
+            case CREATE: {
+                mDescription = CREATE_DESCRIPTION;
+                mLogTag = CREATE_TAG;
+                mSuccessDescription = CREATE_SUCCESS;
+                mErrorDescription = CREATE_ERROR;
+                break;
+            }
+            case DELETE: {
+                mDescription = DELETE_DESCRIPTION;
+                mLogTag = DELETE_TAG;
+                mSuccessDescription = DELETE_SUCCESS;
+                mErrorDescription = DELETE_ERROR;
+                break;
+            }
+        }
+    }
+
     @Override
     public String execute() {
         AuthenticationController
@@ -22,48 +62,38 @@ public class UpdateFileContentsOnServerStory extends BaseUserStory {
                         getFilesFoldersResourceId());
         FileFolderSnippets fileFolderSnippets = new FileFolderSnippets(
                 getO365MyFilesClient());
+
         try {
 
-            String fileContents = "Test create file";
+            String fileContents = "Test create and delete file";
+            //Create file
             String newFileId = fileFolderSnippets
                     .postNewFileToServer(
-                            "test_UpdateFile.txt"
+                            "test_Create_Delete_"
+                                    + java
+                                    .util
+                                    .UUID
+                                    .randomUUID()
+                                    .toString()
+                                    + ".txt"
                             , fileContents.getBytes(Charsets.UTF_8));
 
-
-            String updatedFileContents = fileContents + " updated";
-            fileFolderSnippets.postUpdatedFileToServer(newFileId, updatedFileContents);
-            byte[] fileContentsBytes = fileFolderSnippets.getFileContentsFromServer(newFileId);
+            //Delete file
             fileFolderSnippets.deleteFileFromServer(newFileId);
-
-            if (fileContentsBytes.length == updatedFileContents.length()) {
-                return StoryResultFormatter.wrapResult("Update file contents on server", true);
-            } else {
-                return StoryResultFormatter.wrapResult("Update file contents on server", false);
-            }
-
-        } catch (ExecutionException e) {
+            return StoryResultFormatter.wrapResult(mSuccessDescription, true);
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
+            Log.e(mLogTag, formattedException);
             return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
+                    mErrorDescription + formattedException, false
             );
         }
     }
 
     @Override
     public String getDescription() {
-        return "Update file contents on server";
+        return mDescription;
     }
 }
 // *********************************************************
