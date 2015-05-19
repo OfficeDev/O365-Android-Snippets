@@ -5,12 +5,12 @@ package com.microsoft.office365.snippetapp.helpers;
 
 
 import android.content.res.AssetFileDescriptor;
+import android.util.Log;
 import android.view.View;
 
 import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.outlookservices.odata.OutlookClient;
 
 import java.io.ByteArrayOutputStream;
@@ -45,13 +45,14 @@ public abstract class BaseUserStory {
     public abstract String getDescription();
 
 
-    public  boolean getGroupingFlag(){
+    public boolean getGroupingFlag() {
         return mGroupingFlag;
     }
 
-    public void setGroupingFlag(boolean groupingFlag){
+    public void setGroupingFlag(boolean groupingFlag) {
         mGroupingFlag = groupingFlag;
     }
+
     public String getId() {
         return java.util.UUID.randomUUID().toString();
     }
@@ -61,6 +62,18 @@ public abstract class BaseUserStory {
                 .getApplication()
                 .getApplicationContext()
                 .getString(resourceToGet);
+    }
+
+    public String BaseExceptionFormatter(Exception exception, String storyDescription) {
+        exception.printStackTrace();
+        String formattedException = APIErrorMessageHelper.getErrorMessage(exception.getMessage());
+        Log.e(storyDescription, formattedException);
+        return StoryResultFormatter.wrapResult(
+                storyDescription + ": "
+                        + formattedException
+                , false
+        );
+
     }
 
     public byte[] getDrawableResource(int resourceToGet) {
@@ -94,13 +107,6 @@ public abstract class BaseUserStory {
 
     }
 
-    public String FormatExceptionMessage(Exception exception)
-    {
-        String formattedException = APIErrorMessageHelper.getErrorMessage(exception.getMessage());
-        return StoryResultFormatter.wrapResult(
-                "Forward email message story: " + formattedException, false);
-
-    }
     public View getUIResultView() {
         return mUpdateView;
     }

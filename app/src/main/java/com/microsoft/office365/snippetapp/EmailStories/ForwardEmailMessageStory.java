@@ -5,7 +5,6 @@ package com.microsoft.office365.snippetapp.EmailStories;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -14,6 +13,8 @@ import com.microsoft.outlookservices.Message;
 import java.util.Date;
 
 public class ForwardEmailMessageStory extends BaseEmailUserStory {
+
+    private static final String STORY_DESCRIPTION = "Forward an email message";
 
     @Override
     public String execute() {
@@ -50,20 +51,16 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             }
 
             return StoryResultFormatter.wrapResult(
-                    "Forward email message story: ", true
+                    STORY_DESCRIPTION, true
             );
         } catch (Exception ex) {
-//            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-//            return StoryResultFormatter.wrapResult(
-//                    "Forward email message story: " + formattedException, false
-//            );
-            return FormatExceptionMessage(ex);
+            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
-        return "Forward an email message";
+        return STORY_DESCRIPTION;
     }
 
 }

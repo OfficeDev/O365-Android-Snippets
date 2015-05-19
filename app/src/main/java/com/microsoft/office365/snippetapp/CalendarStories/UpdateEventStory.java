@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.CalendarStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Event;
@@ -21,9 +18,10 @@ import java.util.concurrent.ExecutionException;
 public class UpdateEventStory extends BaseUserStory {
 
 
+    private static final String STORY_DESCRIPTION = "Update a calendar event";
+
     @Override
     public String execute() {
-        //PREPARE
         AuthenticationController
                 .getInstance()
                 .setResourceId(
@@ -33,7 +31,6 @@ public class UpdateEventStory extends BaseUserStory {
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
         String newEventId = "";
-        //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(
                     getStringResource(R.string.calendar_subject_text)
@@ -55,37 +52,19 @@ public class UpdateEventStory extends BaseUserStory {
             );
             Thread.sleep(20000);
             String updatedSubject = updatedEvent.getSubject();
-            //CLEAN UP
             calendarSnippets.deleteCalendarEvent(newEventId);
-            //ASSERT
             if (updatedSubject.equals(getStringResource(R.string.calendar_subject_text)
                     + " Updated Subject")) {
                 return StoryResultFormatter.wrapResult(
-                        "UpdateEventStory: Event "
+                        STORY_DESCRIPTION + ": Event "
                                 + " updated.", true);
             } else {
                 return StoryResultFormatter.wrapResult(
-                        "Update Event Story: Update "
+                        STORY_DESCRIPTION + ": Update "
                                 + " event.", false);
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update event exception: "
-                            + formattedException
-                    , false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update event story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update event exception: "
-                            + formattedException
-                    , false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
         }
     }
 

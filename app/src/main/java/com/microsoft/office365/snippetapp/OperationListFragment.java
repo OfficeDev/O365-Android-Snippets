@@ -6,8 +6,6 @@ package com.microsoft.office365.snippetapp;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -142,7 +140,7 @@ public class OperationListFragment extends ListFragment implements IOperationCom
             AsyncUseCaseWrapper asyncUseCaseWrapper = new AsyncUseCaseWrapper(this);
 
             //set size with variable to avoid extra construction call with call to toArray
-            int size=0;
+            int size = 0;
             asyncUseCaseWrapper.execute(mCommands.ITEMS.toArray(new BaseUserStory[size]));
         } else {
             Toast.makeText(

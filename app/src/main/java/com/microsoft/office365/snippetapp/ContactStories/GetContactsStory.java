@@ -3,12 +3,9 @@
  */
 package com.microsoft.office365.snippetapp.ContactStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Contact;
 
@@ -16,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GetContactsStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets your contacts";
 
     @Override
     public String execute() {
@@ -41,29 +40,15 @@ public class GetContactsStory extends BaseUserStory {
             }
             return StoryResultFormatter.wrapResult(sb.toString(), true);
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Contacts story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get contacts exception: "
-                            + formattedException, false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
 
-        return "Gets your contacts";
+        return STORY_DESCRIPTION;
     }
 
 

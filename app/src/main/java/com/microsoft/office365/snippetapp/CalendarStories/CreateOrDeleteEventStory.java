@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.CalendarStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -82,13 +79,7 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
             //Delete event
             calendarSnippets.deleteCalendarEvent(newEventId);
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e(mLogTag, formattedException);
-            return StoryResultFormatter.wrapResult(
-                    mErrorDescription + formattedException
-                    , false
-            );
+            return BaseExceptionFormatter(e, mLogTag);
         }
         return StoryResultFormatter.wrapResult(mSuccessDescription, true);
     }

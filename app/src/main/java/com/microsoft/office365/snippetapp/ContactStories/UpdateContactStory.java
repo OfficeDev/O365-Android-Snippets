@@ -4,19 +4,19 @@
 package com.microsoft.office365.snippetapp.ContactStories;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Contact;
 
 import java.util.concurrent.ExecutionException;
 
 public class UpdateContactStory extends BaseUserStory {
+    public static final String UPDATE_CONTACT_STORY = "Update Contact story";
+    public static final String STORY_DESCRIPTION = "Updates the surname of a contact";
     private Context mContext;
 
     public UpdateContactStory(Context context) {
@@ -81,32 +81,15 @@ public class UpdateContactStory extends BaseUserStory {
                 contactsSnippets.deleteContact(contactId);
                 return returnValue;
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update Contact story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update contacts exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update Contact story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update contacts exception: "
-                            + formattedException
-                    , false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return BaseExceptionFormatter(e, UPDATE_CONTACT_STORY);
         }
         return returnValue;
     }
 
     @Override
     public String getDescription() {
-        return "Updates the surname of a contact";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

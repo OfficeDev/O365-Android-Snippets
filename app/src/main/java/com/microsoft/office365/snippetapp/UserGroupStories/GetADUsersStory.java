@@ -1,12 +1,9 @@
 package com.microsoft.office365.snippetapp.UserGroupStories;
 
-import android.util.Log;
-
 import com.microsoft.directoryservices.User;
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.Constants;
 import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -15,6 +12,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GetADUsersStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets users from Active Directory";
 
     @Override
     public String execute() {
@@ -31,9 +30,11 @@ public class GetADUsersStory extends BaseUserStory {
             List<User> userList = usersAndGroupsSnippets.getUsers();
             if (userList == null) {
                 //No users were found
-                resultMessage.append("Get Active Directory Users: No users found.");
+                resultMessage.append(STORY_DESCRIPTION);
+                resultMessage.append(": No users found.");
             } else {
-                resultMessage.append("Get Active Directory Users: The following users were found:\n");
+                resultMessage.append(STORY_DESCRIPTION);
+                resultMessage.append(": The following users were found:\n");
                 for (User user : userList) {
                     resultMessage.append(user.getdisplayName())
                             .append("\n");
@@ -41,19 +42,13 @@ public class GetADUsersStory extends BaseUserStory {
             }
             isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("GetADUsers", formattedException);
-            resultMessage = new StringBuilder();
-            resultMessage.append("Get Active Directory users exception: ")
-                    .append(formattedException);
+            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
         }
         return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Gets users from Active Directory";
+        return STORY_DESCRIPTION;
     }
 }

@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.CalendarStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -20,6 +17,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
+
+    private static final String STORY_DESCRIPTION = "Responds to accept an event invite";
 
     @Override
     public String execute() {
@@ -64,34 +63,32 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
 
                 //Validate the attendee status was set to accepted as expected
                 if (attendeeStatus == ResponseType.Accepted) {
-                    isStoryComplete = true;
-                    resultMessage = "Respond to event invite story: Event accepted.";
+                    resultMessage = StoryResultFormatter.wrapResult(
+                            "Respond to event invite story: Event accepted."
+                            , true);
                 } else {
-                    isStoryComplete = false;
-                    resultMessage = "Respond to event invite story: Event response failed. "
-                            + attendeeStatus;
+                    resultMessage = StoryResultFormatter.wrapResult(
+                            "Respond to event invite story: Event response failed. "
+                                    + attendeeStatus
+                            , false);
                 }
 
                 //CLEANUP by cancelling event
                 calendarSnippets.deleteCalendarEvent(newEventId);
             } else {
-                isStoryComplete = false;
-                resultMessage = "Respond to event invite story: Event is null.";
+                resultMessage = StoryResultFormatter.wrapResult(
+                        "Respond to event invite story: Event is null."
+                        , false);
             }
         } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            resultMessage = "Respond to event exception: "
-                    + formattedException;
-            e.printStackTrace();
-            Log.e("Respond to event story", formattedException);
+            resultMessage = BaseExceptionFormatter(e, STORY_DESCRIPTION);
         }
-        return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
+        return resultMessage;
     }
 
     @Override
     public String getDescription() {
-        return "Responds to accept an event invite";
+        return STORY_DESCRIPTION;
     }
 
 }
