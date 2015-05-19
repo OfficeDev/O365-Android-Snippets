@@ -5,31 +5,32 @@ package com.microsoft.office365.snippetapp.helpers;
 
 import android.content.Context;
 
-import com.microsoft.office365.snippetapp.ContactStories.CreateOrDeleteContactStory;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateOrDeleteEventStory;
-import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteFileStory;
-import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteOneDriveFolder;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateRecurringEventStory;
-import com.microsoft.office365.snippetapp.FileFolderStories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.CalendarStories.EventsFetcherStory;
-import com.microsoft.office365.snippetapp.EmailStories.ForwardEmailMessageStory;
-import com.microsoft.office365.snippetapp.UserGroupStories.GetADGroupsStory;
-import com.microsoft.office365.snippetapp.UserGroupStories.GetADUsersStory;
+import com.microsoft.office365.snippetapp.CalendarStories.GetFilteredImportantEvents;
+import com.microsoft.office365.snippetapp.CalendarStories.RespondToCalendarEventInviteStory;
+import com.microsoft.office365.snippetapp.CalendarStories.UpdateEventStory;
+import com.microsoft.office365.snippetapp.ContactStories.CreateOrDeleteContactStory;
 import com.microsoft.office365.snippetapp.ContactStories.GetContactsStory;
+import com.microsoft.office365.snippetapp.ContactStories.GetFilteredContactsWithSurnameStory;
+import com.microsoft.office365.snippetapp.ContactStories.UpdateContactStory;
+import com.microsoft.office365.snippetapp.EmailStories.ForwardEmailMessageStory;
 import com.microsoft.office365.snippetapp.EmailStories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.EmailStories.GetEmailMessagesStory;
-import com.microsoft.office365.snippetapp.FileFolderStories.GetFilesAndFoldersStory;
-import com.microsoft.office365.snippetapp.ContactStories.GetFilteredContactsWithSurnameStory;
-import com.microsoft.office365.snippetapp.CalendarStories.GetFilteredImportantEvents;
-import com.microsoft.office365.snippetapp.UserGroupStories.GetTenantDetailsStory;
 import com.microsoft.office365.snippetapp.EmailStories.ReplyToEmailMessageStory;
-import com.microsoft.office365.snippetapp.CalendarStories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.EmailStories.SendEmailMessageStory;
 import com.microsoft.office365.snippetapp.EmailStories.SendEmailWithMessageAttachStory;
 import com.microsoft.office365.snippetapp.EmailStories.SendEmailWithTextFileAttachmentStory;
-import com.microsoft.office365.snippetapp.ContactStories.UpdateContactStory;
-import com.microsoft.office365.snippetapp.CalendarStories.UpdateEventStory;
+import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteFileStory;
+import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteOneDriveFolder;
+import com.microsoft.office365.snippetapp.FileFolderStories.DownloadFileStory;
+import com.microsoft.office365.snippetapp.FileFolderStories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.FileFolderStories.UpdateFileContentsOnServerStory;
+import com.microsoft.office365.snippetapp.R;
+import com.microsoft.office365.snippetapp.UserGroupStories.GetADGroupsStory;
+import com.microsoft.office365.snippetapp.UserGroupStories.GetADUsersStory;
+import com.microsoft.office365.snippetapp.UserGroupStories.GetTenantDetailsStory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,10 +53,14 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
+                //Active Directory Stories
+                new StoryGroupPlaceholder(context.getString(R.string.active_directory_group_placeholder)),
                 new GetADUsersStory(),
                 new GetTenantDetailsStory(),
                 new GetADGroupsStory(),
-                new CreateRecurringEventStory(),
+
+                //Email Stories
+                new StoryGroupPlaceholder(context.getString(R.string.email_group_placeholder)),
                 new SendEmailMessageStory(),
                 new GetEmailMessagesStory(),
                 new ReplyToEmailMessageStory(),
@@ -63,17 +68,27 @@ public class StoryList {
                 new SendEmailWithTextFileAttachmentStory(),
                 new SendEmailWithMessageAttachStory(),
                 new GetEmailAttachmentsStory(),
+
+                //Contact Stories
+                new StoryGroupPlaceholder(context.getString(R.string.contact_group_placeholder)),
                 new GetContactsStory(),
                 new CreateOrDeleteContactStory(StoryAction.CREATE),
                 new CreateOrDeleteContactStory(StoryAction.DELETE),
                 new UpdateContactStory(context),
                 new GetFilteredContactsWithSurnameStory(),
+
+                //Calendar Stories
+                new StoryGroupPlaceholder(context.getString(R.string.calendar_group_placeholder)),
                 new CreateOrDeleteEventStory(StoryAction.CREATE),
                 new CreateOrDeleteEventStory(StoryAction.DELETE),
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
                 new RespondToCalendarEventInviteStory(),
                 new GetFilteredImportantEvents(),
+                new CreateRecurringEventStory(),
+
+                //Files and Folders Stories
+                new StoryGroupPlaceholder(context.getString(R.string.file_folder_group_placeholder)),
                 new GetFilesAndFoldersStory(),
                 new CreateOrDeleteFileStory(StoryAction.CREATE),
                 new UpdateFileContentsOnServerStory(),
