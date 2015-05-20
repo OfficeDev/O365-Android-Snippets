@@ -3,11 +3,8 @@
  */
 package com.microsoft.office365.snippetapp.CalendarStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
@@ -18,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class CreateRecurringEventStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Create a recurring event";
+
     @Override
     public String execute() {
         boolean isStoryComplete;
@@ -43,12 +43,10 @@ public class CreateRecurringEventStory extends BaseUserStory {
             //Cleanup by deleting the event
             calendarSnippets.deleteCalendarEvent(newEventId);
             isStoryComplete = true;
-            resultMessage = "Create recurring event: Recurring event created";
+            resultMessage = STORY_DESCRIPTION + ": Recurring event created";
         } catch (ExecutionException | InterruptedException e) {
             isStoryComplete = false;
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("CreateRecurringEvent", formattedException);
-            resultMessage = "Create recurring event exception: " + formattedException;
+            resultMessage = FormatException(e, STORY_DESCRIPTION);
         }
 
         return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);
@@ -56,7 +54,7 @@ public class CreateRecurringEventStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Create a recurring event";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

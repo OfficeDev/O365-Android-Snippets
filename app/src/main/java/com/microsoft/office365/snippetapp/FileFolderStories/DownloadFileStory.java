@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -21,6 +20,7 @@ public class DownloadFileStory extends BaseUserStory {
     private static final String DOWNLOAD_DOC_PATH = "O365Snippets";
     private static final String DOWNLOAD_DOC_FILENAME = "testdownload.txt";
     private static final String FILE_CONTENTS = "Test download file contents";
+    private static final String STORY_DESCRIPTION = "Download a file from MyFiles";
     private boolean mFolderCreated = false;
 
     @Override
@@ -57,34 +57,20 @@ public class DownloadFileStory extends BaseUserStory {
 
                 //Verify local file exists and then remove it
                 if (verifyFileInExternalStorage(DOWNLOAD_DOC_FILENAME))
-                    return StoryResultFormatter.wrapResult("Download file from server", true);
+                    return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, true);
                 else
-                    return StoryResultFormatter.wrapResult("Download file from server", false);
+                    return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, false);
 
             } else
-                return StoryResultFormatter.wrapResult("Download file from server", false);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
-            );
+                return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, false);
+        } catch (ExecutionException | InterruptedException e) {
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
-        return "Download a file from MyFiles";
+        return STORY_DESCRIPTION;
     }
 
 

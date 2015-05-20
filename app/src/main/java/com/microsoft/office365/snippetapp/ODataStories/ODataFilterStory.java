@@ -3,12 +3,9 @@
  */
 package com.microsoft.office365.snippetapp.ODataStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.Snippets.ODataSystemQuerySnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -71,18 +68,12 @@ public class ODataFilterStory extends BaseUserStory {
             calendarSnippets.deleteCalendarEvent(testEvent.getId());
 
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("EventFilter", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Filter important events: " + formattedException
-                    , false
-            );
+            return FormatException(e, STORY_DESCRIPTION);
         }
         if (isSucceeding) {
-            return StoryResultFormatter.wrapResult("FilterImportantEventsStory: Important events found.", true);
+            return StoryResultFormatter.wrapResult(STORY_DESCRIPTION + ": Important events found.", true);
         } else {
-            return StoryResultFormatter.wrapResult("FilterImportantEventsStory: Important events not found.", false);
+            return StoryResultFormatter.wrapResult(STORY_DESCRIPTION + ": Important events not found.", false);
         }
     }
 

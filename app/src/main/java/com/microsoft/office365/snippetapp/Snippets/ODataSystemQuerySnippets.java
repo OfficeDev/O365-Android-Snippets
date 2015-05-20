@@ -10,6 +10,11 @@ import com.microsoft.outlookservices.odata.OutlookClient;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * This class contains snippets that demonstrate how to specify
+ * OData system query options such as $select and $filter
+ * through the Office 365 SDK for Android.
+ */
 public class ODataSystemQuerySnippets {
 
     /**

@@ -3,11 +3,8 @@
  */
 package com.microsoft.office365.snippetapp.FileFolderStories;
 
-import android.util.Log;
-
 import com.microsoft.fileservices.Item;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -16,6 +13,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GetFilesAndFoldersStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets files and folders from user's OneDrive";
+
     @Override
     public String execute() {
         AuthenticationController
@@ -40,29 +40,14 @@ public class GetFilesAndFoldersStory extends BaseUserStory {
             }
             return StoryResultFormatter.wrapResult(sb.toString(), true);
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Files/folders", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get Files and folders exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get Files/folders", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get Files and folders exception: "
-                            + formattedException, false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return FormatException(e, STORY_DESCRIPTION);
         }
-
     }
 
     @Override
     public String getDescription() {
-        return "Gets files and folders from user's OneDrive";
+        return STORY_DESCRIPTION;
     }
 
 }

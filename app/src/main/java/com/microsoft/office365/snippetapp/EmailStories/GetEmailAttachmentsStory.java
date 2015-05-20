@@ -3,11 +3,8 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -16,14 +13,14 @@ import com.microsoft.outlookservices.FileAttachment;
 import com.microsoft.outlookservices.Message;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
 public class GetEmailAttachmentsStory extends BaseEmailUserStory {
-    public static final String SENT_NOTICE = "Attachment email sent with subject line:";
-    public static final boolean IS_INLINE = false;
+    private static final String SENT_NOTICE = "Attachment email sent with subject line:";
+    private static final boolean IS_INLINE = false;
+    private static final String STORY_DESCRIPTION = "Gets the attachments from an email message";
 
     @Override
     public String execute() {
@@ -86,17 +83,8 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
             //3. Delete the email using the ID
             // Boolean result = emailSnippets.deleteMail(emailID);
 
-        } catch (ExecutionException | InterruptedException ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("GetEmailAttachments", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get email attachments exception: "
-                            + formattedException
-                    , false
-            );
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (ExecutionException | InterruptedException | UnsupportedEncodingException ex) {
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
 
@@ -104,7 +92,7 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
 
     @Override
     public String getDescription() {
-        return "Gets the attachments from an email message";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

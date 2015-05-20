@@ -15,6 +15,9 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import java.util.concurrent.ExecutionException;
 
 public class GetTenantDetailsStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets the tenant details from Active Directory";
+
     @Override
     public String execute() {
         StringBuilder results = new StringBuilder();
@@ -30,15 +33,15 @@ public class GetTenantDetailsStory extends BaseUserStory {
         try {
             tenant = usersAndGroupsSnippets.getTenantDetails();
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            return StoryResultFormatter.wrapResult("Get tenant detail exception:", false);
+            return FormatException(e, STORY_DESCRIPTION);
         }
 
         if (tenant == null) {
             //No tenants were found
-            return StoryResultFormatter.wrapResult("Get tenant detail: No tenant found", true);
+            return StoryResultFormatter.wrapResult(STORY_DESCRIPTION + ": No tenant found", false);
         }
-        results.append("Get Active Directory Users: The following tenant was found:\n");
+        results.append(STORY_DESCRIPTION);
+        results.append(": The following tenant was found:\n");
         results.append(tenant.getdisplayName())
                 .append("\n");
         return StoryResultFormatter.wrapResult(results.toString(), true);
@@ -46,7 +49,7 @@ public class GetTenantDetailsStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Gets the tenant details from Active Directory";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

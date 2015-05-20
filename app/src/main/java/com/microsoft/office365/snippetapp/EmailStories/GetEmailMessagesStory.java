@@ -3,10 +3,7 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
@@ -15,6 +12,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GetEmailMessagesStory extends BaseEmailUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets 10 newest email messages";
+
     @Override
     public String execute() {
         String returnResult;
@@ -42,30 +42,15 @@ public class GetEmailMessagesStory extends BaseEmailUserStory {
                 sb.append("\n");
             }
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Get email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get email exception: "
-                            + formattedException, false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return returnResult;
     }
 
     @Override
     public String getDescription() {
-
-        return "Gets 10 newest email messages";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

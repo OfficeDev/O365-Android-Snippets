@@ -3,23 +3,18 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
-import java.util.Date;
-
 public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
 
-    public static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
-    public static final String SENT_NOTICE = "Email sent with subject line:";
-    public static final boolean IS_INLINE = false;
+    private static final String STORY_DESCRIPTION = "Sends an email message with a message attachment";
+    private static final String SENT_NOTICE = "Email sent with subject line:";
+    private static final boolean IS_INLINE = false;
 
 
     @Override
@@ -68,19 +63,15 @@ public class SendEmailWithMessageAttachStory extends BaseEmailUserStory {
                         getStringResource(R.string.Email_Folder_Sent));
 
                 returnResult = StoryResultFormatter.wrapResult(
-                        STORY_DESCRIPTION, true
-                );
+                        SENT_NOTICE
+                                + " "
+                                + getStringResource(R.string.mail_subject_text)
+                        , true);
             }
 
 
         } catch (Exception ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send msg w/ message ", formattedException);
-            returnResult = StoryResultFormatter.wrapResult(
-                    "Send mail exception: "
-                            + formattedException
-                    , false
-            );
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
     }

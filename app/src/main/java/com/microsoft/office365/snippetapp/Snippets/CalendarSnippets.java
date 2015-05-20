@@ -378,7 +378,6 @@ public class CalendarSnippets {
     }
 
 
-
     /**
      * Local helper method that converts an list of email strings into
      * a list of attendees.

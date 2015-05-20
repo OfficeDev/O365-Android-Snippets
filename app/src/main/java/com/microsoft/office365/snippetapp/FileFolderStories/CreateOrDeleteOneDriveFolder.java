@@ -3,10 +3,7 @@
  */
 package com.microsoft.office365.snippetapp.FileFolderStories;
 
-import android.util.Log;
-
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
@@ -22,32 +19,22 @@ public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
     //Unique names used for tracking and cleanup of items created by running snippets
     private static final String FOLDER_NAME = "O365SnippetFolder_";
     private final String CREATE_DESCRIPTION = "Create new folder on OneDrive";
-    private final String CREATE_TAG = "CreateOneDriveFolder";
     private final String CREATE_SUCCESS = "OneDrive create folder story: Folder created.";
-    private final String CREATE_ERROR = "Create OneDrive folder exception: ";
     private final String DELETE_DESCRIPTION = "Delete folder from OneDrive";
-    private final String DELETE_TAG = "DeleteOneDriveFolder";
     private final String DELETE_SUCCESS = "OneDrive delete folder story: Folder deleted.";
-    private final String DELETE_ERROR = "Decline OneDrive folder exception: ";
     private String mDescription;
-    private String mLogTag;
     private String mSuccessDescription;
-    private String mErrorDescription;
 
     public CreateOrDeleteOneDriveFolder(StoryAction action) {
         switch (action) {
             case CREATE: {
                 mDescription = CREATE_DESCRIPTION;
-                mLogTag = CREATE_TAG;
                 mSuccessDescription = CREATE_SUCCESS;
-                mErrorDescription = CREATE_ERROR;
                 break;
             }
             case DELETE: {
                 mDescription = DELETE_DESCRIPTION;
-                mLogTag = DELETE_TAG;
                 mSuccessDescription = DELETE_SUCCESS;
-                mErrorDescription = DELETE_ERROR;
                 break;
             }
         }
@@ -78,12 +65,7 @@ public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
                     mSuccessDescription, true);
 
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e(mLogTag, formattedException);
-            return StoryResultFormatter.wrapResult(mErrorDescription + formattedException
-                    , false
-            );
+            return FormatException(e, mDescription);
         }
     }
 
