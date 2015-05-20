@@ -1,10 +1,11 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.CalendarStories;
+package com.microsoft.office365.snippetapp.ODataStories;
 
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
+import com.microsoft.office365.snippetapp.Snippets.ODataSystemQuerySnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -17,9 +18,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetFilteredImportantEvents extends BaseUserStory {
-
-    private static final String STORY_DESCRIPTION = "Gets events filtered by most important";
+public class ODataFilterStory extends BaseUserStory {
+    private static final String STORY_DESCRIPTION = "Use $filter to get events filtered by most important";
 
     @Override
     public String execute() {
@@ -28,6 +28,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
                 .getInstance()
                 .setResourceId(getO365MailResourceId());
         CalendarSnippets calendarSnippets = new CalendarSnippets(getO365MailClient());
+        ODataSystemQuerySnippets oDataSystemQuerySnippets = new ODataSystemQuerySnippets();
 
         try {
             //Set up one important event to test with
@@ -52,7 +53,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
             testEvent = calendarSnippets.createCalendarEvent(testEvent);
 
             //Retrieve important events (should include our test event)
-            List<Event> importantEvents = calendarSnippets.getImportantEvents();
+            List<Event> importantEvents = oDataSystemQuerySnippets.getImportantEventsUsing$filter(getO365MailClient());
 
             //Check that all events are important to determine if story succeeded.
             isSucceeding = true;

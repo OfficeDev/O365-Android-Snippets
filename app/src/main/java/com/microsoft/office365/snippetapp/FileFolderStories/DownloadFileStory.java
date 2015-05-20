@@ -33,7 +33,7 @@ public class DownloadFileStory extends BaseUserStory {
                 getO365MyFilesClient());
         try {
             String fileContents = FILE_CONTENTS;
-            String itemId = "";
+            String itemId;
 
             //Remove test text file from server if left by previous execute()
             itemId = fileFolderSnippets.getFileFromServerByName(DOWNLOAD_DOC_FILENAME);

@@ -10,7 +10,6 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 //Create a new email, send to yourself, reply to the email, and delete sent mail
@@ -31,11 +30,9 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
 
-            //Store the date and time that the email is sent in UTC
-            Date sentDate = new Date();
             //1. Send an email and store the ID
             String uniqueGUID = java.util.UUID.randomUUID().toString();
-            String emailID = emailSnippets.createAndSendMail(
+            emailSnippets.createAndSendMail(
                     GlobalValues.USER_EMAIL
                     , getStringResource(R.string.mail_subject_text)
                             + uniqueGUID

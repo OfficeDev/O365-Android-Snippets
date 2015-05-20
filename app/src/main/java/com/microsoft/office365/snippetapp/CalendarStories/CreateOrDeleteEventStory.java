@@ -66,7 +66,7 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
 
         List<String> attendeeEmailAddresses = new ArrayList<>();
         attendeeEmailAddresses.add(GlobalValues.USER_EMAIL);
-        String newEventId = "";
+        String newEventId;
         //ACT
         try {
             newEventId = calendarSnippets.createCalendarEvent(

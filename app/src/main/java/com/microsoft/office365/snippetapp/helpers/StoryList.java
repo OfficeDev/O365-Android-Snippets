@@ -8,7 +8,6 @@ import android.content.Context;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateRecurringEventStory;
 import com.microsoft.office365.snippetapp.CalendarStories.EventsFetcherStory;
-import com.microsoft.office365.snippetapp.CalendarStories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.CalendarStories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.CalendarStories.UpdateEventStory;
 import com.microsoft.office365.snippetapp.ContactStories.CreateOrDeleteContactStory;
@@ -27,6 +26,8 @@ import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteOneDri
 import com.microsoft.office365.snippetapp.FileFolderStories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.FileFolderStories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.FileFolderStories.UpdateFileContentsOnServerStory;
+import com.microsoft.office365.snippetapp.ODataStories.ODataFilterStory;
+import com.microsoft.office365.snippetapp.ODataStories.ODataSelectStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.UserGroupStories.GetADGroupsStory;
 import com.microsoft.office365.snippetapp.UserGroupStories.GetADUsersStory;
@@ -53,6 +54,11 @@ public class StoryList {
      */
     public StoryList(Context context) {
         List<BaseUserStory> baseUserStories = Arrays.asList(
+                //OData system query option stories
+                new StoryGroupPlaceholder("OData system query stories"),
+                new ODataSelectStory(),
+                new ODataFilterStory(),
+
                 //Active Directory Stories
                 new StoryGroupPlaceholder(context.getString(R.string.active_directory_group_placeholder)),
                 new GetADUsersStory(),
@@ -84,7 +90,6 @@ public class StoryList {
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
                 new RespondToCalendarEventInviteStory(),
-                new GetFilteredImportantEvents(),
                 new CreateRecurringEventStory(),
 
                 //Files and Folders Stories

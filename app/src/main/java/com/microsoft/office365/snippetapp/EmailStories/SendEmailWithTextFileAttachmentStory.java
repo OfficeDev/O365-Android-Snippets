@@ -18,7 +18,7 @@ public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
         try {
             AuthenticationController
                     .getInstance()

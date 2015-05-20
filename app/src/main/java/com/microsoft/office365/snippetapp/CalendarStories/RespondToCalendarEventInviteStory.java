@@ -6,7 +6,6 @@ package com.microsoft.office365.snippetapp.CalendarStories;
 import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -24,15 +23,13 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
     public String execute() {
         //PREPARE
         boolean isStoryComplete;
-        String resultMessage = "";
+        String resultMessage;
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
 
         CalendarSnippets calendarSnippets = new CalendarSnippets(
-                getO365MailClient());
-        EmailSnippets emailSnippets = new EmailSnippets(
                 getO365MailClient());
 
         List<String> attendeeEmailAddresses = new ArrayList<>();

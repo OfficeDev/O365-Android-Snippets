@@ -45,7 +45,10 @@ public class CalendarSnippets {
      * Return a list of calendar events from the default calendar and ordered by the
      * Start field. The range of events to be returned includes events from
      * 1 week prior to current date through 1 week into the future. 10 events
-     * are returned per page
+     * are returned per page.
+     * <p/>
+     * This snippet only selects the Subject, Start, and End fields
+     * to reduce network traffic.
      *
      * @return List. A list of the com.microsoft.outlookservices.Event objects
      * @version 1.0
@@ -69,6 +72,7 @@ public class CalendarSnippets {
                 .addParameter("startdatetime", dateStart)
                 .addParameter("enddatetime", dateEnd)
                 .top(PAGE_SIZE)
+                .select("Subject,Start,End")
                 .orderBy(SORT_COLUMN)
                 .read()
                 .get();
@@ -145,6 +149,7 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
+                .select("ID")
                 .add(newEvent).get().getId();
     }
 
@@ -230,6 +235,7 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
+                .select("ID")
                 .add(newEvent).get().getId();
     }
 
@@ -281,6 +287,7 @@ public class CalendarSnippets {
                 .getMe()
                 .getEvents()
                 .getById(eventId)
+                .select("Subject")
                 .update(calendarEvent)
                 .get();
 
@@ -295,6 +302,7 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
+                .select("ID")
                 .add(eventToCreate).get();
     }
 
@@ -328,7 +336,7 @@ public class CalendarSnippets {
     public Event respondToCalendarEventInvite(String eventId, String myEmailAddress, ResponseType response) throws ExecutionException, InterruptedException {
         //Get the event
         Event calendarEvent = getCalendarEvent(eventId);
-        if (calendarEvent == null)
+        if (calendarEvent == null || calendarEvent.getAttendees() == null)
             return null;
 
         //find the correct attendee and set the response status for that attendee
@@ -345,27 +353,12 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
+                .select("ID")
                 .getById(eventId)
                 .update(calendarEvent)
                 .get();
     }
 
-
-    /**
-     * Gets the event id of the event specified by an event Id
-     *
-     * @param eventId The id of the event to be responded to
-     * @version 1.0
-     */
-    public String getCalendarEventId(String eventId) throws ExecutionException, InterruptedException {
-        return mCalendarClient
-                .getMe()
-                .getEvents()
-                .getById(eventId)
-                .read()
-                .get()
-                .getId();
-    }
 
     /**
      * Gets the event object of the event specified by an event Id
@@ -379,26 +372,11 @@ public class CalendarSnippets {
                 .getMe()
                 .getEvents()
                 .getById(eventId)
+                .select("ID,Attendees")
                 .read()
                 .get();
     }
 
-    /**
-     * Runs a filtered query to find all events that are high importance. This snippet can be
-     * modified to run any filtered query. For a complete list of Events properties that
-     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
-     *
-     * @return A list of events
-     * @version 1.0
-     */
-    public List<Event> getImportantEvents() throws ExecutionException, InterruptedException {
-        return mCalendarClient
-                .getMe()
-                .getEvents()
-                .filter("Importance eq 'High'")
-                .read()
-                .get();
-    }
 
     /**
      * Local helper method that converts an list of email strings into

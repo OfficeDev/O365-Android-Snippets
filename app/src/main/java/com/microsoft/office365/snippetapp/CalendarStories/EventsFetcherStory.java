@@ -20,7 +20,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
         if (getO365MailClient() == null) {
             returnResult = "Null OutlookClient";
         }
@@ -52,7 +52,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     private String formatEventDates(Event thisEvent) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy - hh:ss a", Locale.US);
-        return simpleDateFormat.format(thisEvent.getStart().getTime()).toString();
+        return simpleDateFormat.format(thisEvent.getStart().getTime());
     }
 
     @Override

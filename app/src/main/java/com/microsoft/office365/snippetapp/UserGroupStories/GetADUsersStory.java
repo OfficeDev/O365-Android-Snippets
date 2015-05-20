@@ -1,6 +1,7 @@
 package com.microsoft.office365.snippetapp.UserGroupStories;
 
 import com.microsoft.directoryservices.User;
+import com.microsoft.directoryservices.odata.DirectoryClient;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
@@ -23,7 +24,10 @@ public class GetADUsersStory extends BaseUserStory {
         AuthenticationController
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
-        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(O365ServicesManager.getDirectoryClient());
+        DirectoryClient directoryClient = O365ServicesManager.getDirectoryClient();
+        if (directoryClient == null)
+            return StoryResultFormatter.wrapResult("Tenant ID was null", false);
+        UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(directoryClient);
 
         try {
             //Get list of users

@@ -35,7 +35,7 @@ public class EmailSnippets {
 
     /**
      * Gets a list of the 10 most recent email messages in the
-     * user Inbox, sorted by date and time received
+     * user Inbox, sorted by date and time received.
      *
      * @return List of type com.microsoft.outlookservices.Message
      * @version 1.0
@@ -43,8 +43,10 @@ public class EmailSnippets {
     public List<Message> getMailMessages() throws ExecutionException, InterruptedException {
         List<Message> messages = mOutlookClient
                 .getMe()
-                .getFolders().getById("Inbox")
+                .getFolders()
+                .getById("Inbox")
                 .getMessages()
+                .select("Subject")
                 .orderBy("DateTimeReceived desc")
                 .top(10)
                 .read().get();
@@ -62,6 +64,7 @@ public class EmailSnippets {
         return mOutlookClient
                 .getMe()
                 .getMessages()
+                .select("ID")
                 .getById(mailId)
                 .read().get();
 
@@ -106,8 +109,10 @@ public class EmailSnippets {
     public List<Message> GetMailboxMessagesByFolderName_Subject(
             String subjectLine
             , String folderName) throws ExecutionException, InterruptedException {
+
         List<Folder> sentFolder = mOutlookClient.getMe()
                 .getFolders()
+                .select("ID")
                 .filter("DisplayName eq '" + folderName + "'")
                 .read()
                 .get();
@@ -115,6 +120,7 @@ public class EmailSnippets {
                 .getMe()
                 .getFolder(sentFolder.get(0).getId())
                 .getMessages()
+                .select("ID")
                 .filter("Subject eq '" + subjectLine.trim() + "'")
                 .read()
                 .get();
@@ -144,6 +150,7 @@ public class EmailSnippets {
                 .getFolders()
                 .getById(mailFolder)
                 .getMessages()
+                .select("ID")
                 .filter(filterString)
                 .read()
                 .get();
@@ -244,7 +251,9 @@ public class EmailSnippets {
                 .getMe()
                 .getMessages()
                 .getById(mailID)
-                .getAttachments().expand("ContentType").read().get();
+                .getAttachments()
+                .read()
+                .get();
     }
 
     /**
@@ -342,6 +351,7 @@ public class EmailSnippets {
         Message draft = mOutlookClient
                 .getMe()
                 .getMessages()
+                .select("ID")
                 .add(messageToSend)
                 .get();
         mOutlookClient.getMe()
@@ -418,6 +428,7 @@ public class EmailSnippets {
                 .getMe()
                 .getFolder("Drafts")
                 .getMessages()
+                .select("ID")
                 .read()
                 .get();
     }

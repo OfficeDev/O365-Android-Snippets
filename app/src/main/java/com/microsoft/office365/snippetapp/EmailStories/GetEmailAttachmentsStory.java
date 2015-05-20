@@ -13,7 +13,6 @@ import com.microsoft.outlookservices.FileAttachment;
 import com.microsoft.outlookservices.Message;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -51,8 +50,6 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
 
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
-            //UTC time Immediately before message is sent
-            Date sendDate = new Date();
             //Send the draft email to the recipient
             emailSnippets.sendMail(draftMessageID);
 

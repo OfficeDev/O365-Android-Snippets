@@ -27,8 +27,11 @@ public class FileFolderSnippets {
     public List<Item> getFilesAndFolders()
             throws ExecutionException
             , InterruptedException {
-        List<Item> filesAndFolders = mSharePointClient.getfiles().read().get();
-        return filesAndFolders;
+        return mSharePointClient
+                .getfiles()
+                .select("name,type")
+                .read()
+                .get();
     }
 
     /**
@@ -40,7 +43,11 @@ public class FileFolderSnippets {
      */
     public String getFileFromServerByName(String fileName) throws ExecutionException, InterruptedException {
         String itemID = "";
-        List<Item> filesAndFolders = mSharePointClient.getfiles().read().get();
+        List<Item> filesAndFolders = mSharePointClient
+                .getfiles()
+                .select("Name")
+                .read()
+                .get();
 
         for (Item item : filesAndFolders) {
             if (item.getname().equals(fileName)) {
@@ -102,6 +109,7 @@ public class FileFolderSnippets {
 
         newFile = mSharePointClient
                 .getfiles()
+                .select("ID")
                 .add(newFile)
                 .get();
 
@@ -144,7 +152,11 @@ public class FileFolderSnippets {
 
         folder.settype("Folder");
         folder.setname(fullPath);
-        Item createdFolder = mSharePointClient.getfiles().add(folder).get();
+        Item createdFolder = mSharePointClient
+                .getfiles()
+                .select("ID")
+                .add(folder)
+                .get();
         return createdFolder;
     }
 

@@ -16,7 +16,7 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
 
     @Override
     public String execute() {
-        String returnResult = "";
+        String returnResult;
         try {
 
             AuthenticationController

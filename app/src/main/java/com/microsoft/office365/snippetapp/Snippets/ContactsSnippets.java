@@ -32,7 +32,8 @@ public class ContactsSnippets {
                 .getContacts()
                 .top(pageSize)
                 .skip(1)
-                .orderBy("SurName")
+                .select("displayName")
+                .orderBy("surName")
                 .read().get();
     }
 
@@ -73,6 +74,7 @@ public class ContactsSnippets {
         return mOutlookClient
                 .getMe()
                 .getContacts()
+                .select("ID")
                 .add(contact).get().getId();
     }
 
@@ -86,7 +88,9 @@ public class ContactsSnippets {
         return mOutlookClient
                 .getMe()
                 .getContacts()
-                .getById(id).read().get();
+                .getById(id)
+                .select("surname")
+                .read().get();
     }
 
 
@@ -105,6 +109,7 @@ public class ContactsSnippets {
                 .getMe()
                 .getContacts()
                 .getById(contactId)
+                .select("ID")
                 .read()
                 .get();
 
@@ -154,6 +159,7 @@ public class ContactsSnippets {
         return mOutlookClient
                 .getMe()
                 .getContacts()
+                .select("surname")
                 .filter("surname eq '" + surname + "'")
                 .read()
                 .get();

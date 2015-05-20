@@ -1,51 +1,65 @@
 /*
  *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
  */
-package com.microsoft.office365.snippetapp.EmailStories;
+package com.microsoft.office365.snippetapp.ODataStories;
 
-import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
+import android.util.Log;
+
+import com.microsoft.office365.snippetapp.Snippets.ODataSystemQuerySnippets;
+import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class GetEmailMessagesStory extends BaseEmailUserStory {
-
-    private static final String STORY_DESCRIPTION = "Gets 10 newest email messages";
+public class ODataSelectStory extends BaseUserStory {
+    private static final String STORY_DESCRIPTION = "Use $select to reduce payload when getting messages";
 
     @Override
     public String execute() {
-        String returnResult;
+        boolean isStoryComplete = false;
+        StringBuilder returnResult = new StringBuilder();
 
         AuthenticationController
                 .getInstance()
                 .setResourceId(
                         getO365MailResourceId());
-
         try {
-
-            EmailSnippets emailSnippets = new EmailSnippets(
-                    getO365MailClient());
+            ODataSystemQuerySnippets oDataSystemQuerySnippets = new ODataSystemQuerySnippets();
 
             //O365 API called in this helper
-            List<Message> messages = emailSnippets.getMailMessages();
+            List<Message> messages = oDataSystemQuerySnippets.getMailMessagesUsing$select(getO365MailClient());
 
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Gets email: " + messages.size() + " messages returned");
-            sb.append("\n");
-            for (Message m : messages) {
-                sb.append("\t\t");
-                sb.append(m.getSubject());
-                sb.append("\n");
+            returnResult.append(STORY_DESCRIPTION)
+                    .append(": ")
+                    .append(messages.size())
+                    .append(" messages returned")
+                    .append("\n");
+
+            for (Message message : messages) {
+                returnResult.append("\t\tFrom: ")
+                        .append(message.getFrom())
+                        .append("\n\t\tIs Read: ")
+                        .append(message.getIsRead().toString())
+                        .append("\n\t\tSubject: ")
+                        .append(message.getSubject())
+                        .append("\n");
             }
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
-            return FormatException(e, STORY_DESCRIPTION);
+            isStoryComplete = false;
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("Get email story", formattedException);
+            returnResult = new StringBuilder();
+            returnResult.append(STORY_DESCRIPTION)
+                    .append(": ")
+                    .append(formattedException);
         }
-        return returnResult;
+        return StoryResultFormatter.wrapResult(returnResult.toString(), isStoryComplete);
     }
 
     @Override
