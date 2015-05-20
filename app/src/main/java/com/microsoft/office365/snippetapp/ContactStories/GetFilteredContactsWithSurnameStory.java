@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.ContactStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Contact;
 
@@ -18,10 +15,13 @@ import java.util.concurrent.ExecutionException;
 
 public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
 
+    private static final String STORY_DESCRIPTION = "Gets contacts filtered by surname";
+    private static final String CONTACT_WITH_SURNAME = "Contact with surname";
+
     @Override
     public String execute() {
         boolean isStoryComplete = false;
-        StringBuilder storyResultText = new StringBuilder("FilterContactsBySurnameStory: ");
+        String storyResultText = "";
 
         String surname = getStringResource(R.string.contacts_last_name);
         AuthenticationController
@@ -49,24 +49,18 @@ public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
             contactsSnippets.deleteContact(contactId);
 
             //Story is completed
-            isStoryComplete = true;
-            storyResultText.append("Contact with surname ")
-                    .append(surname)
-                    .append(" found.");
+            storyResultText = StoryResultFormatter.wrapResult(CONTACT_WITH_SURNAME
+                    + " " + surname
+                    + " found.", true);
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("ContactFilter", formattedException);
-            storyResultText.append("Filter contacts by surname exception: ")
-                    .append(formattedException);
-            isStoryComplete = false;
+            storyResultText = FormatException(e, STORY_DESCRIPTION);
         }
-        return StoryResultFormatter.wrapResult(storyResultText.toString(), isStoryComplete);
+        return storyResultText;
     }
 
     @Override
     public String getDescription() {
-        return "Gets contacts filtered by surname";
+        return STORY_DESCRIPTION;
     }
 
 

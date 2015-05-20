@@ -3,18 +3,16 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
 public class SendEmailMessageStory extends BaseEmailUserStory {
+
+    private static final String STORY_DESCRIPTION = "Sends an email message";
 
     @Override
     public String execute() {
@@ -40,27 +38,16 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
             Message message = GetAMessageFromEmailFolder(emailSnippets, subject, getStringResource(R.string.Email_Folder_Inbox));
             emailSnippets.deleteMail(message.getId());
 
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append("Email is added");
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
-        } catch (Exception ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Send mail exception: "
-                            + formattedException
-                    , false
-            );
-
+            returnResult = StoryResultFormatter.wrapResult("Email is added", true);
+        } catch (Exception e) {
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return returnResult;
     }
 
     @Override
     public String getDescription() {
-
-        return "Sends an email message";
+        return STORY_DESCRIPTION;
     }
 
 

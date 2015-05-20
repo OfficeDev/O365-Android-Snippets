@@ -56,20 +56,18 @@ class OperationListAdapter extends BaseAdapter {
 
         //Always re-inflate the view because we have two view layouts and the layout changes
         //depending on the current scroll position.
-        if (!getStoryGroupingFlag(position)){
-                convertView = mLayoutInflater.inflate(R.layout.list_item_task, parent, false);
-        }
-        else {
-                convertView = mLayoutInflater.inflate(R.layout.list_item_grouper, parent, false);
+        if (!getStoryGroupingFlag(position)) {
+            convertView = mLayoutInflater.inflate(R.layout.list_item_task, parent, false);
+        } else {
+            convertView = mLayoutInflater.inflate(R.layout.list_item_grouper, parent, false);
         }
 
         if (!getStoryGroupingFlag(position)) {
             mOperationName = (TextView) convertView.findViewById(R.id.use_case_name);
             mOperationProgressBar = convertView.findViewById(R.id.use_case_progress);
             if (mOperationProgressBar != null)
-                 mOperationProgressBar.setVisibility(progressVisibility);
-        }
-        else{
+                mOperationProgressBar.setVisibility(progressVisibility);
+        } else {
             mOperationName = (TextView) convertView.findViewById(R.id.Group_name);
         }
 
@@ -95,9 +93,10 @@ class OperationListAdapter extends BaseAdapter {
      * @param position the story to examine
      * @return the grouping flag
      */
-    protected boolean getStoryGroupingFlag(int position){
+    protected boolean getStoryGroupingFlag(int position) {
         return getItem(position).getGroupingFlag();
     }
+
     /**
      * Check if a story is executing
      *

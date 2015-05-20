@@ -4,12 +4,9 @@
 
 package com.microsoft.office365.snippetapp.CalendarStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Event;
 
@@ -18,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class EventsFetcherStory extends BaseUserStory {
+
+    public static final String STORY_DESCRIPTION = "Get calendar events";
 
     @Override
     public String execute() {
@@ -46,13 +45,7 @@ public class EventsFetcherStory extends BaseUserStory {
             }
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
         } catch (Exception ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("GetEventsTask", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Get events exception: "
-                            + formattedException
-                    , false
-            );
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
     }
@@ -64,7 +57,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Gets Events";
+        return STORY_DESCRIPTION;
     }
 
 }

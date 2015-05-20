@@ -3,12 +3,8 @@
  */
 package com.microsoft.office365.snippetapp.EmailStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.EmailStories.BaseEmailUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -16,9 +12,9 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
 
-    public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
-    public static final String SENT_NOTICE = "Email sent with subject line:";
-    public static final boolean IS_INLINE = false;
+    private static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
+    private static final String SENT_NOTICE = "Email sent with subject line:";
+    private static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
@@ -49,27 +45,19 @@ public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
             String draftMessageID = emailSnippets.getMailMessageById(emailID).getId();
 
             //Send the mail with attachments
-            //build string for test results on UI
-            StringBuilder sb = new StringBuilder();
-            sb.append(SENT_NOTICE);
-            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
-            returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+            returnResult = StoryResultFormatter.wrapResult(
+                    SENT_NOTICE
+                            + getStringResource(R.string.mail_subject_text)
+                            + uniqueGUID
+                    , true);
 
             //Send the draft email to the recipient
             emailSnippets.sendMail(draftMessageID);
 
         } catch (Exception ex) {
-            String formattedException = APIErrorMessageHelper.getErrorMessage(ex.getMessage());
-            Log.e("Send email story", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Send mail exception: "
-                            + formattedException
-                    , false
-            );
-
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
-
     }
 
     @Override

@@ -3,18 +3,18 @@
  */
 package com.microsoft.office365.snippetapp.FileFolderStories;
 
-import android.util.Log;
-
 import com.google.common.base.Charsets;
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 import java.util.concurrent.ExecutionException;
 
 public class UpdateFileContentsOnServerStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Update file contents on user's OneDrive";
+
     @Override
     public String execute() {
         AuthenticationController
@@ -28,7 +28,13 @@ public class UpdateFileContentsOnServerStory extends BaseUserStory {
             String fileContents = "Test create file";
             String newFileId = fileFolderSnippets
                     .postNewFileToServer(
-                            "test_UpdateFile.txt"
+                            "test_Update_"
+                                    + java
+                                    .util
+                                    .UUID
+                                    .randomUUID()
+                                    .toString()
+                                    + ".txt"
                             , fileContents.getBytes(Charsets.UTF_8));
 
 
@@ -38,33 +44,19 @@ public class UpdateFileContentsOnServerStory extends BaseUserStory {
             fileFolderSnippets.deleteFileFromServer(newFileId);
 
             if (fileContentsBytes.length == updatedFileContents.length()) {
-                return StoryResultFormatter.wrapResult("Update file contents on server", true);
+                return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, true);
             } else {
-                return StoryResultFormatter.wrapResult("Update file contents on server", false);
+                return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, false);
             }
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
-            );
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("Update file on server", formattedException);
-            return StoryResultFormatter.wrapResult(
-                    "Update file contents on server exception: "
-                            + formattedException, false
-            );
+        } catch (ExecutionException | InterruptedException e) {
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
-        return "Update file contents on server";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.ContactStories;
 
-import android.util.Log;
-
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryAction;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
@@ -78,14 +75,7 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
                 );
             }
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e(mLogTag, formattedException);
-            return StoryResultFormatter.wrapResult(
-                    mErrorDescription + formattedException
-                    , false
-            );
-
+            return FormatException(e, mDescription);
         }
         return returnValue;
     }

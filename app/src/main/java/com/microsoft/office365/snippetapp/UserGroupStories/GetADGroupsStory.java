@@ -3,13 +3,10 @@
  */
 package com.microsoft.office365.snippetapp.UserGroupStories;
 
-import android.util.Log;
-
 import com.microsoft.directoryservices.Group;
-import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.Snippets.UsersAndGroupsSnippets;
-import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
+import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.Constants;
 import com.microsoft.office365.snippetapp.helpers.O365ServicesManager;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
@@ -18,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GetADGroupsStory extends BaseUserStory {
+
+    private static final String STORY_DESCRIPTION = "Gets groups from Active Directory";
+
     @Override
     public String execute() {
         boolean isStoryComplete;
@@ -44,20 +44,14 @@ public class GetADGroupsStory extends BaseUserStory {
             }
             isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
-            isStoryComplete = false;
-            e.printStackTrace();
-            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
-            Log.e("GetADGroups", formattedException);
-            resultMessage = new StringBuilder();
-            resultMessage.append("Get Active Directory groups exception: ")
-                    .append(formattedException);
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Gets groups from Active Directory";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************
