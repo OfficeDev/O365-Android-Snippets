@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CreateRecurringEventStory extends BaseUserStory {
 
-    public static final String STORY_DESCRIPTION = "Create a recurring event";
+    private static final String STORY_DESCRIPTION = "Create a recurring event";
 
     @Override
     public String execute() {
@@ -46,7 +46,7 @@ public class CreateRecurringEventStory extends BaseUserStory {
             resultMessage = STORY_DESCRIPTION + ": Recurring event created";
         } catch (ExecutionException | InterruptedException e) {
             isStoryComplete = false;
-            resultMessage = BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            resultMessage = FormatException(e, STORY_DESCRIPTION);
         }
 
         return StoryResultFormatter.wrapResult(resultMessage, isStoryComplete);

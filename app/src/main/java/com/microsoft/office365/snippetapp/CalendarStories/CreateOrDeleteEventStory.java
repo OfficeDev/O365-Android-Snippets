@@ -79,7 +79,7 @@ public class CreateOrDeleteEventStory extends BaseUserStory {
             //Delete event
             calendarSnippets.deleteCalendarEvent(newEventId);
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, mLogTag);
+            return FormatException(e, mLogTag);
         }
         return StoryResultFormatter.wrapResult(mSuccessDescription, true);
     }

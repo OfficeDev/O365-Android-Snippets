@@ -53,7 +53,7 @@ public class GetFilteredContactsWithSurnameStory extends BaseUserStory {
                     + " " + surname
                     + " found.", true);
         } catch (ExecutionException | InterruptedException e) {
-            storyResultText = BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            storyResultText = FormatException(e, STORY_DESCRIPTION);
         }
         return storyResultText;
     }

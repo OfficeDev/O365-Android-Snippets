@@ -67,7 +67,7 @@ public class GetFilteredImportantEvents extends BaseUserStory {
             calendarSnippets.deleteCalendarEvent(testEvent.getId());
 
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
         if (isSucceeding) {
             return StoryResultFormatter.wrapResult(STORY_DESCRIPTION + ": Important events found.", true);

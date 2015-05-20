@@ -12,9 +12,9 @@ import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 
 public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
 
-    public static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
-    public static final String SENT_NOTICE = "Email sent with subject line:";
-    public static final boolean IS_INLINE = false;
+    private static final String STORY_DESCRIPTION = "Sends an email message with a text file attachment";
+    private static final String SENT_NOTICE = "Email sent with subject line:";
+    private static final boolean IS_INLINE = false;
 
     @Override
     public String execute() {
@@ -55,7 +55,7 @@ public class SendEmailWithTextFileAttachmentStory extends BaseEmailUserStory {
             emailSnippets.sendMail(draftMessageID);
 
         } catch (Exception ex) {
-            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
     }

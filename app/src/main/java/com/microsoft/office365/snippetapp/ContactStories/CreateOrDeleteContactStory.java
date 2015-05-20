@@ -75,7 +75,7 @@ public class CreateOrDeleteContactStory extends BaseUserStory {
                 );
             }
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, mDescription);
+            return FormatException(e, mDescription);
         }
         return returnValue;
     }

@@ -79,7 +79,7 @@ public class CreateOrDeleteFileStory extends BaseUserStory {
             fileFolderSnippets.deleteFileFromServer(newFileId);
             return StoryResultFormatter.wrapResult(mSuccessDescription, true);
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, mDescription);
+            return FormatException(e, mDescription);
         }
     }
 

@@ -62,7 +62,7 @@ public class ReplyToEmailMessageStory extends BaseEmailUserStory {
                         STORY_DESCRIPTION + ":", false);
             }
         } catch (ExecutionException | InterruptedException ex) {
-            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
+            return FormatException(ex, STORY_DESCRIPTION);
         }
     }
 

@@ -29,7 +29,7 @@ public class GetTenantDetailsStory extends BaseUserStory {
         try {
             tenant = usersAndGroupsSnippets.getTenantDetails();
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
 
         if (tenant == null) {

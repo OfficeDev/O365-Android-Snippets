@@ -42,7 +42,7 @@ public class GetADUsersStory extends BaseUserStory {
             }
             isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
     }

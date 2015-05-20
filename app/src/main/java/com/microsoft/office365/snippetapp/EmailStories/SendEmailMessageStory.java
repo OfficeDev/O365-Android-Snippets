@@ -40,14 +40,13 @@ public class SendEmailMessageStory extends BaseEmailUserStory {
 
             returnResult = StoryResultFormatter.wrapResult("Email is added", true);
         } catch (Exception e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return returnResult;
     }
 
     @Override
     public String getDescription() {
-
         return STORY_DESCRIPTION;
     }
 

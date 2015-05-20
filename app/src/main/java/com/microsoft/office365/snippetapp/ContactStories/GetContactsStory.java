@@ -41,13 +41,12 @@ public class GetContactsStory extends BaseUserStory {
             return StoryResultFormatter.wrapResult(sb.toString(), true);
 
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
-
         return STORY_DESCRIPTION;
     }
 

@@ -19,8 +19,8 @@ import java.util.concurrent.ExecutionException;
 
 
 public class GetEmailAttachmentsStory extends BaseEmailUserStory {
-    public static final String SENT_NOTICE = "Attachment email sent with subject line:";
-    public static final boolean IS_INLINE = false;
+    private static final String SENT_NOTICE = "Attachment email sent with subject line:";
+    private static final boolean IS_INLINE = false;
     private static final String STORY_DESCRIPTION = "Gets the attachments from an email message";
 
     @Override
@@ -87,7 +87,7 @@ public class GetEmailAttachmentsStory extends BaseEmailUserStory {
             // Boolean result = emailSnippets.deleteMail(emailID);
 
         } catch (ExecutionException | InterruptedException | UnsupportedEncodingException ex) {
-            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
 

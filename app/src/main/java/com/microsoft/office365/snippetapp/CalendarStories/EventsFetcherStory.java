@@ -45,7 +45,7 @@ public class EventsFetcherStory extends BaseUserStory {
             }
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
         } catch (Exception ex) {
-            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
+            return FormatException(ex, STORY_DESCRIPTION);
         }
         return returnResult;
     }
@@ -57,7 +57,7 @@ public class EventsFetcherStory extends BaseUserStory {
 
     @Override
     public String getDescription() {
-        return "Gets Events";
+        return STORY_DESCRIPTION;
     }
 
 }

@@ -15,8 +15,8 @@ import com.microsoft.outlookservices.Contact;
 import java.util.concurrent.ExecutionException;
 
 public class UpdateContactStory extends BaseUserStory {
-    public static final String UPDATE_CONTACT_STORY = "Update Contact story";
-    public static final String STORY_DESCRIPTION = "Updates the surname of a contact";
+    private static final String UPDATE_CONTACT_STORY = "Update Contact story";
+    private static final String STORY_DESCRIPTION = "Updates the surname of a contact";
     private Context mContext;
 
     public UpdateContactStory(Context context) {
@@ -82,7 +82,7 @@ public class UpdateContactStory extends BaseUserStory {
                 return returnValue;
             }
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, UPDATE_CONTACT_STORY);
+            return FormatException(e, UPDATE_CONTACT_STORY);
         }
         return returnValue;
     }

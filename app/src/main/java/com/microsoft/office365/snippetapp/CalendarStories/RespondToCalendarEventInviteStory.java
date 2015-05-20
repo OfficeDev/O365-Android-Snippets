@@ -81,7 +81,7 @@ public class RespondToCalendarEventInviteStory extends BaseEmailUserStory {
                         , false);
             }
         } catch (ExecutionException | InterruptedException e) {
-            resultMessage = BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            resultMessage = FormatException(e, STORY_DESCRIPTION);
         }
         return resultMessage;
     }

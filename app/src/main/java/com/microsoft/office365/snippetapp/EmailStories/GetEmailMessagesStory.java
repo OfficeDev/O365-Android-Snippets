@@ -43,14 +43,13 @@ public class GetEmailMessagesStory extends BaseEmailUserStory {
             }
             returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
         return returnResult;
     }
 
     @Override
     public String getDescription() {
-
         return STORY_DESCRIPTION;
     }
 }

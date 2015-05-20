@@ -65,7 +65,7 @@ public class CreateOrDeleteOneDriveFolder extends BaseUserStory {
                     mSuccessDescription, true);
 
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, mDescription);
+            return FormatException(e, mDescription);
         }
     }
 

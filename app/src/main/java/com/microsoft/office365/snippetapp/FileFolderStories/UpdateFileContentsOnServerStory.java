@@ -50,7 +50,7 @@ public class UpdateFileContentsOnServerStory extends BaseUserStory {
             }
 
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 

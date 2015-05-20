@@ -54,7 +54,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                     STORY_DESCRIPTION, true
             );
         } catch (Exception ex) {
-            return BaseExceptionFormatter(ex, STORY_DESCRIPTION);
+            return FormatException(ex, STORY_DESCRIPTION);
         }
     }
 

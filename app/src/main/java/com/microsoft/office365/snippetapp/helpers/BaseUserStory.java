@@ -40,7 +40,7 @@ public abstract class BaseUserStory {
         mUseCaseStatusChangedListener = listener;
     }
 
-    public abstract String execute();
+    protected abstract String execute();
 
     public abstract String getDescription();
 
@@ -53,18 +53,18 @@ public abstract class BaseUserStory {
         mGroupingFlag = groupingFlag;
     }
 
-    public String getId() {
+    protected String getId() {
         return java.util.UUID.randomUUID().toString();
     }
 
-    public String getStringResource(int resourceToGet) {
+    protected String getStringResource(int resourceToGet) {
         return AndroidSnippetsApplication
                 .getApplication()
                 .getApplicationContext()
                 .getString(resourceToGet);
     }
 
-    public String BaseExceptionFormatter(Exception exception, String storyDescription) {
+    protected String FormatException(Exception exception, String storyDescription) {
         exception.printStackTrace();
         String formattedException = APIErrorMessageHelper.getErrorMessage(exception.getMessage());
         Log.e(storyDescription, formattedException);

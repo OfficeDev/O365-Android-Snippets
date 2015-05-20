@@ -64,7 +64,7 @@ public class DownloadFileStory extends BaseUserStory {
             } else
                 return StoryResultFormatter.wrapResult(STORY_DESCRIPTION, false);
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 

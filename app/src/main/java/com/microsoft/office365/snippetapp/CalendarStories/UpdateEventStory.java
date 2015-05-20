@@ -64,13 +64,13 @@ public class UpdateEventStory extends BaseUserStory {
                                 + " event.", false);
             }
         } catch (ExecutionException | InterruptedException e) {
-            return BaseExceptionFormatter(e, STORY_DESCRIPTION);
+            return FormatException(e, STORY_DESCRIPTION);
         }
     }
 
     @Override
     public String getDescription() {
-        return "Update a calendar event";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************
