@@ -3,17 +3,68 @@
  */
 package com.microsoft.office365.snippetapp.ODataStories;
 
+import android.util.Log;
+
+import com.microsoft.office365.snippetapp.Snippets.ODataSystemQuerySnippets;
+import com.microsoft.office365.snippetapp.helpers.APIErrorMessageHelper;
+import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
+import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
+import com.microsoft.outlookservices.Message;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ODataSelectStory extends BaseUserStory {
+    private static final String STORY_DESCRIPTION = "Use $select to reduce payload when getting messages";
+
     @Override
     public String execute() {
-        return "";
+        boolean isStoryComplete = false;
+        StringBuilder returnResult = new StringBuilder();
+
+        AuthenticationController
+                .getInstance()
+                .setResourceId(
+                        getO365MailResourceId());
+        try {
+            ODataSystemQuerySnippets oDataSystemQuerySnippets = new ODataSystemQuerySnippets();
+
+            //O365 API called in this helper
+            List<Message> messages = oDataSystemQuerySnippets.getMailMessagesUsing$select(getO365MailClient());
+
+            returnResult.append(STORY_DESCRIPTION)
+                    .append(": ")
+                    .append(messages.size())
+                    .append(" messages returned")
+                    .append("\n");
+
+            for (Message message : messages) {
+                returnResult.append("\t\tFrom: ")
+                        .append(message.getFrom())
+                        .append("\n\t\tIs Read: ")
+                        .append(message.getIsRead().toString())
+                        .append("\n\t\tSubject: ")
+                        .append(message.getSubject())
+                        .append("\n");
+            }
+            isStoryComplete = true;
+        } catch (ExecutionException | InterruptedException e) {
+            isStoryComplete = false;
+            e.printStackTrace();
+            String formattedException = APIErrorMessageHelper.getErrorMessage(e.getMessage());
+            Log.e("Get email story", formattedException);
+            returnResult = new StringBuilder();
+            returnResult.append(STORY_DESCRIPTION)
+                    .append(": ")
+                    .append(formattedException);
+        }
+        return StoryResultFormatter.wrapResult(returnResult.toString(), isStoryComplete);
     }
 
     @Override
     public String getDescription() {
-        return "Use $select to reduce payload when getting messages";
+        return STORY_DESCRIPTION;
     }
 }
 // *********************************************************

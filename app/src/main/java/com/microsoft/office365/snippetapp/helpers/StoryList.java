@@ -8,7 +8,6 @@ import android.content.Context;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateOrDeleteEventStory;
 import com.microsoft.office365.snippetapp.CalendarStories.CreateRecurringEventStory;
 import com.microsoft.office365.snippetapp.CalendarStories.EventsFetcherStory;
-import com.microsoft.office365.snippetapp.CalendarStories.GetFilteredImportantEvents;
 import com.microsoft.office365.snippetapp.CalendarStories.RespondToCalendarEventInviteStory;
 import com.microsoft.office365.snippetapp.CalendarStories.UpdateEventStory;
 import com.microsoft.office365.snippetapp.ContactStories.CreateOrDeleteContactStory;
@@ -27,7 +26,6 @@ import com.microsoft.office365.snippetapp.FileFolderStories.CreateOrDeleteOneDri
 import com.microsoft.office365.snippetapp.FileFolderStories.DownloadFileStory;
 import com.microsoft.office365.snippetapp.FileFolderStories.GetFilesAndFoldersStory;
 import com.microsoft.office365.snippetapp.FileFolderStories.UpdateFileContentsOnServerStory;
-import com.microsoft.office365.snippetapp.ODataStories.ODataExpandStory;
 import com.microsoft.office365.snippetapp.ODataStories.ODataFilterStory;
 import com.microsoft.office365.snippetapp.ODataStories.ODataSelectStory;
 import com.microsoft.office365.snippetapp.R;
@@ -60,7 +58,6 @@ public class StoryList {
                 new StoryGroupPlaceholder("OData system query stories"),
                 new ODataSelectStory(),
                 new ODataFilterStory(),
-                new ODataExpandStory(),
 
                 //Active Directory Stories
                 new StoryGroupPlaceholder(context.getString(R.string.active_directory_group_placeholder)),
@@ -93,7 +90,6 @@ public class StoryList {
                 new EventsFetcherStory(),
                 new UpdateEventStory(),
                 new RespondToCalendarEventInviteStory(),
-                new GetFilteredImportantEvents(),
                 new CreateRecurringEventStory(),
 
                 //Files and Folders Stories

@@ -377,23 +377,7 @@ public class CalendarSnippets {
                 .get();
     }
 
-    /**
-     * Runs a filtered query to find all events that are high importance. This snippet can be
-     * modified to run any filtered query. For a complete list of Events properties that
-     * can be filtered, see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#RESTAPIResourcesEvent
-     *
-     * @return A list of events
-     * @version 1.0
-     */
-    public List<Event> getImportantEvents() throws ExecutionException, InterruptedException {
-        return mCalendarClient
-                .getMe()
-                .getEvents()
-                .select("importance")
-                .filter("Importance eq 'High'")
-                .read()
-                .get();
-    }
+
 
     /**
      * Local helper method that converts an list of email strings into
