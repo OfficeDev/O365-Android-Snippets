@@ -377,9 +377,6 @@ public class EmailSnippets {
                 .createForward()
                 .get();
         Message message = getDraftMessageMap().get(forwardMessage.getConversationId());
-        if (message == null) {
-            return "";
-        }
         return message.getId();
     }
 
