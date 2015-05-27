@@ -41,7 +41,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
         do {
             List<Message> messages;
             messages = emailSnippets
-                    .GetMailboxMessagesByFolderName_Subject(
+                    .getMailboxMessagesByFolderName_Subject(
                             subjectLine
                             , folderName);
             if (messages.size() > 0) {
@@ -70,7 +70,7 @@ public abstract class BaseEmailUserStory extends BaseUserStory {
         do {
 
             messagesToDelete = emailSnippets
-                    .GetMailboxMessagesByFolderName_Subject(
+                    .getMailboxMessagesByFolderName_Subject(
                             subjectLine
                             , folderName);
             for (Message message : messagesToDelete) {
