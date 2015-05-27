@@ -411,7 +411,8 @@ public class EmailSnippets {
      * @return Map of type String, Message. The result of the operation
      * @version 1.0
      */
-    public Map<String, Message> getDraftMessageMap() throws ExecutionException, InterruptedException {
+    public Map<String, Message> getDraftMessageMap()
+            throws ExecutionException, InterruptedException {
         Map<String, Message> draftMessageMap = new HashMap<>();
         for (Message draftMessage : getDraftMessages()) {
             draftMessageMap.put(draftMessage.getId(), draftMessage);
