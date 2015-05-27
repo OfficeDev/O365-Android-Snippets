@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EmailSnippets {
-    
+
     public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
     OutlookClient mOutlookClient;
 
@@ -79,7 +79,7 @@ public class EmailSnippets {
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
+    public List<String> getInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
