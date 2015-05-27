@@ -14,6 +14,7 @@ import com.microsoft.office365.snippetapp.ContactStories.CreateOrDeleteContactSt
 import com.microsoft.office365.snippetapp.ContactStories.GetContactsStory;
 import com.microsoft.office365.snippetapp.ContactStories.GetFilteredContactsWithSurnameStory;
 import com.microsoft.office365.snippetapp.ContactStories.UpdateContactStory;
+import com.microsoft.office365.snippetapp.EmailStories.DeleteEmailAttachmentStory;
 import com.microsoft.office365.snippetapp.EmailStories.ForwardEmailMessageStory;
 import com.microsoft.office365.snippetapp.EmailStories.GetEmailAttachmentsStory;
 import com.microsoft.office365.snippetapp.EmailStories.GetEmailMessagesStory;
@@ -74,6 +75,7 @@ public class StoryList {
                 new SendEmailWithTextFileAttachmentStory(),
                 new SendEmailWithMessageAttachStory(),
                 new GetEmailAttachmentsStory(),
+                new DeleteEmailAttachmentStory(),
 
                 //Contact Stories
                 new StoryGroupPlaceholder(context.getString(R.string.contact_group_placeholder)),

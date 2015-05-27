@@ -106,7 +106,7 @@ public class EmailSnippets {
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<Message> GetMailboxMessagesByFolderName_Subject(
+    public List<Message> getMailboxMessagesByFolderNameSubject(
             String subjectLine
             , String folderName) throws ExecutionException, InterruptedException {
 
@@ -255,6 +255,38 @@ public class EmailSnippets {
                 .read()
                 .get();
     }
+
+    /**
+     * Deletes all attachments from a message attachment collection and update
+     * the message in the Drafts folder
+     *
+     * @param mailId  The id of the message to update
+     * @return boolean. Success flag. True if attachments are deleted
+     */
+    public boolean removeEmailAttachments(String mailId) throws ExecutionException, InterruptedException {
+        if (mailId.length() == 0)
+            return false;
+
+        List<Attachment> attachments = getAttachmentsFromEmailMessage(
+                mailId);
+
+        //Send the mail with attachments
+        //build string for test results on UI
+        for (Attachment attachment : attachments) {
+            attachments.remove(attachment);
+            mOutlookClient
+                    .getMe()
+                    .getMessages()
+                    .getById(mailId)
+                    .getAttachments()
+                    .getById(attachment.getId())
+                    .delete()
+                    .get();
+        }
+
+        return true;
+    }
+
 
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
