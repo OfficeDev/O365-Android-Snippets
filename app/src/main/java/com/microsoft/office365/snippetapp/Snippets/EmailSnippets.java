@@ -248,7 +248,8 @@ public class EmailSnippets {
      * @return List. A list of Byte array objects
      * @version 1.0
      */
-    public List<Attachment> getAttachmentsFromEmailMessage(String mailID) throws ExecutionException, InterruptedException {
+    public List<Attachment> getAttachmentsFromEmailMessage(String mailID)
+            throws ExecutionException, InterruptedException {
         return mOutlookClient
                 .getMe()
                 .getMessages()
