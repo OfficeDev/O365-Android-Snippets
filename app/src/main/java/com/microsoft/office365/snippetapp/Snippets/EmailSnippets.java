@@ -67,7 +67,6 @@ public class EmailSnippets {
                 .select("ID")
                 .getById(mailId)
                 .read().get();
-
     }
 
     /**
