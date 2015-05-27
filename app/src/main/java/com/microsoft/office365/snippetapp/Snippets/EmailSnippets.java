@@ -137,7 +137,10 @@ public class EmailSnippets {
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> getInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate, String mailFolder) throws ExecutionException, InterruptedException {
+    public List<String> getInboxMessagesBySubject_DateTimeReceived(
+            String subjectLine,
+            Date sentDate,
+            String mailFolder) throws ExecutionException, InterruptedException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         String filterString = "DateTimeReceived ge "
