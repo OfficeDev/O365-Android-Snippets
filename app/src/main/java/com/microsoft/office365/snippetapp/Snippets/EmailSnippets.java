@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EmailSnippets {
-    private final static int pageSize = 11;
+    
     public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
     OutlookClient mOutlookClient;
 
