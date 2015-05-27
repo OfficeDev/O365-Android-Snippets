@@ -199,7 +199,6 @@ public class EmailSnippets {
             , String fileName
             , boolean isInline) throws ExecutionException, InterruptedException {
 
-
         FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
         attachment.setIsInline(isInline);
 
