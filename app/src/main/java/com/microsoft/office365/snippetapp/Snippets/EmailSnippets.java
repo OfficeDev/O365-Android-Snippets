@@ -221,9 +221,9 @@ public class EmailSnippets {
      * @version 1.0
      */
     public Boolean addItemAttachment(
-            String mailId
-            , Item itemToAttach
-            , boolean isInline) throws ExecutionException, InterruptedException {
+            String mailId,
+            Item itemToAttach,
+            boolean isInline) throws ExecutionException, InterruptedException {
         ItemAttachment itemAttachment = new ItemAttachment();
         itemAttachment.setName(itemToAttach.getClass().getName());
         itemAttachment.setItem(itemToAttach);
