@@ -446,10 +446,7 @@ public class EmailSnippets {
      * @version 1.0
      */
     public String replyToEmailMessage(String emailId, String messageBody)
-            throws
-            ExecutionException
-            , InterruptedException {
-
+            throws ExecutionException, InterruptedException {
 
         //Create a new message in the user draft items folder
         Message replyEmail = mOutlookClient
