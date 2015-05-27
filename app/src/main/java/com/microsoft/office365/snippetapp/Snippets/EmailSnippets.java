@@ -319,7 +319,7 @@ public class EmailSnippets {
     }
 
     /**
-     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     * Creates and sends an email
      *
      * @param emailAddress The email address of the mail recipient
      * @param subject      The subject of the email
