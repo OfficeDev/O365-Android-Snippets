@@ -47,7 +47,7 @@ public class CalendarSnippets {
      * This snippet only selects the Subject, Start, and End fields
      * to reduce network traffic.
      *
-     * @return List. A list of the com.microsoft.outlookservices.Event objects
+     * @return List. A list of the {@link com.microsoft.outlookservices.Event} objects
      */
     public List<Event> getO365Events() throws ExecutionException, InterruptedException {
 

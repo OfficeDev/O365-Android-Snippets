@@ -186,10 +186,10 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      */
     public Attachment addTextFileAttachmentToMessage(
-            String mailId
-            , String fileContents
-            , String fileName
-            , boolean isInline) throws ExecutionException, InterruptedException {
+            String mailId,
+            String fileContents,
+            String fileName,
+            boolean isInline) throws ExecutionException, InterruptedException {
 
         FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
         attachment.setIsInline(isInline);
