@@ -269,9 +269,9 @@ public class EmailSnippets {
      * @version 1.0
      */
     public String addDraftMail(
-            final String emailAddress
-            , final String subject
-            , final String body) throws ExecutionException, InterruptedException {
+            final String emailAddress,
+            final String subject,
+            final String body) throws ExecutionException, InterruptedException {
         // Prepare the message.
         List<Recipient> recipientList = new ArrayList<>();
 
