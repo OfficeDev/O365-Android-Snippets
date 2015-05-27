@@ -107,8 +107,8 @@ public class EmailSnippets {
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
     public List<Message> getMailboxMessagesByFolderName_Subject(
-            String subjectLine
-            , String folderName) throws ExecutionException, InterruptedException {
+            String subjectLine,
+            String folderName) throws ExecutionException, InterruptedException {
 
         List<Folder> sentFolder = mOutlookClient.getMe()
                 .getFolders()
