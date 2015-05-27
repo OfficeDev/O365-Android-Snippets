@@ -443,7 +443,6 @@ public class EmailSnippets {
             ExecutionException
             , InterruptedException {
 
-
         //Create a new message in the user draft items folder
         Message replyEmail = mOutlookClient
                 .getMe()
@@ -454,7 +453,6 @@ public class EmailSnippets {
                 .createReply()
                 .get();
 
-        if (replyEmail != null) {
             //Create a message subject body and set in the reply message
             ItemBody bodyItem = new ItemBody();
             bodyItem.setContentType(BodyType.HTML);
@@ -469,10 +467,6 @@ public class EmailSnippets {
                     .get();
 
             return replyEmail.getId();
-        } else {
-            return "";
-        }
-
     }
 
 }
