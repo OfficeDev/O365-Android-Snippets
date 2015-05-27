@@ -59,9 +59,6 @@ public class DeleteEmailAttachmentStory extends  BaseEmailUserStory{
                 returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
 
 
-            //3. Delete the email using the ID
-            // Boolean result = emailSnippets.deleteMail(emailID);
-
         } catch (ExecutionException | InterruptedException  ex) {
             return FormatException(ex, STORY_DESCRIPTION);
         }
