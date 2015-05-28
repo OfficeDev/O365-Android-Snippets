@@ -10,6 +10,8 @@ import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
 import com.microsoft.outlookservices.Message;
 
+import java.util.concurrent.ExecutionException;
+
 public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
     private static final String STORY_DESCRIPTION = "Forward an email message";
@@ -47,7 +49,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             return StoryResultFormatter.wrapResult(
                     STORY_DESCRIPTION, true
             );
-        } catch (Exception ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             return FormatException(ex, STORY_DESCRIPTION);
         }
     }
