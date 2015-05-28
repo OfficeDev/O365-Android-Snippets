@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EmailSnippets {
-    private final static int pageSize = 11;
+
     public static final String MICROSOFT_OUTLOOK_SERVICES_ITEM_ATTACHMENT = "#Microsoft.OutlookServices.ItemAttachment";
     OutlookClient mOutlookClient;
 
@@ -79,7 +79,7 @@ public class EmailSnippets {
      * @return List of String. The mail Ids of the matching messages
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> GetInboxMessagesBySubject(String subjectLine)
+    public List<String> getInboxMessagesBySubject(String subjectLine)
             throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mOutlookClient
                 .getMe()
@@ -136,7 +136,10 @@ public class EmailSnippets {
      * @return List of String. The mail Ids of the matching messages
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> GetInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate, String mailFolder) throws ExecutionException, InterruptedException {
+    public List<String> getInboxMessagesBySubject_DateTimeReceived(
+            String subjectLine,
+            Date sentDate,
+            String mailFolder) throws ExecutionException, InterruptedException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         String filterString = "DateTimeReceived ge "
@@ -188,11 +191,10 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      */
     public Attachment addTextFileAttachmentToMessage(
-            String mailId
-            , String fileContents
-            , String fileName
-            , boolean isInline) throws ExecutionException, InterruptedException {
-
+            String mailId,
+            String fileContents,
+            String fileName,
+            boolean isInline) throws ExecutionException, InterruptedException {
 
         FileAttachment attachment = getTextFileAttachment(fileContents, fileName);
         attachment.setIsInline(isInline);
@@ -215,9 +217,9 @@ public class EmailSnippets {
      * @return Boolean. The result of the operation. True if success
      */
     public Boolean addItemAttachment(
-            String mailId
-            , Item itemToAttach
-            , boolean isInline) throws ExecutionException, InterruptedException {
+            String mailId,
+            Item itemToAttach,
+            boolean isInline) throws ExecutionException, InterruptedException {
         ItemAttachment itemAttachment = new ItemAttachment();
         itemAttachment.setName(itemToAttach.getClass().getName());
         itemAttachment.setItem(itemToAttach);
@@ -289,9 +291,9 @@ public class EmailSnippets {
      * @return String. The id of the email added to the draft folder
      */
     public String addDraftMail(
-            final String emailAddress
-            , final String subject
-            , final String body) throws ExecutionException, InterruptedException {
+            final String emailAddress,
+            final String subject,
+            final String body) throws ExecutionException, InterruptedException {
         // Prepare the message.
         List<Recipient> recipientList = new ArrayList<>();
 
@@ -338,7 +340,7 @@ public class EmailSnippets {
     }
 
     /**
-     * Gets a message out of the user's draft folder by id and adds a text file attachment
+     * Creates and sends an email
      *
      * @param emailAddress The email address of the mail recipient
      * @param subject      The subject of the email
@@ -346,9 +348,9 @@ public class EmailSnippets {
      * @return String. The id of the sent email
      */
     public String createAndSendMail(
-            final String emailAddress
-            , final String subject
-            , final String body) throws ExecutionException, InterruptedException {
+            final String emailAddress,
+            final String subject,
+            final String body) throws ExecutionException, InterruptedException {
 
         // Prepare the message.
         List<Recipient> recipientList = new ArrayList<>();
@@ -426,7 +428,8 @@ public class EmailSnippets {
      *
      * @return Map of type String, Message. The result of the operation
      */
-    public Map<String, Message> getDraftMessageMap() throws ExecutionException, InterruptedException {
+    public Map<String, Message> getDraftMessageMap()
+            throws ExecutionException, InterruptedException {
         Map<String, Message> draftMessageMap = new HashMap<>();
         for (Message draftMessage : getDraftMessages()) {
             draftMessageMap.put(draftMessage.getId(), draftMessage);
@@ -458,10 +461,7 @@ public class EmailSnippets {
      * @return String. The id of the sent email
      */
     public String replyToEmailMessage(String emailId, String messageBody)
-            throws
-            ExecutionException
-            , InterruptedException {
-
+            throws ExecutionException, InterruptedException {
 
         //Create a new message in the user draft items folder
         Message replyEmail = mOutlookClient

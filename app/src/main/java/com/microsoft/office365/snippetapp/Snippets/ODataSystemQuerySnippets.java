@@ -27,9 +27,9 @@ public class ODataSystemQuerySnippets {
      * see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#OdataQueryParams
      *
      * @return List of type com.microsoft.outlookservices.Message
-     * @version 1.0
      */
-    public List<Message> getMailMessagesUsing$select(OutlookClient outlookClient) throws ExecutionException, InterruptedException {
+    public List<Message> getMailMessagesUsing$select(OutlookClient outlookClient)
+            throws ExecutionException, InterruptedException {
         List<Message> messages = outlookClient
                 .getMe()
                 .getFolders()
@@ -54,7 +54,8 @@ public class ODataSystemQuerySnippets {
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    public List<Event> getImportantEventsUsing$filter(OutlookClient outlookClient) throws ExecutionException, InterruptedException {
+    public List<Event> getImportantEventsUsing$filter(OutlookClient outlookClient)
+            throws ExecutionException, InterruptedException {
         return outlookClient
                 .getMe()
                 .getEvents()
@@ -62,7 +63,6 @@ public class ODataSystemQuerySnippets {
                 .read()
                 .get();
     }
-
 
 }
 // *********************************************************

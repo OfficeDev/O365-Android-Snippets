@@ -24,7 +24,6 @@ public class UsersAndGroupsSnippets {
      * Return a list of users from Active Directory, sorted by display name..
      *
      * @return List. A list of the com.microsoft.directoryservices.User objects.
-     * @version 1.0
      */
     public List<User> getUsers() throws ExecutionException, InterruptedException {
         return mDirectoryClient
@@ -39,7 +38,6 @@ public class UsersAndGroupsSnippets {
      * *
      *
      * @return TenantDetail. The com.microsoft.directoryservices.TenantDetail object for first tenant found.
-     * @version 1.0
      */
     public TenantDetail getTenantDetails() throws ExecutionException, InterruptedException {
         List<TenantDetail> tenants = mDirectoryClient
@@ -53,7 +51,6 @@ public class UsersAndGroupsSnippets {
      * Return a list of groups from Active Directory.
      *
      * @return List. A list of the com.microsoft.directoryservices.Group objects.
-     * @version 1.0
      */
     public List<Group> getGroups() throws ExecutionException, InterruptedException {
         return mDirectoryClient
