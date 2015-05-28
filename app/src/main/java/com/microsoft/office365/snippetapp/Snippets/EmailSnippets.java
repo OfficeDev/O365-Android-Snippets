@@ -106,7 +106,7 @@ public class EmailSnippets {
      * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<Message> GetMailboxMessagesByFolderName_Subject(
+    public List<Message> getMailboxMessagesByFolderNameSubject(
             String subjectLine
             , String folderName) throws ExecutionException, InterruptedException {
 
