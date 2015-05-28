@@ -38,9 +38,9 @@ public class EmailSnippets {
      * user Inbox, sorted by date and time received.
      *
      * @return List of type com.microsoft.outlookservices.Message
-     * @version 1.0
      */
-    public List<Message> getMailMessages() throws ExecutionException, InterruptedException {
+    public List<Message> getMailMessages()
+            throws ExecutionException, InterruptedException {
         List<Message> messages = mOutlookClient
                 .getMe()
                 .getFolders()
@@ -49,7 +49,8 @@ public class EmailSnippets {
                 .select("Subject")
                 .orderBy("DateTimeReceived desc")
                 .top(10)
-                .read().get();
+                .read()
+                .get();
         return messages;
 
     }
@@ -58,16 +59,16 @@ public class EmailSnippets {
      * Gets an email message by the id of the desired message
      *
      * @return com.microsoft.outlookservices.Message
-     * @version 1.0
      */
-    public Message getMailMessageById(String mailId) throws ExecutionException, InterruptedException {
+    public Message getMailMessageById(String mailId)
+            throws ExecutionException, InterruptedException {
         return mOutlookClient
                 .getMe()
                 .getMessages()
                 .select("ID")
                 .getById(mailId)
-                .read().get();
-
+                .read()
+                .get();
     }
 
     /**
@@ -76,10 +77,10 @@ public class EmailSnippets {
      *
      * @param subjectLine The subject of the email to be matched
      * @return List of String. The mail Ids of the matching messages
-     * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> GetInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
+    public List<String> GetInboxMessagesBySubject(String subjectLine)
+            throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
@@ -103,7 +104,6 @@ public class EmailSnippets {
      * @param subjectLine The subject of the email to be matched
      * @param folderName  The display name of the mail folder
      * @return List of String. The mail Ids of the matching messages
-     * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
     public List<Message> getMailboxMessagesByFolderNameSubject(
@@ -134,7 +134,6 @@ public class EmailSnippets {
      * @param subjectLine The subject of the email to be matched
      * @param sentDate    The UTC (Zulu) time that the mail was sent.
      * @return List of String. The mail Ids of the matching messages
-     * @version 1.0
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
     public List<String> GetInboxMessagesBySubject_DateTimeReceived(String subjectLine, Date sentDate, String mailFolder) throws ExecutionException, InterruptedException {
@@ -170,7 +169,6 @@ public class EmailSnippets {
      * @param textContent The content of the file to be attached
      * @param fileName    The name of the file to be attached
      * @return com.microsoft.outlookservices.FileAttachment. The Attachment object
-     * @version 1.0
      */
     private FileAttachment getTextFileAttachment(String textContent, String fileName) {
         FileAttachment fileAttachment = new FileAttachment();
@@ -188,7 +186,6 @@ public class EmailSnippets {
      * @param fileContents The contents of the text file to be attached
      * @param fileName     The name of the file to be attached
      * @return Boolean. The result of the operation. True if success
-     * @version 1.0
      */
     public Attachment addTextFileAttachmentToMessage(
             String mailId
@@ -216,7 +213,6 @@ public class EmailSnippets {
      * @param mailId       The id of the draft email that will get the attachment
      * @param itemToAttach The mail message to attach
      * @return Boolean. The result of the operation. True if success
-     * @version 1.0
      */
     public Boolean addItemAttachment(
             String mailId
@@ -244,9 +240,9 @@ public class EmailSnippets {
      *
      * @param mailID The email id of the message whose attachments are wanted
      * @return List. A list of Byte array objects
-     * @version 1.0
      */
-    public List<Attachment> getAttachmentsFromEmailMessage(String mailID) throws ExecutionException, InterruptedException {
+    public List<Attachment> getAttachmentsFromEmailMessage(String mailID)
+            throws ExecutionException, InterruptedException {
         return mOutlookClient
                 .getMe()
                 .getMessages()
@@ -263,9 +259,8 @@ public class EmailSnippets {
      * @param mailId  The id of the message to update
      * @return boolean. Success flag. True if attachments are deleted
      */
-    public boolean removeEmailAttachments(String mailId) throws ExecutionException, InterruptedException {
-        if (mailId.length() == 0)
-            return false;
+    public boolean removeEmailAttachments(String mailId)
+            throws ExecutionException, InterruptedException {
 
         List<Attachment> attachments = getAttachmentsFromEmailMessage(
                 mailId);
@@ -283,11 +278,8 @@ public class EmailSnippets {
                     .delete()
                     .get();
         }
-
         return true;
     }
-
-
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
      *
@@ -295,7 +287,6 @@ public class EmailSnippets {
      * @param subject      The subject of the email
      * @param body         The body of the email
      * @return String. The id of the email added to the draft folder
-     * @version 1.0
      */
     public String addDraftMail(
             final String emailAddress
@@ -335,7 +326,6 @@ public class EmailSnippets {
      *
      * @param mailId The email to be sent from the draft folder
      * @return Boolean. The result of the operation
-     * @version 1.0
      */
     public Boolean sendMail(String mailId) throws ExecutionException, InterruptedException {
         mOutlookClient
@@ -354,7 +344,6 @@ public class EmailSnippets {
      * @param subject      The subject of the email
      * @param body         The body of the email
      * @return String. The id of the sent email
-     * @version 1.0
      */
     public String createAndSendMail(
             final String emailAddress
@@ -398,7 +387,6 @@ public class EmailSnippets {
      *
      * @param emailId The id of the mail to be forwarded
      * @return String. The id of the sent email
-     * @version 1.0
      */
     public String forwardMail(String emailId) throws ExecutionException, InterruptedException {
         Message forwardMessage = mOutlookClient
@@ -420,7 +408,6 @@ public class EmailSnippets {
      *
      * @param emailID The id of the mail to be deleted
      * @return Boolean. The result of the operation
-     * @version 1.0
      */
     public Boolean deleteMail(String emailID) throws ExecutionException, InterruptedException {
         mOutlookClient
@@ -438,7 +425,6 @@ public class EmailSnippets {
      * mail message
      *
      * @return Map of type String, Message. The result of the operation
-     * @version 1.0
      */
     public Map<String, Message> getDraftMessageMap() throws ExecutionException, InterruptedException {
         Map<String, Message> draftMessageMap = new HashMap<>();
@@ -453,7 +439,6 @@ public class EmailSnippets {
      * the user's email drafts folder
      *
      * @return List. The result of the operation
-     * @version 1.0
      */
     public List<Message> getDraftMessages() throws ExecutionException, InterruptedException {
         return mOutlookClient
@@ -471,7 +456,6 @@ public class EmailSnippets {
      * @param emailId     The id of the mail to be forwarded
      * @param messageBody The body of the message as a string
      * @return String. The id of the sent email
-     * @version 1.0
      */
     public String replyToEmailMessage(String emailId, String messageBody)
             throws
