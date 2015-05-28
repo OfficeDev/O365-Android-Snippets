@@ -24,7 +24,6 @@ public class ContactsSnippets {
      * contact's surname field.
      *
      * @return List. A list of the com.microsoft.outlookservices.Contact objects
-     * @version 1.0
      */
     public List<Contact> getContacts(int pageSize) throws ExecutionException, InterruptedException {
         return mOutlookClient
@@ -46,7 +45,6 @@ public class ContactsSnippets {
      * @param homePhoneString     The home telephone number of the new contact
      * @param lastNameString      The surname of the new contact
      * @return String. The id of the new contact
-     * @version 1.0
      */
     public String createContact(
             String emailAddressString,
@@ -82,7 +80,6 @@ public class ContactsSnippets {
      * Gets a contact by the contact Id
      *
      * @return Contact. The contact corresponding to the id
-     * @version 1.0
      */
     public Contact getAContact(String id) throws ExecutionException, InterruptedException {
         return mOutlookClient
@@ -100,7 +97,6 @@ public class ContactsSnippets {
      * @param contactId       The id of the contact to be updated
      * @param firstNameString The updated first name of the new contact
      * @param lastNameString  The updated surname of the new contact
-     * @version 1.0
      */
     public void updateContact(String contactId, String firstNameString, String lastNameString)
             throws ExecutionException, InterruptedException {
@@ -123,8 +119,6 @@ public class ContactsSnippets {
                 .getContacts()
                 .getById(contactId)
                 .update(updateContact).get();
-
-
     }
 
     /**
