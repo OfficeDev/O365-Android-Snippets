@@ -19,7 +19,7 @@ public class DeleteEmailAttachmentStory extends  BaseEmailUserStory{
 
     @Override
     public String execute() {
-        StringBuilder returnResult = null;
+        StringBuilder returnResult = new StringBuilder();
         try {
             AuthenticationController
                     .getInstance()
