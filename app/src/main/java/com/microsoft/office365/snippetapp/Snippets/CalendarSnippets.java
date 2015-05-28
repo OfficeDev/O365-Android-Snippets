@@ -316,7 +316,7 @@ public class CalendarSnippets {
     }
 
     /**
-     * Accepts an event invitation on behalf of the specified attendee
+     * Responds to an event invitation on behalf of the specified attendee
      *
      * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest

@@ -9,7 +9,6 @@ import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
 
 import java.util.concurrent.ExecutionException;
 
@@ -17,12 +16,10 @@ public class DeleteEmailAttachmentStory extends  BaseEmailUserStory{
 
     private static final String SENT_NOTICE = "Attachment email sent with subject line:";
     private static final String STORY_DESCRIPTION = "Deletes an attachment from a draft email message";
-    private static final boolean IS_INLINE = false;
-
 
     @Override
     public String execute() {
-        String returnResult = "";
+        StringBuilder returnResult = null;
         try {
             AuthenticationController
                     .getInstance()
@@ -45,24 +42,25 @@ public class DeleteEmailAttachmentStory extends  BaseEmailUserStory{
             emailSnippets.addTextFileAttachmentToMessage(emailID
                     , getStringResource(R.string.text_attachment_contents)
                     , getStringResource(R.string.text_attachment_filename)
-                    , IS_INLINE);
+                    , false);
 
             StringBuilder sb = new StringBuilder();
             sb.append(SENT_NOTICE);
-            sb.append(getStringResource(R.string.mail_subject_text) + uniqueGUID);
+            sb.append(getStringResource(R.string.mail_subject_text));
+            sb.append(uniqueGUID);
 
             if (emailID.length() > 0) {
                 emailSnippets.removeEmailAttachments(emailID);
 
-                returnResult = StoryResultFormatter.wrapResult(sb.toString(), true);
+                returnResult.append(StoryResultFormatter.wrapResult(sb.toString(), true));
             } else
-                returnResult = StoryResultFormatter.wrapResult(sb.toString(), false);
+                returnResult.append(StoryResultFormatter.wrapResult(sb.toString(), false)) ;
 
 
         } catch (ExecutionException | InterruptedException  ex) {
-            return FormatException(ex, STORY_DESCRIPTION);
+            returnResult.append(FormatException(ex, STORY_DESCRIPTION)) ;
         }
-        return returnResult;
+        return returnResult.toString();
     }
 
     @Override
