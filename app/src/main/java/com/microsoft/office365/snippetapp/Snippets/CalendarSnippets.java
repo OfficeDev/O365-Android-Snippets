@@ -32,9 +32,6 @@ import java.util.regex.Matcher;
 
 public class CalendarSnippets {
 
-    public static final String ACCEPT = "Accepted";
-    public static final String TENTATIVE = "Tentative";
-    public static final String DECLINE = "Declined";
     OutlookClient mCalendarClient;
 
     public CalendarSnippets(OutlookClient mailClient) {
@@ -50,8 +47,7 @@ public class CalendarSnippets {
      * This snippet only selects the Subject, Start, and End fields
      * to reduce network traffic.
      *
-     * @return List. A list of the com.microsoft.outlookservices.Event objects
-     * @version 1.0
+     * @return List. A list of the {@link com.microsoft.outlookservices.Event} objects
      */
     public List<Event> getO365Events() throws ExecutionException, InterruptedException {
 
@@ -84,7 +80,6 @@ public class CalendarSnippets {
      * are returned per page
      *
      * @param eventId The id of the event to be removed
-     * @version 1.0
      */
     public void deleteCalendarEvent(String eventId)
             throws ExecutionException
@@ -105,7 +100,6 @@ public class CalendarSnippets {
      * @param endDate           The end date of the event
      * @param attendeeAddresses A list of attendee email addresses
      * @return String The id of the created event
-     * @version 1.0
      */
     public String createCalendarEvent(
             String subject
@@ -162,7 +156,6 @@ public class CalendarSnippets {
      * @param itemBodyHtml The body of the event as HTML
      * @param attendees    A list of attendee email addresses
      * @return String The id of the created event
-     * @version 1.0
      */
     public String createRecurringCalendarEvent(
             String subject
@@ -249,7 +242,6 @@ public class CalendarSnippets {
      * @param endDate      The end date of the event
      * @param attendees    A list of attendee email addresses
      * @return String The id of the created event
-     * @version 1.0
      */
     public Event updateCalendarEvent(
             String eventId
@@ -311,9 +303,9 @@ public class CalendarSnippets {
      *
      * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
-     * @version 1.0
      */
-    public ResponseType getEventAttendeeStatus(String eventId, String myEmailAddress) throws ExecutionException, InterruptedException {
+    public ResponseType getEventAttendeeStatus(String eventId, String myEmailAddress)
+            throws ExecutionException, InterruptedException {
         for (Attendee attendee : getCalendarEvent(eventId).getAttendees()) {
             String attendeeEmail = attendee.getEmailAddress().getAddress();
             if (attendeeEmail.equalsIgnoreCase(myEmailAddress)) {
@@ -327,13 +319,14 @@ public class CalendarSnippets {
      * Accepts an event invitation on behalf of the specified attendee
      *
      * @param eventId        The id of the event to be removed
-     *                       Responds to an event invitation on behalf of the specified attendee
-     * @param eventId        The id of the event to be removed
      * @param myEmailAddress The email address of the attendee whose status is of interest
      * @param response       The user's response to the event invitation
-     * @version 1.0
      */
-    public Event respondToCalendarEventInvite(String eventId, String myEmailAddress, ResponseType response) throws ExecutionException, InterruptedException {
+    public Event respondToCalendarEventInvite(
+            String eventId,
+            String myEmailAddress,
+            ResponseType response)
+            throws ExecutionException, InterruptedException {
         //Get the event
         Event calendarEvent = getCalendarEvent(eventId);
         if (calendarEvent == null || calendarEvent.getAttendees() == null)
@@ -365,7 +358,6 @@ public class CalendarSnippets {
      *
      * @param eventId The id of the event to be responded to
      * @return Event The event of interest
-     * @version 1.0
      */
     public Event getCalendarEvent(String eventId) throws ExecutionException, InterruptedException {
         return mCalendarClient
