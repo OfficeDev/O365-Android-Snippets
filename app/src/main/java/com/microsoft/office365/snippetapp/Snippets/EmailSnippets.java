@@ -366,9 +366,6 @@ public class EmailSnippets {
                 .createForward()
                 .get();
         Message message = getDraftMessageMap().get(forwardMessage.getConversationId());
-        if (message == null) {
-            return "";
-        }
         return message.getId();
     }
 
@@ -440,7 +437,6 @@ public class EmailSnippets {
                 .createReply()
                 .get();
 
-        if (replyEmail != null) {
             //Create a message subject body and set in the reply message
             ItemBody bodyItem = new ItemBody();
             bodyItem.setContentType(BodyType.HTML);
@@ -455,10 +451,6 @@ public class EmailSnippets {
                     .get();
 
             return replyEmail.getId();
-        } else {
-            return "";
-        }
-
     }
 
 }
