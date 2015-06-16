@@ -261,14 +261,13 @@ public class EmailSnippets {
      * @param mailId  The id of the message to update
      * @return boolean. Success flag. True if attachments are deleted
      */
-    public boolean removeEmailAttachments(String mailId)
+    public void removeEmailAttachments(String mailId)
             throws ExecutionException, InterruptedException {
 
         List<Attachment> attachments = getAttachmentsFromEmailMessage(
                 mailId);
 
-        //Send the mail with attachments
-        //build string for test results on UI
+        //Delete all attachments from current message
         for (Attachment attachment : attachments) {
             attachments.remove(attachment);
             mOutlookClient
@@ -280,7 +279,6 @@ public class EmailSnippets {
                     .delete()
                     .get();
         }
-        return true;
     }
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
