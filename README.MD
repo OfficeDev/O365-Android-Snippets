@@ -75,6 +75,9 @@ April 16, 2015:
 
 May 14, 2015:
 * Added snippets for getting organization users and groups with Azure Active Directory.
+ 
+June 15, 2015:
+* Added a snippet to remove attachments from a draft message.
 
 ## Device requirements
 To run the snippets project your device needs to meet the following requirements:
