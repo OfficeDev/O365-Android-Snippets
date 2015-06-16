@@ -1,4 +1,5 @@
 # Office 365 Code Snippets for Android
+[![Build Status](https://travis-ci.org/OfficeDev/O365-Android-Snippets.svg?branch=travis-integration)](https://travis-ci.org/OfficeDev/O365-Android-Snippets)
 
 **Table of contents**
 
