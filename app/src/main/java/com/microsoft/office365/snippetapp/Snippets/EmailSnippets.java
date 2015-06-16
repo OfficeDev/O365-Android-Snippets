@@ -39,7 +39,8 @@ public class EmailSnippets {
      *
      * @return List of type com.microsoft.outlookservices.Message
      */
-    public List<Message> getMailMessages() throws ExecutionException, InterruptedException {
+    public List<Message> getMailMessages()
+            throws ExecutionException, InterruptedException {
         List<Message> messages = mOutlookClient
                 .getMe()
                 .getFolders()
@@ -48,7 +49,8 @@ public class EmailSnippets {
                 .select("Subject")
                 .orderBy("DateTimeReceived desc")
                 .top(10)
-                .read().get();
+                .read()
+                .get();
         return messages;
 
     }
@@ -58,13 +60,15 @@ public class EmailSnippets {
      *
      * @return com.microsoft.outlookservices.Message
      */
-    public Message getMailMessageById(String mailId) throws ExecutionException, InterruptedException {
+    public Message getMailMessageById(String mailId)
+            throws ExecutionException, InterruptedException {
         return mOutlookClient
                 .getMe()
                 .getMessages()
                 .select("ID")
                 .getById(mailId)
-                .read().get();
+                .read()
+                .get();
     }
 
     /**
@@ -75,7 +79,8 @@ public class EmailSnippets {
      * @return List of String. The mail Ids of the matching messages
      * @see 'https://msdn.microsoft.com/en-us/office/office365/api/complex-types-for-mail-contacts-calendar'
      */
-    public List<String> getInboxMessagesBySubject(String subjectLine) throws ExecutionException, InterruptedException {
+    public List<String> getInboxMessagesBySubject(String subjectLine)
+            throws ExecutionException, InterruptedException {
         List<Message> inboxMessages = mOutlookClient
                 .getMe()
                 .getFolders()
@@ -249,6 +254,32 @@ public class EmailSnippets {
                 .get();
     }
 
+    /**
+     * Deletes all attachments from a message attachment collection and update
+     * the message in the Drafts folder
+     *
+     * @param mailId  The id of the message to update
+     * @return boolean. Success flag. True if attachments are deleted
+     */
+    public void removeEmailAttachments(String mailId)
+            throws ExecutionException, InterruptedException {
+
+        List<Attachment> attachments = getAttachmentsFromEmailMessage(
+                mailId);
+
+        //Delete all attachments from current message
+        for (Attachment attachment : attachments) {
+            attachments.remove(attachment);
+            mOutlookClient
+                    .getMe()
+                    .getMessages()
+                    .getById(mailId)
+                    .getAttachments()
+                    .getById(attachment.getId())
+                    .delete()
+                    .get();
+        }
+    }
     /**
      * Gets a message out of the user's draft folder by id and adds a text file attachment
      *
@@ -437,6 +468,7 @@ public class EmailSnippets {
                 .createReply()
                 .get();
 
+        if (replyEmail != null) {
             //Create a message subject body and set in the reply message
             ItemBody bodyItem = new ItemBody();
             bodyItem.setContentType(BodyType.HTML);
@@ -451,8 +483,10 @@ public class EmailSnippets {
                     .get();
 
             return replyEmail.getId();
+        } else {
+            return "";
+        }
     }
-
 }
 // *********************************************************
 //
