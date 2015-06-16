@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
-    private static final String STORY_DESCRIPTION = "Forward an email message";
+    private static final String STORY_DESCRIPTION = "Forward a draft email message";
 
     @Override
     public String execute() {
@@ -23,6 +23,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                 .setResourceId(
                         getO365MailResourceId());
 
+        Boolean testPassFlag = false;
         try {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
@@ -39,7 +40,9 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                     getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-            String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
+            String forwardEmailId = emailSnippets.forwardDraftMail(messageToForward.getId(),GlobalValues.USER_EMAIL);
+            testPassFlag = true;
+
             //3. Delete the email using the ID
             emailSnippets.deleteMail(messageToForward.getId());
             if (forwardEmailId.length() > 0) {
@@ -47,7 +50,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             }
 
             return StoryResultFormatter.wrapResult(
-                    STORY_DESCRIPTION, true
+                    STORY_DESCRIPTION, testPassFlag
             );
         } catch (ExecutionException | InterruptedException ex) {
             return FormatException(ex, STORY_DESCRIPTION);

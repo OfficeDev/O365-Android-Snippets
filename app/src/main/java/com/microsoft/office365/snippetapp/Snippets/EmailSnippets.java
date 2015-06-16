@@ -4,6 +4,7 @@
 
 package com.microsoft.office365.snippetapp.Snippets;
 
+import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.outlookservices.Attachment;
 import com.microsoft.outlookservices.BodyType;
 import com.microsoft.outlookservices.EmailAddress;
@@ -388,9 +389,10 @@ public class EmailSnippets {
      * Forwards a message out of the user's Inbox folder by id
      *
      * @param emailId The id of the mail to be forwarded
+     * @param recipientEmailAddress  The email address string of the recipient
      * @return String. The id of the sent email
      */
-    public String forwardMail(String emailId) throws ExecutionException, InterruptedException {
+    public String forwardDraftMail(String emailId, String recipientEmailAddress) throws ExecutionException, InterruptedException {
         Message forwardMessage = mOutlookClient
                 .getMe()
                 .getMessages()
@@ -398,8 +400,19 @@ public class EmailSnippets {
                 .getOperations()
                 .createForward()
                 .get();
-        Message message = getDraftMessageMap().get(forwardMessage.getConversationId());
-        return message.getId();
+
+        //Get the new draft email to forward to dorenap
+        Message draftMessage = getDraftMessageMap().get(forwardMessage.getConversationId());
+
+        //Set the recipient list for the draft message
+        draftMessage.setToRecipients(createEmailRecipientList(recipientEmailAddress));
+        mOutlookClient
+                .getMe()
+                .getOperations()
+                .sendMail(draftMessage, false)
+                .get();
+
+        return draftMessage.getId();
     }
 
     /**
@@ -420,7 +433,7 @@ public class EmailSnippets {
     }
 
     /**
-     * Generates a hash table whose key is a mail Id and value is corresponding
+     * Generates a hash table whose key is a mail conversation Id and value is corresponding
      * mail message
      *
      * @return Map of type String, Message. The result of the operation
@@ -429,7 +442,7 @@ public class EmailSnippets {
             throws ExecutionException, InterruptedException {
         Map<String, Message> draftMessageMap = new HashMap<>();
         for (Message draftMessage : getDraftMessages()) {
-            draftMessageMap.put(draftMessage.getId(), draftMessage);
+            draftMessageMap.put(draftMessage.getConversationId(), draftMessage);
         }
         return draftMessageMap;
     }
@@ -445,7 +458,7 @@ public class EmailSnippets {
                 .getMe()
                 .getFolder("Drafts")
                 .getMessages()
-                .select("ID")
+                .select("ID,Subject,ConversationID")
                 .read()
                 .get();
     }
@@ -463,7 +476,7 @@ public class EmailSnippets {
         //Create a new message in the user draft items folder
         Message replyEmail = mOutlookClient
                 .getMe()
-                .getFolder("Draft")
+                .getFolder("Drafts")
                 .getMessages()
                 .getById(emailId)
                 .getOperations()
@@ -488,6 +501,28 @@ public class EmailSnippets {
         } else {
             return "";
         }
+    }
+
+    private ArrayList<Recipient> createEmailRecipientList(String emailAddress){
+
+        //Create an EmailAddress from string method argument
+        EmailAddress recipientAddress = new EmailAddress();
+        recipientAddress.setAddress(emailAddress);
+
+        //Create a recipient and populate with an email address
+        Recipient recipient = new Recipient();
+        recipient.setEmailAddress(recipientAddress);
+
+        ArrayList<Recipient> recipients = new ArrayList<Recipient>();
+        recipients.add(recipient);
+        return recipients;
+
+    }
+    private String getStringResource(int resourceToGet) {
+        return AndroidSnippetsApplication
+                .getApplication()
+                .getApplicationContext()
+                .getString(resourceToGet);
     }
 }
 // *********************************************************
