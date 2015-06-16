@@ -421,15 +421,13 @@ public class EmailSnippets {
      * @param emailID The id of the mail to be deleted
      * @return Boolean. The result of the operation
      */
-    public Boolean deleteMail(String emailID) throws ExecutionException, InterruptedException {
+    public void deleteMail(String emailID) throws ExecutionException, InterruptedException {
         mOutlookClient
                 .getMe()
                 .getMessages()
                 .getById(emailID)
                 .delete()
                 .get();
-
-        return true;
     }
 
     /**
