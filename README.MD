@@ -95,6 +95,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 * A registered Azure application with a client id and redirect uri value. The application must have the following permissions:
 	* Windows Azure Active Directory
 		* Enable sign-on and read user's profiles.
+		* Access your organization's directory.
 	* Office 365 SharePoint Online
 		* Read and write user files.
 	* Office 365 Exchange Online
