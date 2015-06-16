@@ -96,12 +96,12 @@ To use the Office 365 Code Snippets for Android you need the following:
 	* Windows Azure Active Directory
 		* Enable sign-on and read user's profiles.
 	* Office 365 SharePoint Online
-		* Edit or delete users' files.
+		* Read and write user files.
 	* Office 365 Exchange Online
-		* Read and write access to users' mail.
+		* Read and write user mail.
 		* Send mail as a user.
-		* Get full access to users' calendars.
-		* Get full access to users' contacts.
+		* Read and write user calendars.
+		* Read and write user contacts.
 
 
 
