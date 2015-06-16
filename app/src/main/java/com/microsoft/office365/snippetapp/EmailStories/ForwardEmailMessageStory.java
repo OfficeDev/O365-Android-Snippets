@@ -23,7 +23,6 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                 .setResourceId(
                         getO365MailResourceId());
 
-        Boolean testPassFlag = false;
         try {
             EmailSnippets emailSnippets = new EmailSnippets(
                     getO365MailClient());
@@ -41,7 +40,6 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                             + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
             String forwardEmailId = emailSnippets.forwardDraftMail(messageToForward.getId(),GlobalValues.USER_EMAIL);
-            testPassFlag = true;
 
             //3. Delete the email using the ID
             emailSnippets.deleteMail(messageToForward.getId());
@@ -50,7 +48,7 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
             }
 
             return StoryResultFormatter.wrapResult(
-                    STORY_DESCRIPTION, testPassFlag
+                    STORY_DESCRIPTION, true
             );
         } catch (ExecutionException | InterruptedException ex) {
             return FormatException(ex, STORY_DESCRIPTION);

@@ -516,12 +516,7 @@ public class EmailSnippets {
         return recipients;
 
     }
-    private String getStringResource(int resourceToGet) {
-        return AndroidSnippetsApplication
-                .getApplication()
-                .getApplicationContext()
-                .getString(resourceToGet);
-    }
+
 }
 // *********************************************************
 //
