@@ -6,14 +6,14 @@
 * [Change History](#change-history)
 * [Device requirements](#device-requirements)
 * [Prerequisites](#prerequisites)
-* [Open the project using Android Studio](#open-the-project-using-android-studio) 
+* [Open the project using Android Studio](#open-the-project-using-android-studio)
 * [Run the project](#run-the-project)
 * [Understand the code](#understand-the-code)
 * [Connect to Office 365](#connect-to-office-365)
 * [Questions and comments](#questions-and-comments)
 * [Additional resources](#additional-resources)
 
-This sample for Android is a repository of simple method examples that access email, calendar events, contacts, and files in Office 365. These "snippet" methods are self contained so you can paste them into your own code or use as reference for learning. This sample has snippets for the most common create, read, update, and delete operations on Office 365 content.  
+This sample for Android is a repository of simple method examples that access email, calendar events, contacts, and files in Office 365. These "snippet" methods are self contained so you can paste them into your own code or use as reference for learning. This sample has snippets for the most common create, read, update, and delete operations on Office 365 content.
 
 This sample includes the following operations:
 
@@ -29,7 +29,7 @@ This sample includes the following operations:
 * Get the status of an event attendee.
 
 **OneDrive for Business**
- 
+
 * Get existing files and folders.
 * Create text files.
 * Delete files or folders.
@@ -47,7 +47,7 @@ This sample includes the following operations:
 * Reply to email.
 * Send email with text file attachment.
 * Get email attachments from inbox.
-* Remove attachments from an email message.
+* Remove attachments from email message.
 
 **Contacts**
 
@@ -68,12 +68,19 @@ We will continue adding snippets to this sample, so make sure to check back.
 April 6, 2015:
 
 * Initial release.
-  
+
 April 16, 2015:
+
 * Added snippets for sending email with text file attachments and getting attachments from email in your inbox.
 
 May 14, 2015:
+
 * Added snippets for getting organization users and groups with Azure Active Directory.
+
+June 15, 2015:
+
+* Added a snippet to remove attachments from a draft message.
+
 
 June 14, 2015:
 * Added snippets for removing attachments from email messages.
@@ -106,7 +113,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 ## Azure client application registration
 Each client application that you register with Azure can have its own unique set of permission requirements, application title, and redirect URL. Unless you have an existing application registration that uses the same combination of permissions, title, and URL, you should create a new registration for each app.
 
-1.  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
+*  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
 
  > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 
@@ -143,7 +150,7 @@ Once you've built the snippets project you can run it on an emulator or device.
 5. View the results of the task in the detail pane to the right of the list.
 6. Optionally, clear the results of the task by clicking the "Clear Results" action bar item.
 7. Run all tasks in the list sequentially by clicking the "Run All" action bar item.
-  
+
 
 ## Understand the code
 
@@ -152,10 +159,10 @@ The starter project uses these classes to manage interactions with Office 365:
 * [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java)
 * [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java)
 * [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java)
-* [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java) 
-* [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java) 
+* [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java)
+* [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java)
 
-These classes have snippet methods that wrap calls to the [SharePointClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/file-services/src/main/java/com/microsoft/fileservices/odata/SharePointClient.java) and [OutlookClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/outlook-services/src/main/java/com/microsoft/outlookservices/odata/OutlookClient.java) objects in the Office 365 SDK for Android. Look at the classes in the com.microsoft.office365.snippetapp.O365Stories package to see how the snippets are called. 
+These classes have snippet methods that wrap calls to the [SharePointClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/file-services/src/main/java/com/microsoft/fileservices/odata/SharePointClient.java) and [OutlookClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/outlook-services/src/main/java/com/microsoft/outlookservices/odata/OutlookClient.java) objects in the Office 365 SDK for Android. Look at the classes in the com.microsoft.office365.snippetapp.O365Stories package to see how the snippets are called.
 
 
 ### Connect to Office 365
@@ -166,7 +173,7 @@ The **AuthenticationController** object manages getting a token from ADAL and re
 
 ### Calendar API
 
-The [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java) object wraps the API operations that create, update and delete calendar events in an Office 365 Exchange calendar. 
+The [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java) object wraps the API operations that create, update and delete calendar events in an Office 365 Exchange calendar.
 
 The **getO365Events** method gets a list of events from the Office 365 calendar and loads pages of events into a local list. Changes, deletions, and additions to this list are posted asynchronously to the Office 365 calendar by the **updateCalendarEvent**, **deleteCalendarEvent**, and **createCalendarEvent** methods.
 
@@ -174,19 +181,19 @@ The **getO365Events** method gets a list of events from the Office 365 calendar 
 
 The [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java) object wraps the API operations that create, update, and delete files stored on OneDrive for Business.
 
-The **getFilesAndFoldersFromService** method gets a list of all of the files and folders that are stored on OneDrive for Business and loads the list into a local array. Changes, deletions, and additions to the local list of files are posted asynchronously to OneDrive for Business by the **postUpdatedFileToServer**, **deleteFileFromServer**, and **postNewFileToServer** methods. 
+The **getFilesAndFoldersFromService** method gets a list of all of the files and folders that are stored on OneDrive for Business and loads the list into a local array. Changes, deletions, and additions to the local list of files are posted asynchronously to OneDrive for Business by the **postUpdatedFileToServer**, **deleteFileFromServer**, and **postNewFileToServer** methods.
 
 The **getFilesAndFolders** method returns a list of **Item** objects containing the selected files contents.
 
 ### Mail API
 
-The [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java) object wraps the API operations that create, update and delete mail items in an Office 365 Exchange mailbox. 
+The [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java) object wraps the API operations that create, update and delete mail items in an Office 365 Exchange mailbox.
 
 The **getMailMessages** method gets a list of mail items from the Office 365 mailbox and loads pages of items into a local list. Deletions to this list, and mail sent from the mailbox are posted asynchronously to the Office 365 calendar by the **deleteMail**, **sendMail**, **forwardMail**, and **replyToEmailMessage** methods.
 
 ### Contacts API
 
-The [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java) object wraps the API operations that create, update and delete contacts in Office 365 Exchange. 
+The [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java) object wraps the API operations that create, update and delete contacts in Office 365 Exchange.
 
 The **getContacts** method gets a list of contacts from Office 365 and loads pages of contacts into a local list. Changes, deletions, and additions to this list are posted asynchronously to Office 365 by the **updateContact**, **deleteContact**, and **createContact** methods.
 
@@ -202,7 +209,7 @@ We'd love to get your feedback on this Android starter kit. You can send your qu
 
 * In the [Issues](https://github.com/OfficeDev/O365-Android-Start/issues) section of this repository.
 * Send us an email to [docthis@microsoft.com](mailto:docthis@microsoft.com?subject=Feedback%20on%20the%20Office%20365%20Starter%20project%20for%20Android).
-  
+
 <a name="resources"/>
 ## Additional resources
 
