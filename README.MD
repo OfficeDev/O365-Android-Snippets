@@ -103,13 +103,14 @@ To use the Office 365 Code Snippets for Android you need the following:
 		* Read and write user calendars.
 		* Read and write user contacts.
 
+## Azure client application registration
+Each client application that you register with Azure can have its own unique set of permission requirements, application title, and redirect URL. Unless you have an existing application registration that uses the same combination of permissions, title, and URL, you should create a new registration for each app.
+1.  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
+ > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 
 
 ## Open the project using Android Studio
 Open the project by importing the settings.gradle file.
-
-1.  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
- > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 
 1. Install [Android Studio](http://developer.android.com/tools/studio/index.html#install-updates) and add the Android SDK packages according to the [instructions](http://developer.android.com/sdk/installing/adding-packages.html) on developer.android.com.
 2. Download or clone the [Office 365 Code Snippets for Android](https://github.com/OfficeDev/O365-Android-Snippets).
@@ -117,7 +118,7 @@ Open the project by importing the settings.gradle file.
 4. From the **Welcome to Android Studio** dialog box, choose **Import project (Eclipse ADT, Gradle, etc)**.
 5. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
 6. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
-7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
+7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in step 1.
 8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in step 1.
 
     ![Office 365 Snippet sample](/readme-images/constants_Modify.png "Client ID and Redirect URI values in Constants file")
