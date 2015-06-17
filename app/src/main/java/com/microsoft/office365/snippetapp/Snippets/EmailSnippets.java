@@ -401,8 +401,9 @@ public class EmailSnippets {
                 .createForward()
                 .get();
 
-        //Get the new draft email to forward to dorenap
-        Message draftMessage = getDraftMessageMap().get(forwardMessage.getConversationId());
+        //Get the new draft email to forward to the specified email recipient
+        Message draftMessage = getDraftMessageMap()
+                .get(forwardMessage.getConversationId());
 
         //Set the recipient list for the draft message
         draftMessage.setToRecipients(createEmailRecipientList(recipientEmailAddress));
