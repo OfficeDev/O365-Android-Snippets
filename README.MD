@@ -94,13 +94,14 @@ To use the Office 365 Code Snippets for Android you need the following:
 * A registered Azure application with a client id and redirect uri value. The application must have the following permissions:
 	* Windows Azure Active Directory
 		* Enable sign-on and read user's profiles.
+		* Access your organization's directory.
 	* Office 365 SharePoint Online
-		* Edit or delete users' files.
+		* Read and write user files.
 	* Office 365 Exchange Online
-		* Read and write access to users' mail.
+		* Read and write user mail.
 		* Send mail as a user.
-		* Get full access to users' calendars.
-		* Get full access to users' contacts.
+		* Read and write user calendars.
+		* Read and write user contacts.
 
 
 
@@ -117,7 +118,8 @@ Open the project by importing the settings.gradle file.
 5. Select the **settings.gradle** file in the **O365-Android-Snippets** folder and click **OK**.
 6. Open the constants.java file in the com.microsoft.office365.snippetapp.helpers package.
 7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
-8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in Azure Active Directory.
+8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in step 1.
+
     ![Office 365 Snippet sample](/readme-images/constants_Modify.png "Client ID and Redirect URI values in Constants file")
 
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
