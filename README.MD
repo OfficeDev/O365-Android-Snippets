@@ -45,8 +45,9 @@ This sample includes the following operations:
 * Send new mail.
 * Forward email.
 * Reply to email.
-* Send email with text file attachment
-* Get email attachments from inbox
+* Send email with text file attachment.
+* Get email attachments from inbox.
+* Remove attachments from an email message.
 
 **Contacts**
 
@@ -69,11 +70,13 @@ April 6, 2015:
 * Initial release.
   
 April 16, 2015:
-
 * Added snippets for sending email with text file attachments and getting attachments from email in your inbox.
 
 May 14, 2015:
 * Added snippets for getting organization users and groups with Azure Active Directory.
+
+June 14, 2015:
+* Added snippets for removing attachments from email messages.
 
 ## Device requirements
 To run the snippets project your device needs to meet the following requirements:
@@ -104,7 +107,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 ## Open the project using Android Studio
 Open the project by importing the settings.gradle file.
 
-1. Register a new app in [Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding)
+1.  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
  > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 
 1. Install [Android Studio](http://developer.android.com/tools/studio/index.html#install-updates) and add the Android SDK packages according to the [instructions](http://developer.android.com/sdk/installing/adding-packages.html) on developer.android.com.
@@ -116,8 +119,6 @@ Open the project by importing the settings.gradle file.
 7. Find the CLIENT_ID constant and set its String value equal to the client id you registered in Azure Active Directory.
 8. Find the REDIRECT_URI constant and set its String value equal to the redirect URI you registered in Azure Active Directory.
     ![Office 365 Snippet sample](/readme-images/constants_Modify.png "Client ID and Redirect URI values in Constants file")
-
-9. [Grant proper permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
 
 > Note: The starter project declares the required dependencies using Gradle. The dependencies are:
 > * The [Azure Active Directory Authentication Library for Android](https://github.com/AzureAD/azure-activedirectory-library-for-android).
