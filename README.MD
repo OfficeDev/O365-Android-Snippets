@@ -97,7 +97,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 * The latest version of [Android Studio](http://developer.android.com/sdk/index.html).
 * The [Gradle](http://www.gradle.org) build automation system version 2.2.1 or later.
 * An Office 365 account. You can sign up for [an Office 365 Developer subscription](https://portal.office.com/Signup/Signup.aspx?OfferId=C69E7747-2566-4897-8CBA-B998ED3BAB88&DL=DEVELOPERPACK&ali=1#0) that includes the resources that you need to start building Office 365 apps.
-* [Java Development Kit (JDK) 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
+* [Java Development Kit (JDK) 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 * A registered Azure application with a client id and redirect uri value. The application must have the following permissions:
 	* Windows Azure Active Directory
 		* Enable sign-on and read user's profiles.
@@ -145,6 +145,8 @@ Open the project by importing the settings.gradle file.
 Once you've built the snippets project you can run it on an emulator or device.
 
 1. Run the project.
+
+ > Note: The sample is designed to run in landscape mode. If you want to run the sample in portrait mode, change the orientation of the emulator by pressing the ctrl-f12 key combination on a Windows computer and control-f12 on a OSX computer.
 3. Click the "Connect" item on the action bar overflow menu and enter your credentials.
 4. Click a task in the main activity list to run a task.
 5. View the results of the task in the detail pane to the right of the list.
