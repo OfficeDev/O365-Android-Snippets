@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.microsoft.discoveryservices.ServiceInfo;
 import com.microsoft.discoveryservices.odata.DiscoveryClient;
+import com.microsoft.services.discovery.ServiceInfo;
 import com.microsoft.services.odata.impl.ADALDependencyResolver;
 
 import java.util.List;
