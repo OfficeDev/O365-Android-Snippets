@@ -14,9 +14,9 @@ import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationResult;
 import com.microsoft.aad.adal.AuthenticationResult.AuthenticationStatus;
 import com.microsoft.aad.adal.PromptBehavior;
-import com.microsoft.services.odata.impl.ADALDependencyResolver;
-import com.microsoft.services.odata.interfaces.DependencyResolver;
-import com.microsoft.services.odata.interfaces.LogLevel;
+import com.microsoft.services.orc.core.DependencyResolver;
+import com.microsoft.services.orc.log.LogLevel;
+import com.microsoft.services.orc.resolvers.ADALDependencyResolver;
 
 /**
  * Handles setup of ADAL Dependency Resolver for use in API clients.

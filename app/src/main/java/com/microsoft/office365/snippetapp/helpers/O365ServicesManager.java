@@ -4,7 +4,7 @@
 package com.microsoft.office365.snippetapp.helpers;
 
 import com.microsoft.directoryservices.odata.DirectoryClient;
-import com.microsoft.services.odata.interfaces.DependencyResolver;
+import com.microsoft.services.orc.core.DependencyResolver;
 
 public class O365ServicesManager {
     static DirectoryClient mDirectoryClient = null;
