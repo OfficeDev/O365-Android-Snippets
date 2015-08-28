@@ -145,6 +145,8 @@ Open the project by importing the settings.gradle file.
 Once you've built the snippets project you can run it on an emulator or device.
 
 1. Run the project.
+
+ > Note: The sample is designed to run in landscape mode. If you want to run the sample in portrait mode, change the orientation of the emulator by pressing the ctrl-f12 key combination on a Windows computer and control-f12 on a OSX computer.
 3. Click the "Connect" item on the action bar overflow menu and enter your credentials.
 4. Click a task in the main activity list to run a task.
 5. View the results of the task in the detail pane to the right of the list.
@@ -205,21 +207,22 @@ The **getUsers** method gets a list of all users from the Office 365 tenant. Sim
 
 ## Questions and comments
 
-We'd love to get your feedback on this Android starter kit. You can send your questions and suggestions to us:
+We'd love to get your feedback on the O365 Android Snippets project. You can send your questions and suggestions to us in the [Issues](https://github.com/OfficeDev/O365-Android-Snippets/issues) section of this repository.
 
-* In the [Issues](https://github.com/OfficeDev/O365-Android-Start/issues) section of this repository.
-* Send us an email to [docthis@microsoft.com](mailto:docthis@microsoft.com?subject=Feedback%20on%20the%20Office%20365%20Starter%20project%20for%20Android).
+Questions about Office 365 development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/Office365+API). Make sure that your questions or comments are tagged with [Office365] and [API].
 
 <a name="resources"/>
 ## Additional resources
 
-* [Office 365 APIs documentation](http://msdn.microsoft.com/office/office365/howto/platform-development-overview)
-* [File REST operations reference](https://msdn.microsoft.com/office/office365/api/files-rest-operations)
-* [Calendar REST operations reference](http://msdn.microsoft.com/office/office365/api/calendar-rest-operations)
-* [Mail REST operations reference](https://msdn.microsoft.com/office/office365/api/mail-rest-operations)
-* [Microsoft Office 365 API Tools](https://visualstudiogallery.msdn.microsoft.com/a15b85e6-69a7-4fdf-adda-a38066bb5155)
+* [Office 365 APIs platform overview](http://msdn.microsoft.com/office/office365/howto/platform-development-overview)
+* [File REST API reference](https://msdn.microsoft.com/office/office365/api/files-rest-operations)
+* [Outlook Calendar REST API reference](http://msdn.microsoft.com/office/office365/api/calendar-rest-operations)
+* [Outlook Mail REST API reference](https://msdn.microsoft.com/office/office365/api/mail-rest-operations)
 * [Office Dev Center](http://dev.office.com/)
-* [Office 365 APIs starter projects and code samples](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
+* [Office 365 APIs starter projects and code samples](http://msdn.microsoft.com/office/office365/howto/starter-projects-and-code-samples)
+* [Office 365 Connect Sample for Android](https://github.com/OfficeDev/O365-Android-Connect)
+* [Office 365 APIs Starter Project for Android](https://github.com/OfficeDev/O365-Android-Start)
+* [Office 365 Profile sample for Android](https://github.com/OfficeDev/O365-Android-Profile)
 
 
 ## Copyright
