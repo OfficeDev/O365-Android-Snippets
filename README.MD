@@ -158,11 +158,11 @@ Once you've built the snippets project you can run it on an emulator or device.
 
 The starter project uses these classes to manage interactions with Office 365:
 
-* [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java)
-* [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java)
-* [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java)
-* [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java)
-* [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java)
+* [CalendarSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java)
+* [ContactsSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java)
+* [EmailSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java)
+* [FileFolderSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java)
+* [UsersAndGroupsSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java)
 
 These classes have snippet methods that wrap calls to the [SharePointClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/file-services/src/main/java/com/microsoft/fileservices/odata/SharePointClient.java) and [OutlookClient](https://github.com/OfficeDev/Office-365-SDK-for-Android/blob/master/sdk/outlook-services/src/main/java/com/microsoft/outlookservices/odata/OutlookClient.java) objects in the Office 365 SDK for Android. Look at the classes in the com.microsoft.office365.snippetapp.O365Stories package to see how the snippets are called.
 
@@ -175,13 +175,13 @@ The **AuthenticationController** object manages getting a token from ADAL and re
 
 ### Calendar API
 
-The [CalendarSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java) object wraps the API operations that create, update and delete calendar events in an Office 365 Exchange calendar.
+The [CalendarSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/CalendarSnippets.java) object wraps the API operations that create, update and delete calendar events in an Office 365 Exchange calendar.
 
 The **getO365Events** method gets a list of events from the Office 365 calendar and loads pages of events into a local list. Changes, deletions, and additions to this list are posted asynchronously to the Office 365 calendar by the **updateCalendarEvent**, **deleteCalendarEvent**, and **createCalendarEvent** methods.
 
 ### Files API
 
-The [FileFolderSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java) object wraps the API operations that create, update, and delete files stored on OneDrive for Business.
+The [FileFolderSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/FileFolderSnippets.java) object wraps the API operations that create, update, and delete files stored on OneDrive for Business.
 
 The **getFilesAndFoldersFromService** method gets a list of all of the files and folders that are stored on OneDrive for Business and loads the list into a local array. Changes, deletions, and additions to the local list of files are posted asynchronously to OneDrive for Business by the **postUpdatedFileToServer**, **deleteFileFromServer**, and **postNewFileToServer** methods.
 
@@ -189,19 +189,19 @@ The **getFilesAndFolders** method returns a list of **Item** objects containing 
 
 ### Mail API
 
-The [EmailSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java) object wraps the API operations that create, update and delete mail items in an Office 365 Exchange mailbox.
+The [EmailSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/EmailSnippets.java) object wraps the API operations that create, update and delete mail items in an Office 365 Exchange mailbox.
 
 The **getMailMessages** method gets a list of mail items from the Office 365 mailbox and loads pages of items into a local list. Deletions to this list, and mail sent from the mailbox are posted asynchronously to the Office 365 calendar by the **deleteMail**, **sendMail**, **forwardMail**, and **replyToEmailMessage** methods.
 
 ### Contacts API
 
-The [ContactsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java) object wraps the API operations that create, update and delete contacts in Office 365 Exchange.
+The [ContactsSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/ContactsSnippets.java) object wraps the API operations that create, update and delete contacts in Office 365 Exchange.
 
 The **getContacts** method gets a list of contacts from Office 365 and loads pages of contacts into a local list. Changes, deletions, and additions to this list are posted asynchronously to Office 365 by the **updateContact**, **deleteContact**, and **createContact** methods.
 
 ### Azure Active Directory API
 
-The [UsersAndGroupsSnippets](https://github.com/OfficeDev/O365-Android-Snippets/blob/master/app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java) object wraps the API operations for working with users, groups, and other Azure Active Directory data. Office 365 users and groups are stored in Azure Active Directory.
+The [UsersAndGroupsSnippets](app/src/main/java/com/microsoft/office365/snippetapp/Snippets/UsersAndGroupsSnippets.java) object wraps the API operations for working with users, groups, and other Azure Active Directory data. Office 365 users and groups are stored in Azure Active Directory.
 
 The **getUsers** method gets a list of all users from the Office 365 tenant. Similarly **getGroups** gets all the groups from the Office 365 tenant. **getTenantDetails** will retrieve information about the Office 365 tenant itself.
 
