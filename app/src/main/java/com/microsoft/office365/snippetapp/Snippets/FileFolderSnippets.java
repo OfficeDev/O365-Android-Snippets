@@ -4,18 +4,18 @@
 package com.microsoft.office365.snippetapp.Snippets;
 
 import com.google.common.base.Charsets;
-import com.microsoft.services.files.Item;
-import com.microsoft.services.files.fetchers.FilesClient;
+import com.microsoft.fileservices.Item;
+import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.services.odata.Constants;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FileFolderSnippets {
-    FilesClient mFilesClient;
+    SharePointClient mSharePointClient;
 
-    public FileFolderSnippets(FilesClient sharePointClient) {
-        mFilesClient = sharePointClient;
+    public FileFolderSnippets(SharePointClient sharePointClient) {
+        mSharePointClient = sharePointClient;
     }
 
     /**
@@ -26,8 +26,8 @@ public class FileFolderSnippets {
     public List<Item> getFilesAndFolders()
             throws ExecutionException
             , InterruptedException {
-        return mFilesClient
-               .getFiles()
+        return mSharePointClient
+                .getfiles()
                 .select("name,type")
                 .read()
                 .get();
@@ -41,15 +41,15 @@ public class FileFolderSnippets {
      */
     public String getFileFromServerByName(String fileName) throws ExecutionException, InterruptedException {
         String itemID = "";
-        List<Item> filesAndFolders = mFilesClient
-                .getFiles()
+        List<Item> filesAndFolders = mSharePointClient
+                .getfiles()
                 .select("Name")
                 .read()
                 .get();
 
         for (Item item : filesAndFolders) {
-            if (item.getName().equals(fileName)) {
-                itemID = item.getId();
+            if (item.getname().equals(fileName)) {
+                itemID = item.getid();
             }
         }
         return itemID;
@@ -63,7 +63,7 @@ public class FileFolderSnippets {
      */
     public byte[] getFileContentsFromServer(String fileId)
             throws ExecutionException, InterruptedException {
-        byte[] fileContents = mFilesClient.getFiles()
+        byte[] fileContents = mSharePointClient.getfiles()
                 .getById(fileId)
                 .asFile()
                 .getContent().get();
@@ -77,7 +77,7 @@ public class FileFolderSnippets {
      */
     public void deleteFileFromServer(String fileId)
             throws ExecutionException, InterruptedException {
-        mFilesClient.getFiles()
+        mSharePointClient.getfiles()
                 .getById(fileId)
                 .addHeader("If-Match", "*")
                 .delete()
@@ -97,21 +97,21 @@ public class FileFolderSnippets {
             throws ExecutionException
             , InterruptedException {
         Item newFile = new Item();
-        newFile.setType("File");
-        newFile.setName(fileName);
+        newFile.settype("File");
+        newFile.setname(fileName);
 
-        newFile = mFilesClient
-                .getFiles()
+        newFile = mSharePointClient
+                .getfiles()
                 .select("ID")
                 .add(newFile)
                 .get();
 
-        mFilesClient.getFiles()
-                .getById(newFile.getId())
+        mSharePointClient.getfiles()
+                .getById(newFile.getid())
                 .asFile()
                 .putContent(fileContents)
                 .get();
-        return newFile.getId();
+        return newFile.getid();
     }
 
     /**
@@ -125,7 +125,7 @@ public class FileFolderSnippets {
             , String updatedContents)
             throws ExecutionException
             , InterruptedException {
-        mFilesClient.getFiles()
+        mSharePointClient.getfiles()
                 .getById(fileId)
                 .asFile()
                 .putContent(
@@ -141,10 +141,10 @@ public class FileFolderSnippets {
     public Item createO365Folder(String fullPath) throws ExecutionException, InterruptedException {
         Item folder = new Item();
 
-        folder.setType("Folder");
-        folder.setName(fullPath);
-        Item createdFolder = mFilesClient
-                .getFiles()
+        folder.settype("Folder");
+        folder.setname(fullPath);
+        Item createdFolder = mSharePointClient
+                .getfiles()
                 .select("ID")
                 .add(folder)
                 .get();
@@ -158,16 +158,16 @@ public class FileFolderSnippets {
      */
     public void deleteO365Folder(String fullPath) throws ExecutionException, InterruptedException {
         //Find ID of the path
-        Item folder = mFilesClient
-                .getFiles()
+        Item folder = mSharePointClient
+                .getfiles()
                 .getOperations()
                 .getByPath(fullPath)
                 .get();
 
         //Use ID to delete the folder
-        mFilesClient
-                .getFiles()
-                .getById(folder.getId())
+        mSharePointClient
+                .getfiles()
+                .getById(folder.getid())
                 .addHeader(Constants.IF_MATCH_HEADER, "*")
                 .delete()
                 .get();

@@ -5,21 +5,20 @@ package com.microsoft.office365.snippetapp.Snippets;
 
 import android.util.Patterns;
 
-
-import com.microsoft.services.outlook.Attendee;
-import com.microsoft.services.outlook.BodyType;
-import com.microsoft.services.outlook.DayOfWeek;
-import com.microsoft.services.outlook.EmailAddress;
-import com.microsoft.services.outlook.Event;
-import com.microsoft.services.outlook.ItemBody;
-import com.microsoft.services.outlook.PatternedRecurrence;
-import com.microsoft.services.outlook.RecurrencePattern;
-import com.microsoft.services.outlook.RecurrencePatternType;
-import com.microsoft.services.outlook.RecurrenceRange;
-import com.microsoft.services.outlook.RecurrenceRangeType;
-import com.microsoft.services.outlook.ResponseStatus;
-import com.microsoft.services.outlook.ResponseType;
-import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.outlookservices.Attendee;
+import com.microsoft.outlookservices.BodyType;
+import com.microsoft.outlookservices.DayOfWeek;
+import com.microsoft.outlookservices.EmailAddress;
+import com.microsoft.outlookservices.Event;
+import com.microsoft.outlookservices.ItemBody;
+import com.microsoft.outlookservices.PatternedRecurrence;
+import com.microsoft.outlookservices.RecurrencePattern;
+import com.microsoft.outlookservices.RecurrencePatternType;
+import com.microsoft.outlookservices.RecurrenceRange;
+import com.microsoft.outlookservices.RecurrenceRangeType;
+import com.microsoft.outlookservices.ResponseStatus;
+import com.microsoft.outlookservices.ResponseType;
+import com.microsoft.outlookservices.odata.OutlookClient;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -48,7 +47,7 @@ public class CalendarSnippets {
      * This snippet only selects the Subject, Start, and End fields
      * to reduce network traffic.
      *
-     * @return List. A list of the {@link com.microsoft.services.outlook.Event} objects
+     * @return List. A list of the {@link com.microsoft.outlookservices.Event} objects
      */
     public List<Event> getO365Events() throws ExecutionException, InterruptedException {
 
