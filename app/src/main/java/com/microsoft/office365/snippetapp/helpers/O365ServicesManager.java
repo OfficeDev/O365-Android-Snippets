@@ -22,9 +22,11 @@ public class O365ServicesManager {
                     .append(mTenantId)
                     .append("?")
                     .append(Constants.DIRECTORY_API_VERSION);
-            mDirectoryClient = new DirectoryClient(endpoint.toString(), dependencyResolver);
+
+                    //Replace DirectoryClient class with equivalent REST calls to AD for user information
+                 // mDirectoryClient = new DirectoryClient(endpoint.toString(), dependencyResolver);
         }
-        return mDirectoryClient;
+        return null;
     }
 }
 // *********************************************************
