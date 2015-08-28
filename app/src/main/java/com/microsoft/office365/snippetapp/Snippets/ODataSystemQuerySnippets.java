@@ -3,9 +3,11 @@
  */
 package com.microsoft.office365.snippetapp.Snippets;
 
-import com.microsoft.outlookservices.Event;
-import com.microsoft.outlookservices.Message;
-import com.microsoft.outlookservices.odata.OutlookClient;
+
+
+import com.microsoft.services.outlook.Event;
+import com.microsoft.services.outlook.Message;
+import com.microsoft.services.outlook.fetchers.OutlookClient;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

@@ -9,9 +9,9 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.microsoft.discoveryservices.ServiceInfo;
-import com.microsoft.discoveryservices.odata.DiscoveryClient;
-import com.microsoft.services.odata.impl.ADALDependencyResolver;
+import com.microsoft.services.discovery.ServiceInfo;
+import com.microsoft.services.discovery.fetchers.DiscoveryClient;
+import com.microsoft.services.orc.core.DependencyResolver;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -55,10 +55,10 @@ public class DiscoveryController {
         if (mServices != null) {
             boolean serviceFound = false;
             for (ServiceInfo service : mServices) {
-                if (service.getcapability().equals(capability)) {
+                if (service.getCapability().equals(capability)) {
                     Log.i(TAG,
                             "getServiceInfo - "
-                                    + service.getserviceName()
+                                    + service.getServiceName()
                                     + " service for "
                                     + capability
                                     + " was found in local cached services");
@@ -78,7 +78,7 @@ public class DiscoveryController {
             }
         } else { // The services have not been cached yet. Go ask the discovery service.
             AuthenticationController.getInstance().setResourceId(Constants.DISCOVERY_RESOURCE_ID);
-            ADALDependencyResolver dependencyResolver = (ADALDependencyResolver) AuthenticationController
+            DependencyResolver dependencyResolver = (DependencyResolver) AuthenticationController
                     .getInstance()
                     .getDependencyResolver();
 
@@ -87,7 +87,7 @@ public class DiscoveryController {
 
             try {
                 ListenableFuture<List<ServiceInfo>> future = discoveryClient
-                        .getservices()
+                        .getServices()
                         .select("serviceResourceId,serviceEndpointUri,capability")
                         .read();
                 Futures.addCallback(future,
@@ -100,10 +100,10 @@ public class DiscoveryController {
 
                                 boolean serviceFound = false;
                                 for (ServiceInfo service : services) {
-                                    if (service.getcapability().equals(capability)) {
+                                    if (service.getCapability().equals(capability)) {
                                         Log.i(TAG,
                                                 "getServiceInfo - "
-                                                        + service.getserviceName()
+                                                        + service.getServiceName()
                                                         + " service for "
                                                         + capability
                                                         + " was found in services retrieved from discovery");

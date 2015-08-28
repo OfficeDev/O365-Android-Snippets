@@ -5,17 +5,18 @@
 package com.microsoft.office365.snippetapp.Snippets;
 
 import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
-import com.microsoft.outlookservices.Attachment;
-import com.microsoft.outlookservices.BodyType;
-import com.microsoft.outlookservices.EmailAddress;
-import com.microsoft.outlookservices.FileAttachment;
-import com.microsoft.outlookservices.Folder;
-import com.microsoft.outlookservices.Item;
-import com.microsoft.outlookservices.ItemAttachment;
-import com.microsoft.outlookservices.ItemBody;
-import com.microsoft.outlookservices.Message;
-import com.microsoft.outlookservices.Recipient;
-import com.microsoft.outlookservices.odata.OutlookClient;
+import com.microsoft.services.outlook.Attachment;
+import com.microsoft.services.outlook.BodyType;
+import com.microsoft.services.outlook.EmailAddress;
+import com.microsoft.services.outlook.FileAttachment;
+import com.microsoft.services.outlook.Folder;
+import com.microsoft.services.outlook.Item;
+import com.microsoft.services.outlook.ItemAttachment;
+import com.microsoft.services.outlook.ItemBody;
+import com.microsoft.services.outlook.Message;
+import com.microsoft.services.outlook.Recipient;
+import com.microsoft.services.outlook.fetchers.OutlookClient;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -8,9 +8,9 @@ import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Attachment;
-import com.microsoft.outlookservices.FileAttachment;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.services.outlook.Attachment;
+import com.microsoft.services.outlook.FileAttachment;
+import com.microsoft.services.outlook.Message;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
