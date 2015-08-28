@@ -37,10 +37,10 @@ dependencies {
     compile 'com.microsoft.services:odata-engine-android-impl:0.13.0@aar'
 
     //Office 365 SDK service libraries:
-    compile 'com.microsoft.services:outlook-services:1.0.0'
-    compile 'com.microsoft.services:discovery-services:1.0.0'
+    compile 'com.microsoft.services:outlook-services:0.13.0'
+    compile 'com.microsoft.services:discovery-services:0.13.0'
     compile 'com.microsoft.services:directory-services:0.13.0'
-    compile 'com.microsoft.services:file-services:1.0.0'
+    compile 'com.microsoft.services:file-services:0.13.0'
 
     // Azure Active Directory Library
     compile 'com.microsoft.aad:adal:1.1.3'

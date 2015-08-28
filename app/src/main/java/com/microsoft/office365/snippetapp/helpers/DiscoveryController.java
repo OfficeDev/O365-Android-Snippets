@@ -9,9 +9,9 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.microsoft.services.discovery.ServiceInfo;
-import com.microsoft.services.discovery.fetchers.DiscoveryClient;
-import com.microsoft.services.orc.core.DependencyResolver;
+import com.microsoft.discoveryservices.ServiceInfo;
+import com.microsoft.discoveryservices.odata.DiscoveryClient;
+import com.microsoft.services.odata.impl.ADALDependencyResolver;
 
 import java.util.List;
 import java.util.NoSuchElementException;

@@ -20,16 +20,15 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.microsoft.aad.adal.AuthenticationResult;
-import com.microsoft.services.discovery.ServiceInfo;
-import com.microsoft.services.files.fetchers.FilesClient;
+import com.microsoft.discoveryservices.ServiceInfo;
+import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.Interfaces.O365Operations;
 import com.microsoft.office365.snippetapp.helpers.AuthUtil;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.Constants;
 import com.microsoft.office365.snippetapp.helpers.DiscoveryController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
-import com.microsoft.services.orc.core.DependencyResolver;
-import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.outlookservices.odata.OutlookClient;
 import com.microsoft.services.odata.impl.ADALDependencyResolver;
 
 import java.net.URI;
@@ -46,7 +45,7 @@ public class OperationListActivity extends Activity
     public static final int SIGNOUT_MENU_ITEM = 2;
     private static final String TAG = "OperationListActivity";
     public OutlookClient mOutlookClient;
-    public FilesClient mMyFilesClient;
+    public SharePointClient mMyFilesClient;
     private String mMailServiceResourceId;
     private String mMailServiceEndpointUri;
     private String mMyFilesServiceEndpointUri;
@@ -240,7 +239,7 @@ public class OperationListActivity extends Activity
     }
 
     @Override
-    public FilesClient getO365MyFilesClient() {
+    public SharePointClient getO365MyFilesClient() {
         return mMyFilesClient;
     }
 
@@ -283,9 +282,9 @@ public class OperationListActivity extends Activity
                                 .getInstance()
                                 .getDependencyResolver();
 
-                        mMyFilesClient = new FilesClient(
+                        mMyFilesClient = new SharePointClient(
                                 mMyFilesServiceEndpointUri,
-                                (DependencyResolver) dependencyResolver
+                                dependencyResolver
                         );
 
                         //User is connected, SharePoint client endpoint is found
@@ -328,10 +327,10 @@ public class OperationListActivity extends Activity
                         showDiscoverSuccessUI();
 
                         mMailServiceResourceId =
-                                serviceInfo.getServiceResourceId();
+                                serviceInfo.getserviceResourceId();
 
                         mMailServiceEndpointUri =
-                                serviceInfo.getServiceEndpointUri();
+                                serviceInfo.getserviceEndpointUri();
 
                         lazyMailClientGetter();
                         enableListClick();
@@ -360,7 +359,7 @@ public class OperationListActivity extends Activity
         AuthenticationController.getInstance()
                 .setResourceId(mMailServiceResourceId);
 
-        DependencyResolver dependencyResolver = (DependencyResolver) AuthenticationController
+        ADALDependencyResolver dependencyResolver = (ADALDependencyResolver) AuthenticationController
                 .getInstance()
                 .getDependencyResolver();
         if (mOutlookClient == null) {
