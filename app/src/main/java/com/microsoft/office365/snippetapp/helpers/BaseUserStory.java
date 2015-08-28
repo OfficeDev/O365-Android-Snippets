@@ -8,10 +8,10 @@ import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 import android.view.View;
 
+import com.microsoft.fileservices.odata.SharePointClient;
 import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
-import com.microsoft.services.files.fetchers.FilesClient;
-import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.outlookservices.odata.OutlookClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -22,7 +22,7 @@ public abstract class BaseUserStory {
     private boolean mIsExecuting = false;
     private View mUpdateView;
     private OutlookClient mO365MailClient;
-    private FilesClient mO365MyFilesClient;
+    private SharePointClient mO365MyFilesClient;
     private String mMailResourceId;
     private OnUseCaseStatusChangedListener mUseCaseStatusChangedListener;
     private String mFilesFoldersResourceId;
@@ -137,11 +137,11 @@ public abstract class BaseUserStory {
         mO365MailClient = client;
     }
 
-    public FilesClient getO365MyFilesClient() {
+    public SharePointClient getO365MyFilesClient() {
         return mO365MyFilesClient;
     }
 
-    public void setO365MyFilesClient(FilesClient client) {
+    public void setO365MyFilesClient(SharePointClient client) {
         mO365MyFilesClient = client;
     }
 

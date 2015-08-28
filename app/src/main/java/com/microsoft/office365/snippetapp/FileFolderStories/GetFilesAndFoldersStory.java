@@ -3,11 +3,11 @@
  */
 package com.microsoft.office365.snippetapp.FileFolderStories;
 
+import com.microsoft.fileservices.Item;
 import com.microsoft.office365.snippetapp.Snippets.FileFolderSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.services.files.Item;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +35,7 @@ public class GetFilesAndFoldersStory extends BaseUserStory {
             sb.append("\n");
             for (Item item : items) {
                 sb.append("\t\t");
-                sb.append(item.getType() + ": " + item.getName());
+                sb.append(item.gettype() + ": " + item.getname());
                 sb.append("\n");
             }
             return StoryResultFormatter.wrapResult(sb.toString(), true);

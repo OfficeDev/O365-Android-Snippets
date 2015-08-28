@@ -9,7 +9,7 @@ import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.services.outlook.ResponseType;
+import com.microsoft.outlookservices.ResponseType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,10 +3,9 @@
  */
 package com.microsoft.office365.snippetapp.Snippets;
 
-
-import com.microsoft.services.outlook.Contact;
-import com.microsoft.services.outlook.EmailAddress;
-import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.outlookservices.Contact;
+import com.microsoft.outlookservices.EmailAddress;
+import com.microsoft.outlookservices.odata.OutlookClient;
 
 import java.util.ArrayList;
 import java.util.List;

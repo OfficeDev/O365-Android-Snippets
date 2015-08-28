@@ -8,7 +8,7 @@ import com.microsoft.office365.snippetapp.Snippets.ContactsSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.services.outlook.Contact;
+import com.microsoft.outlookservices.Contact;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
