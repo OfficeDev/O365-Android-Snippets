@@ -24,9 +24,11 @@ public class GetADUsersStory extends BaseUserStory {
         AuthenticationController
                 .getInstance()
                 .setResourceId(Constants.DIRECTORY_RESOURCE_ID);
+
         DirectoryClient directoryClient = O365ServicesManager.getDirectoryClient();
         if (directoryClient == null)
             return StoryResultFormatter.wrapResult("Tenant ID was null", false);
+
         UsersAndGroupsSnippets usersAndGroupsSnippets = new UsersAndGroupsSnippets(directoryClient);
 
         try {
@@ -44,11 +46,10 @@ public class GetADUsersStory extends BaseUserStory {
                             .append("\n");
                 }
             }
-            isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
             return FormatException(e, STORY_DESCRIPTION);
         }
-        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
+        return StoryResultFormatter.wrapResult(resultMessage.toString(), true);
     }
 
     @Override

@@ -47,11 +47,10 @@ public class GetADGroupsStory extends BaseUserStory {
                             .append("\n");
                 }
             }
-            isStoryComplete = true;
         } catch (ExecutionException | InterruptedException e) {
             return FormatException(e, STORY_DESCRIPTION);
         }
-        return StoryResultFormatter.wrapResult(resultMessage.toString(), isStoryComplete);
+        return StoryResultFormatter.wrapResult(resultMessage.toString(), true);
     }
 
     @Override

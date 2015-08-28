@@ -24,7 +24,7 @@ public class ContactsSnippets {
      * Return a list of contacts and ordered by the
      * contact's surname field.
      *
-     * @return List. A list of the com.microsoft.outlookservices.Contact objects
+     * @return List. A list of the com.microsoft.services.outlook.Contact objects
      */
     public List<Contact> getContacts(int pageSize) throws ExecutionException, InterruptedException {
         return mOutlookClient

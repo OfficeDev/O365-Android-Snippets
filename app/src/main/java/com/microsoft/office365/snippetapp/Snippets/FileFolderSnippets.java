@@ -21,7 +21,7 @@ public class FileFolderSnippets {
     /**
      * Gets the folders and files at the user's OneDrive for business root
      *
-     * @return List. A list of the com.microsoft.fileservices.Item objects
+     * @return List. A list of the com.microsoft.services.files.Item objects
      */
     public List<Item> getFilesAndFolders()
             throws ExecutionException

@@ -37,7 +37,7 @@ public class EmailSnippets {
      * Gets a list of the 10 most recent email messages in the
      * user Inbox, sorted by date and time received.
      *
-     * @return List of type com.microsoft.outlookservices.Message
+     * @return List of type com.microsoft.services.outlook.Message
      */
     public List<Message> getMailMessages()
             throws ExecutionException, InterruptedException {
@@ -58,7 +58,7 @@ public class EmailSnippets {
     /**
      * Gets an email message by the id of the desired message
      *
-     * @return com.microsoft.outlookservices.Message
+     * @return com.microsoft.services.outlook.Message
      */
     public Message getMailMessageById(String mailId)
             throws ExecutionException, InterruptedException {
@@ -171,7 +171,7 @@ public class EmailSnippets {
      *
      * @param textContent The content of the file to be attached
      * @param fileName    The name of the file to be attached
-     * @return com.microsoft.outlookservices.FileAttachment. The Attachment object
+     * @return com.microsoft.services.outlook.FileAttachment. The Attachment object
      */
     private FileAttachment getTextFileAttachment(String textContent, String fileName) {
         FileAttachment fileAttachment = new FileAttachment();

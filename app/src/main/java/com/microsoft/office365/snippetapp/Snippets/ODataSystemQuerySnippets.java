@@ -27,7 +27,7 @@ public class ODataSystemQuerySnippets {
      * For a complete list of types and properties that can be selected
      * see https://msdn.microsoft.com/office/office365/APi/complex-types-for-mail-contacts-calendar#OdataQueryParams
      *
-     * @return List of type com.microsoft.outlookservices.Message
+     * @return List of type com.microsoft.services.outlook.Message
      */
     public List<Message> getMailMessagesUsing$select(OutlookClient outlookClient)
             throws ExecutionException, InterruptedException {
