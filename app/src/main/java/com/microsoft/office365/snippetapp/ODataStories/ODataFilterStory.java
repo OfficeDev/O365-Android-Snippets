@@ -9,10 +9,10 @@ import com.microsoft.office365.snippetapp.Snippets.ODataSystemQuerySnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.BodyType;
-import com.microsoft.outlookservices.Event;
-import com.microsoft.outlookservices.Importance;
-import com.microsoft.outlookservices.ItemBody;
+import com.microsoft.services.outlook.BodyType;
+import com.microsoft.services.outlook.Event;
+import com.microsoft.services.outlook.Importance;
+import com.microsoft.services.outlook.ItemBody;
 
 import java.util.Calendar;
 import java.util.List;

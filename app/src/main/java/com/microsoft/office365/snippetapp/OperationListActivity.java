@@ -265,17 +265,17 @@ public class OperationListActivity extends Activity
 
         Futures.addCallback(
                 serviceDiscovered,
-                new FutureCallback<Object>() {
+                new FutureCallback<ServiceInfo>() {
                     @Override
                     public void onSuccess(ServiceInfo serviceInfo) {
                         Log.i(TAG, "onConnect - My files service discovered");
                         showDiscoverSuccessUI();
 
                         mMyFilesServiceResourceId =
-                                serviceInfo.getserviceResourceId();
+                                serviceInfo.getServiceResourceId();
 
                         mMyFilesServiceEndpointUri =
-                                serviceInfo.getserviceEndpointUri();
+                                serviceInfo.getServiceEndpointUri();
 
                         AuthenticationController.getInstance()
                                 .setResourceId(mMyFilesServiceResourceId);
