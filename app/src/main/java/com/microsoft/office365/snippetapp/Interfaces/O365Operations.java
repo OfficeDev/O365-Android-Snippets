@@ -6,8 +6,8 @@ package com.microsoft.office365.snippetapp.Interfaces;
 
 import android.view.View;
 
-import com.microsoft.services.files.fetchers.FilesClient;
-import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.fileservices.odata.SharePointClient;
+import com.microsoft.outlookservices.odata.OutlookClient;
 
 public interface O365Operations {
     public void connectToO365();
@@ -20,7 +20,7 @@ public interface O365Operations {
 
     public String getMailServiceResourceId();
 
-    public FilesClient getO365MyFilesClient();
+    public SharePointClient getO365MyFilesClient();
 
     public String getMyFilesServiceResourceId();
 
