@@ -8,13 +8,13 @@ import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.GlobalValues;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.services.outlook.Message;
 
 import java.util.concurrent.ExecutionException;
 
 public class ForwardEmailMessageStory extends BaseEmailUserStory {
 
-    private static final String STORY_DESCRIPTION = "Forward an email message";
+    private static final String STORY_DESCRIPTION = "Forward a draft email message";
 
     @Override
     public String execute() {
@@ -39,7 +39,8 @@ public class ForwardEmailMessageStory extends BaseEmailUserStory {
                     getStringResource(R.string.mail_subject_text)
                             + uniqueGUID, getStringResource(R.string.Email_Folder_Inbox));
 
-            String forwardEmailId = emailSnippets.forwardMail(messageToForward.getId());
+            String forwardEmailId = emailSnippets.forwardDraftMail(messageToForward.getId(),GlobalValues.USER_EMAIL);
+
             //3. Delete the email using the ID
             emailSnippets.deleteMail(messageToForward.getId());
             if (forwardEmailId.length() > 0) {

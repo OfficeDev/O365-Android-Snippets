@@ -5,7 +5,7 @@ package com.microsoft.office365.snippetapp.EmailStories;
 
 import com.microsoft.office365.snippetapp.Snippets.EmailSnippets;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
-import com.microsoft.outlookservices.Message;
+import com.microsoft.services.outlook.Message;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

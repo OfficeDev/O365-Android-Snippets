@@ -8,7 +8,7 @@ import com.microsoft.office365.snippetapp.Snippets.CalendarSnippets;
 import com.microsoft.office365.snippetapp.helpers.AuthenticationController;
 import com.microsoft.office365.snippetapp.helpers.BaseUserStory;
 import com.microsoft.office365.snippetapp.helpers.StoryResultFormatter;
-import com.microsoft.outlookservices.Event;
+import com.microsoft.services.outlook.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
