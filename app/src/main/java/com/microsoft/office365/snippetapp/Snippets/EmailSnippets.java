@@ -4,7 +4,6 @@
 
 package com.microsoft.office365.snippetapp.Snippets;
 
-import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
 import com.microsoft.services.outlook.Attachment;
 import com.microsoft.services.outlook.BodyType;
 import com.microsoft.services.outlook.EmailAddress;
@@ -260,7 +259,6 @@ public class EmailSnippets {
      * the message in the Drafts folder
      *
      * @param mailId  The id of the message to update
-     * @return boolean. Success flag. True if attachments are deleted
      */
     public void removeEmailAttachments(String mailId)
             throws ExecutionException, InterruptedException {
@@ -418,7 +416,6 @@ public class EmailSnippets {
      * Deletes a message out of the user's Sent folder by id
      *
      * @param emailID The id of the mail to be deleted
-     * @return Boolean. The result of the operation
      */
     public void deleteMail(String emailID) throws ExecutionException, InterruptedException {
         mOutlookClient
