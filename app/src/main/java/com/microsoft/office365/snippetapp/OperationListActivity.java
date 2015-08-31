@@ -150,6 +150,10 @@ public class OperationListActivity extends Activity
                         //obtain email address for logged in user to use for email snippets
                         GlobalValues.USER_EMAIL = result.getUserInfo().getDisplayableId();
                         GlobalValues.USER_NAME = result.getUserInfo().getGivenName() + "  " + result.getUserInfo().getFamilyName();
+
+                        //This access token is needed by RetroFitHelpers to create REST adapter for use in UsersGroups stories.
+                        String accessToken = result.getAccessToken();
+
                         mSignOut.setTitle("Disconnect " + GlobalValues.USER_NAME);
 
                     }

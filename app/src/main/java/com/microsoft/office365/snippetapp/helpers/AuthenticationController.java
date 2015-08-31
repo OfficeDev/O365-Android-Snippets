@@ -29,6 +29,7 @@ public class AuthenticationController {
     private ADALDependencyResolver dependencyResolver;
     private Activity contextActivity;
     private String resourceId;
+    private String mAccessToken;
 
     private AuthenticationController() {
         resourceId = com.microsoft.office365.snippetapp.helpers.Constants.DISCOVERY_RESOURCE_ID;
@@ -72,6 +73,13 @@ public class AuthenticationController {
         this.dependencyResolver.setResourceId(resourceId);
     }
 
+    /**
+     * Returns the access token for the connected user
+     * @return String
+     */
+    public String getAccessToken(){
+        return mAccessToken;
+    }
     /**
      * Turn on logging.
      *
@@ -121,6 +129,7 @@ public class AuthenticationController {
                                             resourceId,
                                             Constants.CLIENT_ID);
                                     O365ServicesManager.initialize(authenticationResult.getTenantId());
+                                    mAccessToken = authenticationResult.getAccessToken();
                                     result.set(authenticationResult);
                                 }
                             }

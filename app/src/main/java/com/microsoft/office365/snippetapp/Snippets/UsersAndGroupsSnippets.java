@@ -3,34 +3,67 @@
  */
 package com.microsoft.office365.snippetapp.Snippets;
 
+
+import android.util.Log;
+
 import com.microsoft.directoryservices.Group;
 import com.microsoft.directoryservices.TenantDetail;
 import com.microsoft.directoryservices.User;
 import com.microsoft.directoryservices.odata.DirectoryClient;
+import com.microsoft.office365.snippetapp.helpers.RetroFitHelpers;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
-public class UsersAndGroupsSnippets {
+
+public class UsersAndGroupsSnippets  {
 
     DirectoryClient mDirectoryClient;
+    UsersAndGroupsService mUsersAndGroupsService;
 
     public UsersAndGroupsSnippets(DirectoryClient directoryClient) {
         mDirectoryClient = directoryClient;
     }
 
+    public UsersAndGroupsSnippets(String  AccessToken)
+    {
+        RetroFitHelpers retroFitHelpers = new RetroFitHelpers(AccessToken);
+        mUsersAndGroupsService =  retroFitHelpers.getRestAdapter().create(UsersAndGroupsService.class);
+        //Create UsersAndGroupsService...
+    }
+
+    private retrofit.Callback<Envelope<UserValue>> getUsersCallback() {
+        return new retrofit.Callback<Envelope<UserValue>>() {
+            @Override
+            public void success(Envelope<UserValue> users, Response response) {
+
+                Log.i("Users returned ", "Multiple users were returned: " + users.value.length);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                // TODO show an error and disable the run button
+            }
+        };
+    }
     /**
      * Return a list of users from Active Directory, sorted by display name..
      *
      * @return List. A list of the com.microsoft.directoryservices.User objects.
      */
     public List<User> getUsers() throws ExecutionException, InterruptedException {
-        return mDirectoryClient
-                .getusers()
-                .orderBy("displayName")
-                .read()
-                .get();
+
+        mUsersAndGroupsService.getUsers(null,null,null,null,null,"application/json" ,getUsersCallback());
+//        return mDirectoryClient
+//                .getusers()
+//                .orderBy("displayName")
+//                .read()
+//                .get();
+        return null;
     }
 
     /**
