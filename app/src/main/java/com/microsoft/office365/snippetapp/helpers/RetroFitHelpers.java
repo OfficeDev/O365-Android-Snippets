@@ -4,9 +4,6 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
-/**
- * Created by johnau on 8/31/2015.
- */
 public  class RetroFitHelpers {
 
     private GsonConverter mGsonConverter;
