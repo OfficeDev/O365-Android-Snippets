@@ -5,6 +5,8 @@ android:
   - extra
   - android-21
   - build-tools-21.1.2
-
 script:
-  - gradle clean build
+- gradle clean build
+notifications:
+  slack:
+    secure: NFVYwzwGY9fzvUyDqt+MR9Pn8PiG0a0e4MrVfD5lffcFfh6D9N2iWC10/mUHGk5JZtnGKW1JFRivunMIvSUrU+pTeuIwVXD7BL+ydTvgIEttpIyMwpHy63l9z5/cABEPX1i3nDJkg+MAy86YWB8YFbpBZ64wkBtJqnmh3iJtAUk=
