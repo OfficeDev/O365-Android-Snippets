@@ -8,7 +8,7 @@ import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 import android.view.View;
 
-import com.microsoft.office365.snippetapp.AndroidSnippetsApplication;
+import com.microsoft.office365.snippetapp.SnippetApp;
 import com.microsoft.office365.snippetapp.Interfaces.OnUseCaseStatusChangedListener;
 import com.microsoft.services.files.fetchers.FilesClient;
 import com.microsoft.services.outlook.fetchers.OutlookClient;
@@ -58,7 +58,7 @@ public abstract class BaseUserStory {
     }
 
     protected String getStringResource(int resourceToGet) {
-        return AndroidSnippetsApplication
+        return SnippetApp
                 .getApplication()
                 .getApplicationContext()
                 .getString(resourceToGet);
@@ -79,7 +79,7 @@ public abstract class BaseUserStory {
     public byte[] getDrawableResource(int resourceToGet) {
 
         //Get the photo from the resource/drawable folder as a raw image
-        final AssetFileDescriptor raw = AndroidSnippetsApplication
+        final AssetFileDescriptor raw = SnippetApp
                 .getApplication()
                 .getApplicationContext()
                 .getResources()

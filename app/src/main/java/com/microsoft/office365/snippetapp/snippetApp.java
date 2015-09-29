@@ -5,18 +5,18 @@ package com.microsoft.office365.snippetapp;
 
 import android.app.Application;
 
-public class AndroidSnippetsApplication extends Application {
+public class SnippetApp extends Application {
 
-    private static AndroidSnippetsApplication mAndroidSnippetsApplication;
+    private static SnippetApp mSnippetApp;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mAndroidSnippetsApplication = this;
+        mSnippetApp = this;
     }
 
-    public static AndroidSnippetsApplication getApplication() {
-        return mAndroidSnippetsApplication;
+    public static SnippetApp getApplication() {
+        return mSnippetApp;
     }
 }
 // *********************************************************

@@ -10,8 +10,9 @@ import com.microsoft.directoryservices.Group;
 import com.microsoft.directoryservices.TenantDetail;
 import com.microsoft.directoryservices.User;
 import com.microsoft.directoryservices.odata.DirectoryClient;
+import com.microsoft.office365.snippetapp.R;
 import com.microsoft.office365.snippetapp.helpers.RetroFitHelpers;
-
+import com.microsoft.office365.snippetapp.SnippetApp;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -23,9 +24,11 @@ public class UsersAndGroupsSnippets  {
 
     DirectoryClient mDirectoryClient;
     UsersAndGroupsService mUsersAndGroupsService;
+    SnippetApp mSnippetApp;
 
     public UsersAndGroupsSnippets(DirectoryClient directoryClient) {
         mDirectoryClient = directoryClient;
+        mSnippetApp = SnippetApp.getApplication();
     }
 
     public UsersAndGroupsSnippets(String  AccessToken)
@@ -57,7 +60,16 @@ public class UsersAndGroupsSnippets  {
      */
     public List<User> getUsers() throws ExecutionException, InterruptedException {
 
-        mUsersAndGroupsService.getUsers(null,null,null,null,null,"application/json" ,getUsersCallback());
+        mUsersAndGroupsService.getUsers(
+                null,
+                null,
+                null,
+                null,
+                null,
+                mSnippetApp.
+                        getString(
+                                R.string.appJSON) ,
+                getUsersCallback());
 //        return mDirectoryClient
 //                .getusers()
 //                .orderBy("displayName")
@@ -88,7 +100,11 @@ public class UsersAndGroupsSnippets  {
     public List<Group> getGroups() throws ExecutionException, InterruptedException {
         return mDirectoryClient
                 .getgroups()
-                .orderBy("displayName")
+                .orderBy(
+                        mSnippetApp.
+                                getString(
+                                        R.string.displayName).
+                                toString())
                 .read()
                 .get();
     }

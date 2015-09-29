@@ -90,4 +90,11 @@
     <string name="contact_group_placeholder">Contact stories</string>
     <string name="email_group_placeholder">Email stories</string>
     <string name="active_directory_group_placeholder">Active Directory stories</string>
+    <string name="appJSON">application/json</string>
+    <string name="displayName">displayName</string>
+    <string name="eventStart">Start</string>
+    <string name="getCalendarStartDateQueryParam">startdatetime</string>
+    <string name="getCalendarEndDateQueryParam">enddatetime</string>
+    <string name="getCalendarQuerySelectParam">Subject,Start,End</string>
+    <string name="getCalendarIDSelectColumn">ID</string>
 </resources>

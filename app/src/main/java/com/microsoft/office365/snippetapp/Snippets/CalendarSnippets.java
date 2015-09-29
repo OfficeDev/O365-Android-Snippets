@@ -6,6 +6,7 @@ package com.microsoft.office365.snippetapp.Snippets;
 import android.util.Patterns;
 
 
+import com.microsoft.office365.snippetapp.R;
 import com.microsoft.services.outlook.Attendee;
 import com.microsoft.services.outlook.BodyType;
 import com.microsoft.services.outlook.DayOfWeek;
@@ -20,6 +21,7 @@ import com.microsoft.services.outlook.RecurrenceRangeType;
 import com.microsoft.services.outlook.ResponseStatus;
 import com.microsoft.services.outlook.ResponseType;
 import com.microsoft.services.outlook.fetchers.OutlookClient;
+import com.microsoft.office365.snippetapp.SnippetApp;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -34,9 +36,11 @@ import java.util.regex.Matcher;
 public class CalendarSnippets {
 
     OutlookClient mCalendarClient;
+    SnippetApp mSnippetApp;
 
     public CalendarSnippets(OutlookClient mailClient) {
         mCalendarClient = mailClient;
+        mSnippetApp = SnippetApp.getApplication();
     }
 
     /**
@@ -55,7 +59,7 @@ public class CalendarSnippets {
         int EVENT_RANGE_START = 1;
         int EVENT_RANGE_END = 1;
         int PAGE_SIZE = 10;
-        String SORT_COLUMN = "Start";
+        String SORT_COLUMN = mSnippetApp.getString(R.string.eventStart);
         java.util.Calendar dateStart = java.util.Calendar.getInstance();
 
         //Set the date range of the calendar view to retrieve
@@ -66,10 +70,18 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getCalendarView()
-                .addParameter("startdatetime", dateStart)
-                .addParameter("enddatetime", dateEnd)
+                .addParameter(
+                        mSnippetApp.getString(
+                                R.string.getCalendarStartDateQueryParam),
+                        dateStart)
+                .addParameter(
+                        mSnippetApp.getString(
+                                R.string.getCalendarEndDateQueryParam),
+                        dateEnd)
                 .top(PAGE_SIZE)
-                .select("Subject,Start,End")
+                .select(
+                        mSnippetApp.getString(
+                                R.string.getCalendarQuerySelectParam))
                 .orderBy(SORT_COLUMN)
                 .read()
                 .get();
@@ -144,7 +156,9 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
+                .select(
+                        mSnippetApp.getString(
+                                R.string.getCalendarIDSelectColumn))
                 .add(newEvent).get().getId();
     }
 
@@ -229,7 +243,9 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
+                .select(
+                        mSnippetApp.getString(
+                                R.string.getCalendarIDSelectColumn))
                 .add(newEvent).get().getId();
     }
 
@@ -295,7 +311,9 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
+                .select(
+                        mSnippetApp.getString(
+                                R.string.getCalendarIDSelectColumn))
                 .add(eventToCreate).get();
     }
 
@@ -347,7 +365,9 @@ public class CalendarSnippets {
         return mCalendarClient
                 .getMe()
                 .getEvents()
-                .select("ID")
+                .select(
+                        mSnippetApp.getString(
+                                R.string.getCalendarIDSelectColumn))
                 .getById(eventId)
                 .update(calendarEvent)
                 .get();
