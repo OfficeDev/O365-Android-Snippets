@@ -113,7 +113,7 @@ To use the Office 365 Code Snippets for Android you need the following:
 ## Azure client application registration
 Each client application that you register with Azure can have its own unique set of permission requirements, application title, and redirect URL. Unless you have an existing application registration that uses the same combination of permissions, title, and URL, you should create a new registration for each app.
 
-*  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
+*  [Register a native client application in Azure Active Directory](https://msdn.microsoft.com/office/office365/HowTo/add-common-consent-manually#bk_RegisterNativeApp) and [assign the required permissions](https://github.com/OfficeDev/O365-Android-Snippets/wiki/Grant-permissions-for-the-Snippet-application-in-Azure) to the sample application in Azure.
 
  > Note: Be sure to select the **native client application** on step 5 of the Azure Management Portal azure application procedure.
 
